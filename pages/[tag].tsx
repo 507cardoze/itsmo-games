@@ -1,6 +1,5 @@
 import { Grid } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import CardDetails from "../components/card-details";
 import HeaderLogo from "../components/header-logo";
@@ -12,9 +11,6 @@ const CardDetailsPage: NextPage = () => {
 
 	return (
 		<>
-			<Head>
-				<title>Istmo games inventario</title>
-			</Head>
 			<HeaderLogo />
 			<Grid
 				templateColumns={{

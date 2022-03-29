@@ -1,6 +1,7 @@
-import { GridItem, Image, Stack } from "@chakra-ui/react";
+import { GridItem, Stack } from "@chakra-ui/react";
 import { Heading, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
+import Singles from "../singles";
 
 const CardItem = () => {
 	return (
@@ -15,8 +16,8 @@ const CardItem = () => {
 						transform: "scale(1.05)",
 					},
 				}}>
-				<Image
-					src='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
+				<Singles
+					url='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
 					sx={{ width: "100%", height: "250px", objectFit: "contain" }}
 					alt='card-text'
 				/>

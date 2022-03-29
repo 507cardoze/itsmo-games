@@ -1,5 +1,6 @@
 import { Box, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import { fCurrency } from "../../common/formatNumber";
+import Singles from "../singles";
 
 const CardDetails = () => {
 	return (
@@ -10,8 +11,8 @@ const CardDetails = () => {
 				justifyContent: "center",
 				alignItems: "center",
 			}}>
-			<Image
-				src='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
+			<Singles
+				url='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
 				sx={{
 					width: "50%",
 					height: "400px",

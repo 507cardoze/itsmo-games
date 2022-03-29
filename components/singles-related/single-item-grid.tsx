@@ -14,7 +14,10 @@ const SingleItemGrid = () => {
 						transform: "scale(1.05)",
 					},
 				}}>
-				<Singles />
+				<Singles
+					url='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
+					alt='textcard'
+				/>
 			</GridItem>
 		</NextLink>
 	);
