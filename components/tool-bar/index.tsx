@@ -4,14 +4,20 @@ import {
 	InputGroup,
 	InputLeftElement,
 	Select,
-	Stack,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
 const Toolbar = () => {
 	return (
 		<Box>
-			<Box m={5} maxW='350px'>
+			<Box
+				m={5}
+				sx={{
+					width: {
+						base: "450px",
+						md: "450px",
+					},
+				}}>
 				<InputGroup>
 					<InputLeftElement
 						pointerEvents='none'
@@ -20,7 +26,14 @@ const Toolbar = () => {
 					<Input type='text' placeholder='Buscar por ...' />
 				</InputGroup>
 			</Box>
-			<Box m={5} maxW='350px'>
+			<Box
+				m={5}
+				sx={{
+					width: {
+						base: "450px",
+						md: "450px",
+					},
+				}}>
 				<Select placeholder='Filtrar por'>
 					<option value='option1'>Option 1</option>
 					<option value='option2'>Option 2</option>

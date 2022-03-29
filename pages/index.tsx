@@ -8,7 +8,7 @@ const Home: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>Itsmo games inventario</title>
+				<title>Istmo games inventario</title>
 			</Head>
 			<HeaderLogo />
 			<Toolbar />

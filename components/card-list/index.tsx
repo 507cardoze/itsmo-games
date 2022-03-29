@@ -7,9 +7,9 @@ const CardList = () => {
 		<Grid
 			templateColumns={{
 				base: "repeat(2, 1fr)",
-				md: "repeat(3, 1fr)",
-				lg: "repeat(4, 1fr)",
-				xl: "repeat(6, 1fr)",
+				md: "repeat(4, 1fr)",
+				lg: "repeat(6, 1fr)",
+				xl: "repeat(8, 1fr)",
 			}}
 			gap={2}
 			m={5}>

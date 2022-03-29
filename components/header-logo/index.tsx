@@ -1,24 +1,30 @@
 import { Box, Image } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 const HeaderLogo = () => {
 	return (
-		<Box
-			sx={{
-				minHeight: "100px",
-				backgroundColor: "#001f34",
-				position: "relative",
-			}}>
-			<Image
-				src='/Istmo Games.png'
+		<NextLink href={`/`} passHref>
+			<Box
 				sx={{
-					position: "absolute",
-					top: "50%",
-					left: "50%",
-					transform: "translate(-50%, -50%)",
-					width: "250px",
-				}}
-			/>
-		</Box>
+					minHeight: "100px",
+					backgroundColor: "#001f34",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}>
+				<Image
+					src='/Istmo Games.png'
+					sx={{
+						width: "250px",
+						cursor: "pointer",
+						transition: "all 0.3s ease-in-out",
+						"&:hover": {
+							transform: "scale(1.05)",
+						},
+					}}
+				/>
+			</Box>
+		</NextLink>
 	);
 };
 
