@@ -18,6 +18,7 @@ const CardItem = () => {
 				<Image
 					src='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
 					sx={{ width: "100%", height: "250px", objectFit: "contain" }}
+					alt='card-text'
 				/>
 				<Stack sx={{ textAlign: "center", mt: 2 }}>
 					<Heading

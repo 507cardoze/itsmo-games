@@ -14,6 +14,7 @@ const HeaderLogo = () => {
 					width: "100%",
 				}}>
 				<Image
+					alt='card-text'
 					src='/Istmo Games.png'
 					sx={{
 						width: "250px",

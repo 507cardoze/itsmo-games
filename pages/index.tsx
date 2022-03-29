@@ -7,9 +7,6 @@ import CardList from "../components/card-list";
 const Home: NextPage = () => {
 	return (
 		<>
-			<Head>
-				<title>Istmo games inventario</title>
-			</Head>
 			<HeaderLogo />
 			<Toolbar />
 			<CardList />

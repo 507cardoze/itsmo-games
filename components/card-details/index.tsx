@@ -23,6 +23,7 @@ const CardDetails = () => {
 						transform: "scale(1.02)",
 					},
 				}}
+				alt='card-text'
 			/>
 			<Stack sx={{ width: "50%", m: 6 }}>
 				<Heading sx={{ lineHeight: 0.9 }}>Dark Magician</Heading>
