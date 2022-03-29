@@ -1,4 +1,4 @@
-import { Box, Grid } from "@chakra-ui/react";
+import { Box, Grid, Heading } from "@chakra-ui/react";
 import SingleItemGrid from "./single-item-grid";
 
 const SinglesRelated = () => {
@@ -7,9 +7,11 @@ const SinglesRelated = () => {
 			mt={10}
 			sx={{
 				display: "flex",
-				justifyContent: "flex-start",
-				alignItems: "flex-start",
+				justifyContent: "center",
+				alignItems: "center",
+				flexDirection: "column",
 			}}>
+			<Heading sx={{ textAlign: "center" }}>Singles relacionados</Heading>
 			<Grid
 				templateColumns={{
 					base: "repeat(3, 1fr)",

@@ -19,9 +19,7 @@ const CardDetailsPage: NextPage = () => {
 			<Grid
 				templateColumns={{
 					base: "repeat(1, 1fr)",
-					// md: "repeat(1, 1fr)",
 					lg: "repeat(2, 1fr)",
-					// xl: "repeat(8, 1fr)",
 				}}
 				gap={2}>
 				<CardDetails />

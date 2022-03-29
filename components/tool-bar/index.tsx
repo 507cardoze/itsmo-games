@@ -9,12 +9,12 @@ import { SearchIcon } from "@chakra-ui/icons";
 
 const Toolbar = () => {
 	return (
-		<Box>
+		<Box sx={{ width: "100%" }}>
 			<Box
 				m={5}
 				sx={{
 					width: {
-						base: "450px",
+						base: "80%",
 						md: "450px",
 					},
 				}}>
@@ -30,7 +30,7 @@ const Toolbar = () => {
 				m={5}
 				sx={{
 					width: {
-						base: "450px",
+						base: "80%",
 						md: "450px",
 					},
 				}}>

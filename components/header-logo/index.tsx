@@ -11,6 +11,7 @@ const HeaderLogo = () => {
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
+					width: "100%",
 				}}>
 				<Image
 					src='/Istmo Games.png'

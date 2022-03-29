@@ -24,10 +24,10 @@ const CardItem = () => {
 						as='h3'
 						size='lg'
 						color='black'
-						sx={{ lineHeight: 0.6, fontSize: "20px" }}>
+						sx={{ lineHeight: 0.8, fontSize: "20px" }}>
 						Dimension Shifter
 					</Heading>
-					<Text color='black' sx={{ lineHeight: 0.6, fontSize: "14px" }}>
+					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "14px" }}>
 						TN19-EN012
 					</Text>
 				</Stack>
