@@ -11,7 +11,7 @@ const SinglesRelated = () => {
 				alignItems: "center",
 				flexDirection: "column",
 			}}>
-			<Heading sx={{ textAlign: "center" }}>Singles relacionados</Heading>
+			{/* <Heading sx={{ textAlign: "center" }}>Singles relacionados</Heading>
 			<Grid
 				templateColumns={{
 					base: "repeat(3, 1fr)",
@@ -25,7 +25,7 @@ const SinglesRelated = () => {
 				<SingleItemGrid />
 				<SingleItemGrid />
 				<SingleItemGrid />
-			</Grid>
+			</Grid> */}
 		</Box>
 	);
 };

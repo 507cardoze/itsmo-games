@@ -1,8 +1,10 @@
 import { Box, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import { fCurrency } from "../../common/formatNumber";
+import { useAppSelector } from "../../redux/store";
 import Singles from "../singles";
 
 const CardDetails = () => {
+	const cardDetail = useAppSelector((store) => store.CardListSlice.cardDetail);
 	return (
 		<Box
 			mt={10}
@@ -12,7 +14,7 @@ const CardDetails = () => {
 				alignItems: "center",
 			}}>
 			<Singles
-				url='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
+				url={cardDetail ? cardDetail.url : ""}
 				sx={{
 					width: "50%",
 					height: "400px",
@@ -27,22 +29,32 @@ const CardDetails = () => {
 				alt='card-text'
 			/>
 			<Stack sx={{ width: "50%", m: 6 }}>
-				<Heading sx={{ lineHeight: 0.9 }}>Dark Magician</Heading>
+				<Heading sx={{ lineHeight: 0.9 }}>
+					{cardDetail ? cardDetail.name : ""}
+				</Heading>
 				<Text fontStyle='italic' fontWeight='bold'>
-					Spellcaster / Normal
+					{cardDetail ? cardDetail.cardType : ""}
 				</Text>
-				<Text sx={{ lineHeight: 0.6 }}>25TH-EN001</Text>
-				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>ATK: 2500</Text>
-				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>DEF: 2100</Text>
-				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>LV: 7</Text>
-				<Text sx={{ lineHeight: 1 }}>Descripcion:</Text>
+				<Text sx={{ lineHeight: 0.6 }}>
+					{cardDetail ? cardDetail.printTag : ""}
+				</Text>
+				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+					ATK: {cardDetail ? cardDetail.atk : ""}
+				</Text>
+				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+					DEF: {cardDetail ? cardDetail.def : ""}
+				</Text>
+				<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+					LV: {cardDetail ? cardDetail.level : ""}
+				</Text>
+				<Text sx={{ lineHeight: 1 }}>Descripción:</Text>
 				<Text sx={{ lineHeight: 1.1 }}>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-					dolorum, optio laudantium Lorem ipsum dolor sit amet consectetur,
-					adipisicing elit. Provident minus error, possimus quisquam,
+					{cardDetail ? cardDetail.text : ""}
 				</Text>
 				<Text fontWeight='bold' fontSize='26px' sx={{ lineHeight: 0.8 }}>
-					{fCurrency(1.54)}
+					{fCurrency(
+						cardDetail && cardDetail.prices ? cardDetail.prices.average : 0,
+					)}
 				</Text>
 			</Stack>
 		</Box>

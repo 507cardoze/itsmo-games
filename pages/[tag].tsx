@@ -6,7 +6,7 @@ import CardDetails from "../components/card-details";
 import HeaderLogo from "../components/header-logo";
 import SinglesRelated from "../components/singles-related";
 import {
-	getDetailsByname,
+	getCardDetails,
 	startFetchingCardList,
 	stopFetchingCardList,
 } from "../redux/slices/card-list-slice";
@@ -17,20 +17,19 @@ const CardDetailsPage: NextPage = () => {
 	const { tag, name } = router.query;
 
 	const dispatch = useAppDispatch();
-	const cardDetail = useAppSelector((store) => store.CartListSlice.cardDetail);
 	const isLoadingCardList = useAppSelector(
-		(store) => store.CartListSlice.isLoadingCardList,
+		(store) => store.CardListSlice.isLoadingCardList,
 	);
 
 	const fetchData = useCallback(async () => {
 		dispatch(startFetchingCardList());
-		await dispatch(getDetailsByname());
+		await dispatch(getCardDetails({ tag, name }));
 		dispatch(stopFetchingCardList());
-	}, []);
+	}, [dispatch, tag, name]);
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [fetchData, tag, name]);
 
 	return (
 		<>
@@ -41,7 +40,7 @@ const CardDetailsPage: NextPage = () => {
 					lg: "repeat(2, 1fr)",
 				}}
 				gap={2}>
-				<CardDetails />
+				{isLoadingCardList ? "cargando ..." : <CardDetails />}
 				<SinglesRelated />
 			</Grid>
 		</>

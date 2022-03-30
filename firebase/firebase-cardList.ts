@@ -9,7 +9,10 @@ import {
 	where,
 	getDocs,
 } from "firebase/firestore";
-import { CardDetail, CardType } from "../redux/slices/card-list-slice";
+import {
+	//CardDetail,
+	CardType,
+} from "../redux/slices/card-list-slice";
 import axios from "axios";
 
 export const getCardList = async (): Promise<CardType[] | unknown> => {
@@ -27,13 +30,22 @@ export const getCardList = async (): Promise<CardType[] | unknown> => {
 	return data;
 };
 
-export const getCardDetail = async (): Promise<CardDetail | unknown> => {
-	try {
-		return (
-			await axios.get(`https://yugiohprices.com/api/price_for_print_tag/${"MAGO-EN023"}`)
-		).data.data;
-	} catch (error) {
-		return error;
-	}
+export const getCardData = async (name: string) => {
+	const request = await axios.get(
+		`https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/card_data/${name}`,
+	);
+	return {
+		...request.data.data,
+	};
 };
-//https://yugiohprices.com/api/price_for_print_tag/MAGO-EN023
+
+export const getCardPricing = async (tag: string) => {
+	const request = await axios.get(
+		`https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/price_for_print_tag/${tag}`,
+	);
+	return {
+		...request.data.data.price_data.price_data.data.prices,
+	};
+}
+
+//https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/price_for_print_tag/MAGO-EN023

@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
 import { FirebaseError } from "firebase/app";
-import { getCardDetail, getCardList } from "../../firebase/firebase-cardList";
+import {
+	getCardData,
+	getCardList,
+	getCardPricing,
+} from "../../firebase/firebase-cardList";
 import { errorToast } from "../../common/toast";
 
 export type CardType = {
@@ -11,32 +15,23 @@ export type CardType = {
 	uid: string;
 	url: string;
 };
-
-export interface CardDetail {
+export type CardTypeAPI = {
+	dateCreated: string;
 	name: string;
-	card_type: string;
-	property: null;
+	printTag: string;
+	uid: string;
+	url: string;
+	cardType: string;
 	family: string;
+	property: string;
 	type: string;
-	price_data: CardDetailPriceData;
-}
-
-export interface CardDetailPriceData {
-	name: string;
-	print_tag: string;
 	rarity: string;
-	price_data: PriceDataPriceData;
-}
-
-export interface PriceDataPriceData {
-	status: string;
-	data: Data;
-}
-
-export interface Data {
-	listings: any[];
+	text: string;
 	prices: Prices;
-}
+	atk: number;
+	def: number;
+	level: number;
+};
 
 export interface Prices {
 	high: number;
@@ -55,14 +50,18 @@ export interface Prices {
 
 export type CartListTypeState = {
 	cardList: CardType[];
-	cardDetail: CardDetail | null;
+	cardDetail: CardTypeAPI | null;
 	isLoadingCardList: boolean;
+	searchTerm: string;
+	filterBy: string;
 };
 
 const initialState = {
 	cardList: [],
 	cardDetail: null,
 	isLoadingCardList: false,
+	searchTerm: "",
+	filterBy: "",
 } as CartListTypeState;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
@@ -73,8 +72,8 @@ export const getCards = createAsyncThunk<
 	AsyncThunkConfig
 >("cardList-slice/getCards", async (_, thunkAPI) => {
 	try {
-		const cardsCollecton = await getCardList();
-		return cardsCollecton as CardType[];
+		const cardsCollection = await getCardList();
+		return cardsCollection as CardType[];
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			errorToast(`${error.name}`, `${error.code}`);
@@ -85,19 +84,51 @@ export const getCards = createAsyncThunk<
 	}
 });
 
-export const getDetailsByname = createAsyncThunk<
-	CardDetail,
-	undefined,
+export const getCardDetails = createAsyncThunk<
+	CardTypeAPI,
+	any,
 	AsyncThunkConfig
->("cardList-slice/getDetailsByname", async (_, thunkAPI) => {
+>("cardList-slice/getCardDetails", async (args, thunkAPI) => {
 	try {
-		const CardDetail = await getCardDetail();
-		console.log("CardDetail: ", CardDetail);
-		if (!CardDetail) {
-			errorToast("API error", "Fallo al consultar el API externo");
-			return thunkAPI.rejectWithValue("Fallo al consultar el API externo");
+		const { tag, name } = args;
+		if (!tag || !name) {
+			errorToast("Error", "Tag o nombre vacío");
+			return thunkAPI.rejectWithValue(new Error("No tag or name"));
 		}
-		return CardDetail as CardDetail;
+
+		let data = {} as any;
+
+		const cardsCollection = (await getCardList()) as CardType[];
+
+		if (cardsCollection.length === 0) {
+			errorToast("Error", "No hay cartas en la base de datos");
+			return thunkAPI.rejectWithValue(new Error("No cards in DB"));
+		}
+
+		data = cardsCollection.find((card) => card.printTag === tag);
+
+		if (!data) {
+			errorToast("Error", "No se encontró la carta");
+			return thunkAPI.rejectWithValue(new Error("No cards in DB"));
+		}
+
+		const APIcardData = await getCardData(name);
+
+		if (!APIcardData) {
+			errorToast("Error", "No se encontró la carta");
+			return thunkAPI.rejectWithValue(new Error("No data in API externo"));
+		}
+
+		const APIcardPricing = await getCardPricing(tag);
+
+		if (!APIcardPricing) {
+			errorToast("Error", "No se encontró la carta");
+			return thunkAPI.rejectWithValue(new Error("No price in API externo"));
+		}
+
+		data = { ...data, ...APIcardData, prices: { ...APIcardPricing } };
+
+		return data;
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			errorToast(`${error.name}`, `${error.code}`);
@@ -108,8 +139,8 @@ export const getDetailsByname = createAsyncThunk<
 	}
 });
 
-export const CartListSlice = createSlice({
-	name: "cartList",
+export const CardListSlice = createSlice({
+	name: "cardList",
 	initialState,
 	reducers: {
 		startFetchingCardList: (state) => {
@@ -118,6 +149,12 @@ export const CartListSlice = createSlice({
 		stopFetchingCardList: (state) => {
 			state.isLoadingCardList = false;
 		},
+		setSearchTerm: (state, action) => {
+			state.searchTerm = action.payload;
+		},
+		setFilterBy: (state, action) => {
+			state.filterBy = action.payload;
+		},
 	},
 
 	extraReducers: (builder) => {
@@ -125,13 +162,17 @@ export const CartListSlice = createSlice({
 			.addCase(getCards.fulfilled, (state, action) => {
 				state.cardList = action.payload;
 			})
-			.addCase(getDetailsByname.fulfilled, (state, action) => {
+			.addCase(getCardDetails.fulfilled, (state, action) => {
 				state.cardDetail = action.payload;
 			});
 	},
 });
 
-export const { startFetchingCardList, stopFetchingCardList } =
-	CartListSlice.actions;
+export const {
+	startFetchingCardList,
+	stopFetchingCardList,
+	setSearchTerm,
+	setFilterBy,
+} = CardListSlice.actions;
 
-export default CartListSlice.reducer;
+export default CardListSlice.reducer;

@@ -6,8 +6,14 @@ import {
 	Select,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { setSearchTerm } from "../../redux/slices/card-list-slice";
 
 const Toolbar = () => {
+	const dispatch = useAppDispatch();
+	const searchTerm = useAppSelector((store) => store.CardListSlice.searchTerm);
+	const filterBy = useAppSelector((store) => store.CardListSlice.filterBy);
+
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Box
@@ -22,10 +28,15 @@ const Toolbar = () => {
 					<InputLeftElement pointerEvents='none'>
 						<SearchIcon color='gray.300' />
 					</InputLeftElement>
-					<Input type='text' placeholder='Buscar por ...' />
+					<Input
+						type='text'
+						placeholder='Buscar...'
+						value={searchTerm}
+						onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+					/>
 				</InputGroup>
 			</Box>
-			<Box
+			{/* <Box
 				m={5}
 				sx={{
 					width: {
@@ -38,7 +49,7 @@ const Toolbar = () => {
 					<option value='option2'>Option 2</option>
 					<option value='option3'>Option 3</option>
 				</Select>
-			</Box>
+			</Box> */}
 		</Box>
 	);
 };

@@ -1,14 +1,23 @@
 import { Grid } from "@chakra-ui/react";
 import { memo } from "react";
-import { CardType } from "../../redux/slices/card-list-slice";
+import { useAppSelector } from "../../redux/store";
 import CardItem from "../card-item";
 
-type PropsTypes = {
-	isloading: boolean;
-	cardList: CardType[];
-};
+const CardList = () => {
+	const cardList = useAppSelector((store) => store.CardListSlice.cardList);
+	const isloading = useAppSelector(
+		(store) => store.CardListSlice.isLoadingCardList,
+	);
+	const searchTerm = useAppSelector((store) => store.CardListSlice.searchTerm);
 
-const CardList = ({ isloading, cardList }: PropsTypes) => {
+	const filteredCardList = cardList
+		.filter((card) =>
+			card.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
+		)
+		.map((card, idx) => (
+			<CardItem key={card.uid + idx.toString()} card={card} />
+		));
+
 	return (
 		<Grid
 			templateColumns={{
@@ -20,9 +29,9 @@ const CardList = ({ isloading, cardList }: PropsTypes) => {
 			m={5}>
 			{isloading
 				? "cargando..."
-				: cardList.map((card, idx) => (
-						<CardItem key={card.uid + idx.toString()} card={card} />
-				  ))}
+				: filteredCardList.length > 0
+				? filteredCardList
+				: "no hay resultados"}
 		</Grid>
 	);
 };

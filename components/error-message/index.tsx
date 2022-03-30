@@ -1,5 +1,4 @@
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
-import { Head } from "next/document";
 import NextLink from "next/link";
 
 const ErrorMessage = () => {
@@ -13,9 +12,6 @@ const ErrorMessage = () => {
 			display='flex'
 			px={6}
 			minH={"100vh"}>
-			<Head>
-				<title>404 Página no encontrada</title>
-			</Head>
 			<Heading
 				display='inline-block'
 				as='h2'
