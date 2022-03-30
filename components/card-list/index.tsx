@@ -1,30 +1,30 @@
 import { Grid } from "@chakra-ui/react";
-import React from "react";
+import { memo } from "react";
+import { CardType } from "../../redux/slices/card-list-slice";
 import CardItem from "../card-item";
 
-const CardList = () => {
+type PropsTypes = {
+	isloading: boolean;
+	cardList: CardType[];
+};
+
+const CardList = ({ isloading, cardList }: PropsTypes) => {
 	return (
 		<Grid
 			templateColumns={{
 				base: "repeat(2, 1fr)",
 				md: "repeat(4, 1fr)",
 				lg: "repeat(6, 1fr)",
-				xl: "repeat(8, 1fr)",
 			}}
 			gap={2}
 			m={5}>
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
-			<CardItem />
+			{isloading
+				? "cargando..."
+				: cardList.map((card, idx) => (
+						<CardItem key={card.uid + idx.toString()} card={card} />
+				  ))}
 		</Grid>
 	);
 };
 
-export default CardList;
+export default memo(CardList);

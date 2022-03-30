@@ -1,11 +1,12 @@
 import { GridItem, Stack } from "@chakra-ui/react";
 import { Heading, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { CardType } from "../../redux/slices/card-list-slice";
 import Singles from "../singles";
 
-const CardItem = () => {
+const CardItem = ({ card }: { card: CardType }) => {
 	return (
-		<NextLink href={`./${"TN19-EN012"}?name=${"Dimension Shifter"}`} passHref>
+		<NextLink href={`./${card.printTag}?name=${card.name}`} passHref>
 			<GridItem
 				w='100%'
 				sx={{
@@ -17,9 +18,9 @@ const CardItem = () => {
 					},
 				}}>
 				<Singles
-					url='https://static-3.studiobebop.net/ygo_data/card_images/Dimension_Shifter.jpg'
+					url={card.url}
 					sx={{ width: "100%", height: "250px", objectFit: "contain" }}
-					alt='card-text'
+					alt={card.name}
 				/>
 				<Stack sx={{ textAlign: "center", mt: 2 }}>
 					<Heading
@@ -27,10 +28,10 @@ const CardItem = () => {
 						size='lg'
 						color='black'
 						sx={{ lineHeight: 0.8, fontSize: "20px" }}>
-						Dimension Shifter
+						{card.name}
 					</Heading>
 					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "14px" }}>
-						TN19-EN012
+						{card.printTag}
 					</Text>
 				</Stack>
 			</GridItem>

@@ -3,10 +3,11 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { combineReducers } from "redux";
 import { ThunkMiddleware } from "redux-thunk";
 import reduxThunk from "redux-thunk";
+import CartListSlice from "./slices/card-list-slice";
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
-const reducers = combineReducers({});
+const reducers = combineReducers({ CartListSlice });
 
 export const store = configureStore({
 	reducer: reducers,
