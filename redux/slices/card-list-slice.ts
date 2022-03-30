@@ -101,8 +101,8 @@ export const getCardDetails = createAsyncThunk<
 		const cardsCollection = (await getCardList()) as CardType[];
 
 		if (cardsCollection.length === 0) {
-			errorToast("Error", "No hay cartas en la base de datos");
-			return thunkAPI.rejectWithValue(new Error("No cards in DB"));
+			errorToast("Error", "Esta carta no existe");
+			return thunkAPI.rejectWithValue(new Error("Esta carta no existe"));
 		}
 
 		data = cardsCollection.find((card) => card.printTag === tag);
@@ -115,14 +115,14 @@ export const getCardDetails = createAsyncThunk<
 		const APIcardData = await getCardData(name);
 
 		if (!APIcardData) {
-			errorToast("Error", "No se encontró la carta");
+			errorToast("Error", "No se encontró la data de la carta");
 			return thunkAPI.rejectWithValue(new Error("No data in API externo"));
 		}
 
 		const APIcardPricing = await getCardPricing(tag);
 
 		if (!APIcardPricing) {
-			errorToast("Error", "No se encontró la carta");
+			errorToast("Error", "No se encontró el precio de la carta");
 			return thunkAPI.rejectWithValue(new Error("No price in API externo"));
 		}
 
