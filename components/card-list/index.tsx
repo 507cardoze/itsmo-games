@@ -2,6 +2,7 @@ import { Grid } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAppSelector } from "../../redux/store";
 import CardItem from "../card-item";
+import CardItemSkeleton from "../card-item/card-item-skeleton";
 
 const CardList = () => {
 	const cardList = useAppSelector((store) => store.CardListSlice.cardList);
@@ -27,11 +28,13 @@ const CardList = () => {
 			}}
 			gap={2}
 			m={5}>
-			{isloading
-				? "cargando..."
-				: filteredCardList.length > 0
-				? filteredCardList
-				: "no hay resultados"}
+			{isloading ? (
+				<CardItemSkeleton />
+			) : filteredCardList.length > 0 ? (
+				filteredCardList
+			) : (
+				"no hay resultados"
+			)}
 		</Grid>
 	);
 };

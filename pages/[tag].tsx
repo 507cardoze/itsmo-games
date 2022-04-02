@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import CardDetails from "../components/card-details";
-import HeaderLogo from "../components/header-logo";
+import CardDetailsSkeleton from "../components/card-details/card-details-skeleton";
 import SinglesRelated from "../components/singles-related";
 import {
 	getCardDetails,
@@ -33,14 +33,13 @@ const CardDetailsPage: NextPage = () => {
 
 	return (
 		<>
-			<HeaderLogo />
 			<Grid
 				templateColumns={{
 					base: "repeat(1, 1fr)",
 					lg: "repeat(2, 1fr)",
 				}}
 				gap={2}>
-				{isLoadingCardList ? "cargando ..." : <CardDetails />}
+				{isLoadingCardList ? <CardDetailsSkeleton /> : <CardDetails />}
 				<SinglesRelated />
 			</Grid>
 		</>

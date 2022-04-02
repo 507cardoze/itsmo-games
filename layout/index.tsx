@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
+import HeaderLogo from "../components/header-logo";
 import {
 	getCards,
 	startFetchingCardList,
@@ -20,7 +21,12 @@ const Layout = ({ children }: PropsTypes) => {
 	useEffect(() => {
 		fetchData();
 	}, []);
-	return <Box>{children}</Box>;
+	return (
+		<Box sx={{ overFlow: "hidden", minHeight: "100vh" }}>
+			<HeaderLogo />
+			{children}
+		</Box>
+	);
 };
 
 export default Layout;

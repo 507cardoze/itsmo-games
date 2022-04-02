@@ -11,6 +11,7 @@ const Singles = ({ url, alt, height, sx }: PropsTypes) => {
 	return (
 		<Image
 			alt={alt}
+			loading='lazy'
 			src={url || "/dorso.jpeg"}
 			sx={{
 				width: "100%",

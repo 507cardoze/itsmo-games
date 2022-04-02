@@ -1,32 +1,24 @@
-import { Box, Image } from "@chakra-ui/react";
-import NextLink from "next/link";
+import Logo from "./logo";
+import CartButton from "../cart-drawer";
+import MenuButton from "../menu-drawer";
+import { Box } from "@chakra-ui/react";
 
 const HeaderLogo = () => {
 	return (
-		<NextLink href={`/`} passHref>
-			<Box
-				sx={{
-					minHeight: "100px",
-					backgroundColor: "#001f34",
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					width: "100%",
-				}}>
-				<Image
-					alt='card-text'
-					src='/Istmo Games.png'
-					sx={{
-						width: "250px",
-						cursor: "pointer",
-						transition: "all 0.3s ease-in-out",
-						"&:hover": {
-							transform: "scale(1.05)",
-						},
-					}}
-				/>
-			</Box>
-		</NextLink>
+		<Box
+			sx={{
+				minHeight: "100px",
+				backgroundColor: "#001f34",
+				display: "flex",
+				justifyContent: "space-between",
+				alignItems: "center",
+				width: "100%",
+				px: 6,
+			}}>
+			<MenuButton />
+			<Logo />
+			<CartButton />
+		</Box>
 	);
 };
 
