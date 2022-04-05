@@ -29,15 +29,17 @@ const CardDetails = () => {
 			}}>
 			<Stack
 				sx={{
+					display: "flex",
 					flexDirection: "row",
-					justifyContent: "flex-start",
-					alignItems: "flex-start",
+					justifyContent: "center",
+					alignItems: "center",
+					width: "100%",
 				}}>
 				<Singles
 					url={cardDetail ? cardDetail.url : ""}
 					sx={{
-						width: "40%",
-						height: "auto",
+						width: "50%",
+						height: "350px",
 						objectFit: "contain",
 						cursor: "pointer",
 						mx: 5,
@@ -67,6 +69,12 @@ const CardDetails = () => {
 						</Text>
 						<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
 							LV: {cardDetail ? cardDetail.level : "xxxx"}
+						</Text>
+						<Text sx={{ lineHeight: 0.6 }}>
+							rarity: {cardDetail ? cardDetail.rarity : "xxxx"}
+						</Text>
+						<Text sx={{ lineHeight: 0.6 }}>
+							{cardDetail ? cardDetail.setName : "xxxx"}
 						</Text>
 						<Text fontWeight='bold' fontSize='26px' sx={{ lineHeight: 0.8 }}>
 							{fCurrency(

@@ -25,6 +25,7 @@ export type YugiohCardTypeAPI = {
 	cardType: string;
 	family: string;
 	property: string;
+	setName: string;
 	type: string;
 	rarity: string;
 	text: string;
