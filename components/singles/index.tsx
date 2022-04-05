@@ -1,4 +1,5 @@
 import { Image } from "@chakra-ui/react";
+import { SyntheticEvent } from "react";
 
 type PropsTypes = {
 	url?: string;
@@ -11,11 +12,15 @@ const Singles = ({ url, alt, height, sx }: PropsTypes) => {
 	return (
 		<Image
 			alt={alt}
+			fallbackSrc='/dorso.jpeg'
 			loading='lazy'
-			src={url || "/dorso.jpeg"}
+			onError={(e: SyntheticEvent<HTMLImageElement, Event>) =>
+				(e.currentTarget.src = "/dorso.jpeg")
+			}
+			src={url}
 			sx={{
 				width: "100%",
-				height: height ? height : "250px",
+				height: height,
 				objectFit: "contain",
 				...sx,
 			}}

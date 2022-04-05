@@ -13,7 +13,7 @@ const CardList = () => {
 
 	const filteredCardList = cardList
 		.filter((card) =>
-			card.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
+			card.name?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
 		)
 		.map((card, idx) => (
 			<CardItem key={card.uid + idx.toString()} card={card} />
