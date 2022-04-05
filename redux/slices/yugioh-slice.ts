@@ -1,21 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
+import { errorToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
 import {
 	getCardData,
 	getCardList,
 	getCardPricing,
-} from "../../firebase/firebase-cardList";
-import { errorToast } from "../../common/toast";
+} from "../../firebase/firebase-yugioh";
 
-export type CardType = {
+export type YugiohCardType = {
 	dateCreated: string;
 	name: string;
 	printTag: string;
 	uid: string;
 	url: string;
 };
-export type CardTypeAPI = {
+
+export type YugiohCardTypeAPI = {
 	dateCreated: string;
 	name: string;
 	printTag: string;
@@ -48,9 +49,9 @@ export interface Prices {
 	updated_at: string;
 }
 
-export type CartListTypeState = {
-	cardList: CardType[];
-	cardDetail: CardTypeAPI | null;
+export type YugiohCartListTypeState = {
+	cardList: YugiohCardType[];
+	cardDetail: YugiohCardTypeAPI | null;
 	isLoadingCardList: boolean;
 	searchTerm: string;
 	filterBy: string;
@@ -62,18 +63,18 @@ const initialState = {
 	isLoadingCardList: false,
 	searchTerm: "",
 	filterBy: "",
-} as CartListTypeState;
+} as YugiohCartListTypeState;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
 
 export const getCards = createAsyncThunk<
-	CardType[],
+	YugiohCardType[],
 	undefined,
 	AsyncThunkConfig
 >("cardList-slice/getCards", async (_, thunkAPI) => {
 	try {
 		const cardsCollection = await getCardList();
-		return cardsCollection as CardType[];
+		return cardsCollection as YugiohCardType[];
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			errorToast(`${error.name}`, `${error.code}`);
@@ -85,7 +86,7 @@ export const getCards = createAsyncThunk<
 });
 
 export const getCardDetails = createAsyncThunk<
-	CardTypeAPI,
+	YugiohCardTypeAPI,
 	any,
 	AsyncThunkConfig
 >("cardList-slice/getCardDetails", async (args, thunkAPI) => {
@@ -98,7 +99,7 @@ export const getCardDetails = createAsyncThunk<
 
 		let data = {} as any;
 
-		const cardsCollection = (await getCardList()) as CardType[];
+		const cardsCollection = (await getCardList()) as YugiohCardType[];
 
 		if (cardsCollection.length === 0) {
 			errorToast("Error", "Esta carta no existe");
@@ -139,8 +140,8 @@ export const getCardDetails = createAsyncThunk<
 	}
 });
 
-export const CardListSlice = createSlice({
-	name: "cardList",
+export const YugiohCardListSlice = createSlice({
+	name: "yugiohCardListSlice",
 	initialState,
 	reducers: {
 		startFetchingCardList: (state) => {
@@ -173,6 +174,6 @@ export const {
 	stopFetchingCardList,
 	setSearchTerm,
 	setFilterBy,
-} = CardListSlice.actions;
+} = YugiohCardListSlice.actions;
 
-export default CardListSlice.reducer;
+export default YugiohCardListSlice.reducer;

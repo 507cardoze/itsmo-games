@@ -5,7 +5,7 @@ import {
 	getCards,
 	startFetchingCardList,
 	stopFetchingCardList,
-} from "../redux/slices/card-list-slice";
+} from "../redux/slices/yugioh-slice";
 import { useAppDispatch } from "../redux/store";
 
 type PropsTypes = { children: ReactNode };

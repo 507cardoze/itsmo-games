@@ -7,12 +7,16 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { setSearchTerm } from "../../redux/slices/card-list-slice";
+import { setSearchTerm } from "../../redux/slices/yugioh-slice";
 
 const Toolbar = () => {
 	const dispatch = useAppDispatch();
-	const searchTerm = useAppSelector((store) => store.CardListSlice.searchTerm);
-	const filterBy = useAppSelector((store) => store.CardListSlice.filterBy);
+	const searchTerm = useAppSelector(
+		(store) => store.YugiohCardListSlice.searchTerm,
+	);
+	const filterBy = useAppSelector(
+		(store) => store.YugiohCardListSlice.filterBy,
+	);
 
 	return (
 		<Box sx={{ width: "100%" }}>

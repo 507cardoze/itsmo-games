@@ -4,7 +4,9 @@ import { useAppSelector } from "../../redux/store";
 import Singles from "../singles";
 
 const CardDetails = () => {
-	const cardDetail = useAppSelector((store) => store.CardListSlice.cardDetail);
+	const cardDetail = useAppSelector(
+		(store) => store.YugiohCardListSlice.cardDetail,
+	);
 	return (
 		<Box
 			mt={10}

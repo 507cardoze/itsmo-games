@@ -5,11 +5,15 @@ import CardItem from "../card-item";
 import CardItemSkeleton from "../card-item/card-item-skeleton";
 
 const CardList = () => {
-	const cardList = useAppSelector((store) => store.CardListSlice.cardList);
-	const isloading = useAppSelector(
-		(store) => store.CardListSlice.isLoadingCardList,
+	const cardList = useAppSelector(
+		(store) => store.YugiohCardListSlice.cardList,
 	);
-	const searchTerm = useAppSelector((store) => store.CardListSlice.searchTerm);
+	const isloading = useAppSelector(
+		(store) => store.YugiohCardListSlice.isLoadingCardList,
+	);
+	const searchTerm = useAppSelector(
+		(store) => store.YugiohCardListSlice.searchTerm,
+	);
 
 	const filteredCardList = cardList
 		.filter((card) =>

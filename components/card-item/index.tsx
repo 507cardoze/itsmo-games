@@ -1,12 +1,13 @@
 import { GridItem, Stack } from "@chakra-ui/react";
 import { Heading, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { CardType } from "../../redux/slices/card-list-slice";
+import { YugiohCardType } from "../../redux/slices/yugioh-slice";
+
 import Singles from "../singles";
 
-const CardItem = ({ card }: { card: CardType }) => {
+const CardItem = ({ card }: { card: YugiohCardType }) => {
 	return (
-		<NextLink href={`./${card.printTag}?name=${card.name}`} passHref>
+		<NextLink href={`./yugioh/${card.printTag}?name=${card.name}`} passHref>
 			<GridItem
 				w='100%'
 				sx={{
