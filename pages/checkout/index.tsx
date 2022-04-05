@@ -16,7 +16,7 @@ const CheckoutPage: NextPage = () => {
 		if (!currentUser || !cartItems.length) {
 			router.push("/");
 		}
-	}, []);
+	}, [currentUser, cartItems]);
 
 	return (
 		<>

@@ -10,7 +10,9 @@ const CartList = () => {
 	return (
 		<Stack spacing={2} w='100%' py={5} overflowY='auto'>
 			{cartItems.length ? (
-				cartItems.map((product) => <CartItem product={product} />)
+				cartItems.map((product) => (
+					<CartItem key={product.uid} product={product} />
+				))
 			) : (
 				<EmptyCartItem />
 			)}

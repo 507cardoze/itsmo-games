@@ -30,12 +30,12 @@ const CardDetailsPage: NextPage = () => {
 			await dispatch(getCardDetails({ tag, name }));
 			dispatch(stopFetchingCardList());
 		},
-		[tag, name],
+		[dispatch, tag, name],
 	);
 
 	useLayoutEffect(() => {
 		fetchData(tag, name);
-	}, [tag, name]);
+	}, [dispatch, tag, name]);
 
 	return (
 		<>
