@@ -7,8 +7,10 @@ import {
 import { Icon } from "@chakra-ui/react";
 import { memo } from "react";
 import MenuItem from "./menu-item";
+import { useAppSelector } from "../../redux/store";
 
 const MenuList = () => {
+	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 	return (
 		<Stack spacing={2} mt={1}>
 			<MenuItem
@@ -21,11 +23,13 @@ const MenuList = () => {
 				label='Mi Cuenta'
 				Icono={<Icon as={MdAccountBox} />}
 			/>
-			<MenuItem
-				handleOnClick={() => {}}
-				label='Admin Panel'
-				Icono={<Icon as={MdOutlineWeb} />}
-			/>
+			{currentUser?.isAdmin && (
+				<MenuItem
+					handleOnClick={() => {}}
+					label='Admin Panel'
+					Icono={<Icon as={MdOutlineWeb} />}
+				/>
+			)}
 		</Stack>
 	);
 };

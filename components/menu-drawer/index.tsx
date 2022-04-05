@@ -45,14 +45,7 @@ const MenuButton = () => {
 							justifyContent: "flex-start",
 							flexDirection: "column",
 						}}>
-						{currentUser ? (
-							<AccountDisplay
-								title='Anthony Cardoze'
-								subTitle={fCurrency(300)}
-							/>
-						) : (
-							<LogoBox />
-						)}
+						{currentUser ? <AccountDisplay /> : <LogoBox />}
 						{currentUser && <MenuList />}
 						<GameList />
 						<Spacer />

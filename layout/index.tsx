@@ -1,12 +1,19 @@
 import { Box } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
 import HeaderLogo from "../components/header-logo";
+import AuthModal from "../components/modals/auth-modal/auth-modal";
 import {
 	getCards,
 	startFetchingCardList,
 	stopFetchingCardList,
 } from "../redux/slices/yugioh-slice";
 import { useAppDispatch } from "../redux/store";
+import { auth } from "../firebase/firebase-config";
+import {
+	isUserAuthenticated,
+	startAuthLoading,
+	stopAuthLoading,
+} from "../redux/slices/auth-slice";
 
 type PropsTypes = { children: ReactNode };
 
@@ -21,9 +28,23 @@ const Layout = ({ children }: PropsTypes) => {
 	useEffect(() => {
 		fetchData();
 	}, []);
+
+	useEffect(() => {
+		const unSubcribe = auth.onAuthStateChanged(async (currentUser) => {
+			dispatch(startAuthLoading());
+			await dispatch(isUserAuthenticated(currentUser));
+			dispatch(stopAuthLoading());
+		});
+		return () => unSubcribe();
+	}, []);
+
+	const renderModal = () =>
+		typeof window !== "undefined" ? <AuthModal /> : <></>;
+
 	return (
 		<Box sx={{ overFlow: "hidden", minHeight: "100vh" }}>
 			<HeaderLogo />
+			{renderModal()}
 			{children}
 		</Box>
 	);

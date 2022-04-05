@@ -5,7 +5,6 @@ import {
 	DrawerCloseButton,
 	DrawerContent,
 	DrawerOverlay,
-	Heading,
 	IconButton,
 	Spacer,
 } from "@chakra-ui/react";
@@ -14,7 +13,6 @@ import { Icon } from "@chakra-ui/react";
 import QtyIndicator from "./qty-indicator";
 import { useState } from "react";
 import AccountDisplay from "../account-display";
-import { fCurrency } from "../../common/formatNumber";
 import CartList from "./cart-list";
 import CheckoutDetails from "./checkout-details";
 
@@ -46,10 +44,7 @@ const CartButton = () => {
 							alignItems: "center",
 							flexDirection: "column",
 						}}>
-						<AccountDisplay
-							title='Carrito de compra'
-							subTitle={fCurrency(300)}
-						/>
+						<AccountDisplay />
 						<CartList />
 						<Spacer as={Divider} />
 						<CheckoutDetails />

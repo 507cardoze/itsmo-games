@@ -1,11 +1,9 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
+import { fCurrency } from "../../common/formatNumber";
+import { useAppSelector } from "../../redux/store";
 
-type PropsTypes = {
-	title: string;
-	subTitle: string;
-};
-
-const AccountDisplay = ({ title, subTitle }: PropsTypes) => {
+const AccountDisplay = () => {
+	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 	return (
 		<Box
 			w='100%'
@@ -19,8 +17,12 @@ const AccountDisplay = ({ title, subTitle }: PropsTypes) => {
 				pr: 15,
 				pt: 15,
 			}}>
-			<Heading sx={{ fontSize: "22px", color: "white" }}>{title}</Heading>
-			<Text sx={{ fontSize: "14px", color: "white" }}>{subTitle}</Text>
+			<Heading sx={{ fontSize: "22px", color: "white" }}>
+				{currentUser?.displayName}
+			</Heading>
+			<Text sx={{ fontSize: "14px", color: "white" }}>{`Credito: ${fCurrency(
+				currentUser?.credit,
+			)}`}</Text>
 		</Box>
 	);
 };

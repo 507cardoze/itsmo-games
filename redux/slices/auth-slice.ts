@@ -36,10 +36,16 @@ export type firestoreUserType = {
 
 export type AuthStateType = {
 	currentUser: firestoreUserType | null;
+	isAuthLoading: boolean;
+	isOpenAuthModal: boolean;
+	authForm: "login" | "register";
 };
 
 const initialState = {
 	currentUser: null,
+	isAuthLoading: false,
+	isOpenAuthModal: false,
+	authForm: "login",
 } as AuthStateType;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
@@ -226,7 +232,26 @@ export const isUserAuthenticated = createAsyncThunk<
 export const AuthSlice = createSlice({
 	name: "auth-slice",
 	initialState,
-	reducers: {},
+	reducers: {
+		startAuthLoading: (state) => {
+			state.isAuthLoading = true;
+		},
+		stopAuthLoading: (state) => {
+			state.isAuthLoading = false;
+		},
+		setAuthFormToLogin: (state) => {
+			state.authForm = "login";
+		},
+		setAuthFormToRegister: (state) => {
+			state.authForm = "register";
+		},
+		onCloseModalAuth: (state) => {
+			state.isOpenAuthModal = false;
+		},
+		onOpenModalAuth: (state) => {
+			state.isOpenAuthModal = true;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(signInWithGoogle.fulfilled, (state, action) => {
@@ -251,5 +276,14 @@ export const AuthSlice = createSlice({
 			});
 	},
 });
+
+export const {
+	startAuthLoading,
+	stopAuthLoading,
+	onCloseModalAuth,
+	onOpenModalAuth,
+	setAuthFormToLogin,
+	setAuthFormToRegister,
+} = AuthSlice.actions;
 
 export default AuthSlice.reducer;
