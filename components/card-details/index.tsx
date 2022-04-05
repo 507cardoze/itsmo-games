@@ -12,7 +12,7 @@ const CardDetails = () => {
 			mt={10}
 			sx={{
 				display: "flex",
-				justifyContent: "center",
+				justifyContent: "flex-start",
 				alignItems: "center",
 			}}>
 			<Singles
@@ -51,7 +51,7 @@ const CardDetails = () => {
 				</Text>
 				<Text sx={{ lineHeight: 1 }}>Descripción:</Text>
 				<Text sx={{ lineHeight: 1.1 }}>
-					{cardDetail ? cardDetail.text : ""}
+					{cardDetail ? cardDetail.text.slice(0, 1150) : ""}
 				</Text>
 				<Text fontWeight='bold' fontSize='26px' sx={{ lineHeight: 0.8 }}>
 					{fCurrency(

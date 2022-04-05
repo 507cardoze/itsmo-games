@@ -38,6 +38,7 @@ export type AuthStateType = {
 	currentUser: firestoreUserType | null;
 	isAuthLoading: boolean;
 	isOpenAuthModal: boolean;
+	isDrawerOpen: boolean;
 	authForm: "login" | "register";
 };
 
@@ -45,6 +46,7 @@ const initialState = {
 	currentUser: null,
 	isAuthLoading: false,
 	isOpenAuthModal: false,
+	isDrawerOpen: false,
 	authForm: "login",
 } as AuthStateType;
 
@@ -251,6 +253,12 @@ export const AuthSlice = createSlice({
 		onOpenModalAuth: (state) => {
 			state.isOpenAuthModal = true;
 		},
+		onCloseDrawerMenu: (state) => {
+			state.isDrawerOpen = false;
+		},
+		onOpenDrawerMenu: (state) => {
+			state.isDrawerOpen = true;
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -284,6 +292,8 @@ export const {
 	onOpenModalAuth,
 	setAuthFormToLogin,
 	setAuthFormToRegister,
+	onCloseDrawerMenu,
+	onOpenDrawerMenu,
 } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

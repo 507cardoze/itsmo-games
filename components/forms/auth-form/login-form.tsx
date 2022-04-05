@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import {
+	onCloseDrawerMenu,
+	onCloseModalAuth,
 	setAuthFormToRegister,
 	signInUserWithEmail,
 } from "../../../redux/slices/auth-slice";
@@ -30,9 +32,11 @@ const LoginForm = () => {
 	const isEmailEmpty = email.trim() === "";
 	const isPasswordEmpty = password.trim() === "";
 
-	const handleLogin = (event: SyntheticEvent) => {
+	const handleLogin = async (event: SyntheticEvent) => {
 		event.preventDefault();
-		dispatch(signInUserWithEmail({ email, password }));
+		await dispatch(signInUserWithEmail({ email, password }));
+		dispatch(onCloseModalAuth());
+		dispatch(onCloseDrawerMenu());
 	};
 
 	return (

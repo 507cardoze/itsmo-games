@@ -8,18 +8,22 @@ import {
 	Spacer,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useState } from "react";
 import MenuList from "./menu-list";
 import GameList from "./game-list";
 import SignOutButton from "./signout-button";
 import AccountDisplay from "../account-display";
-import { fCurrency } from "../../common/formatNumber";
-import { useAppSelector } from "../../redux/store";
-import LogoBox from "../logo-box";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import AuthButtons from "../auth-buttons";
+import {
+	onCloseDrawerMenu,
+	onOpenDrawerMenu,
+} from "../../redux/slices/auth-slice";
 
 const MenuButton = () => {
-	const [isOpen, setIsOpen] = useState(false);
+
+	const dispatch = useAppDispatch();
+
+	const isOpen = useAppSelector((store) => store.AuthSlice.isDrawerOpen);
 
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 
@@ -30,9 +34,12 @@ const MenuButton = () => {
 				variant='solid'
 				sx={{ fontSize: "2xl" }}
 				aria-label='menu drawer swicher'
-				onClick={() => setIsOpen(true)}
+				onClick={() => dispatch(onOpenDrawerMenu())}
 			/>
-			<Drawer isOpen={isOpen} placement='left' onClose={() => setIsOpen(false)}>
+			<Drawer
+				isOpen={isOpen}
+				placement='left'
+				onClose={() => dispatch(onCloseDrawerMenu())}>
 				<DrawerOverlay />
 				<DrawerContent bg='#c3c3c3'>
 					<DrawerCloseButton sx={{ color: "white" }} />
@@ -45,7 +52,7 @@ const MenuButton = () => {
 							justifyContent: "flex-start",
 							flexDirection: "column",
 						}}>
-						{currentUser ? <AccountDisplay /> : <LogoBox />}
+						<AccountDisplay />
 						{currentUser && <MenuList />}
 						<GameList />
 						<Spacer />

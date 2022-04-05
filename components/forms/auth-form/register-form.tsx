@@ -16,6 +16,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import {
 	createUserWithEmail,
+	onCloseDrawerMenu,
+	onCloseModalAuth,
 	setAuthFormToLogin,
 } from "../../../redux/slices/auth-slice";
 
@@ -38,6 +40,8 @@ const RegisterForm = () => {
 	const handleRegister = (event: SyntheticEvent) => {
 		event.preventDefault();
 		dispatch(createUserWithEmail({ email, password, displayName }));
+		dispatch(onCloseModalAuth());
+		dispatch(onCloseDrawerMenu());
 	};
 
 	return (

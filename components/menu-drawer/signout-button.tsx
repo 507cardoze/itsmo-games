@@ -1,7 +1,10 @@
 import { Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { signoutSession } from "../../redux/slices/auth-slice";
+import {
+	onCloseDrawerMenu,
+	signoutSession,
+} from "../../redux/slices/auth-slice";
 import { useAppDispatch } from "../../redux/store";
 
 const SignOutButton = () => {
@@ -9,6 +12,7 @@ const SignOutButton = () => {
 	const router = useRouter();
 	const handleOnSignout = async () => {
 		await dispatch(signoutSession("withToast"));
+		dispatch(onCloseDrawerMenu());
 		router.push("/");
 	};
 	return (

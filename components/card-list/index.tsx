@@ -37,7 +37,7 @@ const CardList = () => {
 			) : filteredCardList.length > 0 ? (
 				filteredCardList
 			) : (
-				"no hay resultados"
+				"No hay resultados."
 			)}
 		</Grid>
 	);
