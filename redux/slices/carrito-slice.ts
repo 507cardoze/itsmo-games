@@ -1,7 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../store";
-import { errorToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type CartItemType = {
 	uid: string;
@@ -14,13 +11,13 @@ export type CartItemType = {
 
 export type CartListTypeState = {
 	items: CartItemType[];
+	cartDrawerOpen: boolean;
 };
 
 const initialState = {
 	items: [],
+	cartDrawerOpen: false,
 } as CartListTypeState;
-
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
 
 export const cartListSlice = createSlice({
 	name: "cartListSlice",
@@ -91,9 +88,21 @@ export const cartListSlice = createSlice({
 				}
 			}
 		},
+		setClosecartDrawerOpen: (state) => {
+			state.cartDrawerOpen = false;
+		},
+		setOpencartDrawerOpen: (state) => {
+			state.cartDrawerOpen = true;
+		},
 	},
 });
 
-export const { addItem, lessItem, deleteItem } = cartListSlice.actions;
+export const {
+	addItem,
+	lessItem,
+	deleteItem,
+	setClosecartDrawerOpen,
+	setOpencartDrawerOpen,
+} = cartListSlice.actions;
 
 export default cartListSlice.reducer;

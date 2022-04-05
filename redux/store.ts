@@ -8,6 +8,7 @@ import reduxThunk from "redux-thunk";
 import AuthSlice from "./slices/auth-slice";
 import YugiohCardListSlice from "./slices/yugioh-slice";
 import cartListSlice from "./slices/carrito-slice";
+import CheckoutSlice from "./slices/checkout-slice";
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
@@ -15,6 +16,7 @@ const reducers = combineReducers({
 	YugiohCardListSlice,
 	AuthSlice,
 	cartListSlice,
+	CheckoutSlice,
 });
 
 export const store = configureStore({

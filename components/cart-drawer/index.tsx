@@ -11,13 +11,20 @@ import {
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { Icon } from "@chakra-ui/react";
 import QtyIndicator from "./qty-indicator";
-import { useState } from "react";
 import AccountDisplay from "../account-display";
 import CartList from "./cart-list";
 import CheckoutDetails from "./checkout-details";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import {
+	setClosecartDrawerOpen,
+	setOpencartDrawerOpen,
+} from "../../redux/slices/carrito-slice";
 
 const CartButton = () => {
-	const [isOpen, setIsOpen] = useState(false);
+	const dispatch = useAppDispatch();
+
+	const isOpen = useAppSelector((store) => store.cartListSlice.cartDrawerOpen);
+
 	return (
 		<QtyIndicator>
 			<IconButton
@@ -25,12 +32,12 @@ const CartButton = () => {
 				variant='solid'
 				sx={{ fontSize: "2xl" }}
 				aria-label='cart drawer swicher'
-				onClick={() => setIsOpen(true)}
+				onClick={() => dispatch(setOpencartDrawerOpen())}
 			/>
 			<Drawer
 				isOpen={isOpen}
 				placement='right'
-				onClose={() => setIsOpen(false)}>
+				onClose={() => dispatch(setClosecartDrawerOpen())}>
 				<DrawerOverlay />
 				<DrawerContent>
 					<DrawerCloseButton sx={{ color: "white" }} />

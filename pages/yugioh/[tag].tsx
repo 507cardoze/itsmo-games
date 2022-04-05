@@ -44,7 +44,7 @@ const CardDetailsPage: NextPage = () => {
 				ml={2}
 				mt={2}
 				onClick={() => router.push("/yugioh")}>
-				Volver
+				Volver al listado
 			</Button>
 			<Grid
 				templateColumns={{

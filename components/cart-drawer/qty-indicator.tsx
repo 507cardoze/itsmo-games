@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 import { useAppSelector } from "../../redux/store";
 
 type PropsTypes = {
@@ -9,9 +9,11 @@ type PropsTypes = {
 const QtyIndicator = ({ children }: PropsTypes) => {
 	const cartItems = useAppSelector((store) => store.cartListSlice.items);
 
-	const qty = cartItems.reduce((acc, item) => {
-		return acc + item.quantity;
-	}, 0);
+	const qty = useCallback(() => {
+		return cartItems.reduce((acc, item) => {
+			return acc + item.quantity;
+		}, 0);
+	}, [cartItems])();
 
 	const getLabel = (): string => {
 		if (qty > 99) return "99+";
