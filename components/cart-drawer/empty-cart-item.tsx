@@ -1,4 +1,5 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Icon, Text } from "@chakra-ui/react";
+import { MdOutlineTagFaces } from "react-icons/md";
 
 const EmptyCartItem = () => {
 	return (
@@ -8,8 +9,10 @@ const EmptyCartItem = () => {
 			display='flex'
 			justifyContent='center'
 			alignItems='center'
-			textAlign='center'>
-			<Text fontSize={"xl"}>Carrito Vacío</Text>
+			textAlign='center'
+			flexDirection='column'>
+			<Icon as={MdOutlineTagFaces} w={50} h={50} />
+			<Text fontSize={"lg"}>Carrito Vacío</Text>
 		</Box>
 	);
 };

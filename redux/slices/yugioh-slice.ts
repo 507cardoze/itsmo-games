@@ -32,6 +32,8 @@ export type YugiohCardTypeAPI = {
 	atk: number;
 	def: number;
 	level: number;
+	English: number;
+	Spanish: number;
 };
 
 export interface Prices {
@@ -93,8 +95,7 @@ export const getCardDetails = createAsyncThunk<
 	try {
 		const { tag, name } = args;
 		if (!tag || !name) {
-			errorToast("Error", "Tag o nombre vacío");
-			return thunkAPI.rejectWithValue(new Error("No tag or name"));
+			return thunkAPI.rejectWithValue("No tag or name");
 		}
 
 		let data = {} as any;
@@ -103,28 +104,28 @@ export const getCardDetails = createAsyncThunk<
 
 		if (cardsCollection.length === 0) {
 			errorToast("Error", "Esta carta no existe");
-			return thunkAPI.rejectWithValue(new Error("Esta carta no existe"));
+			return thunkAPI.rejectWithValue("Esta carta no existe");
 		}
 
 		data = cardsCollection.find((card) => card.printTag === tag);
 
 		if (!data) {
 			errorToast("Error", "No se encontró la carta");
-			return thunkAPI.rejectWithValue(new Error("No cards in DB"));
+			return thunkAPI.rejectWithValue("No cards in DB");
 		}
 
 		const APIcardData = await getCardData(name);
 
 		if (!APIcardData) {
 			errorToast("Error", "No se encontró la data de la carta");
-			return thunkAPI.rejectWithValue(new Error("No data in API externo"));
+			return thunkAPI.rejectWithValue("No data in API externo");
 		}
 
 		const APIcardPricing = await getCardPricing(tag);
 
 		if (!APIcardPricing) {
 			errorToast("Error", "No se encontró el precio de la carta");
-			return thunkAPI.rejectWithValue(new Error("No price in API externo"));
+			return thunkAPI.rejectWithValue("No price in API externo");
 		}
 
 		data = { ...data, ...APIcardData, prices: { ...APIcardPricing } };

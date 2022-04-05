@@ -19,7 +19,7 @@ import CheckoutDetails from "./checkout-details";
 const CartButton = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	return (
-		<QtyIndicator qty={0}>
+		<QtyIndicator>
 			<IconButton
 				icon={<Icon as={MdOutlineShoppingBag} />}
 				variant='solid'
