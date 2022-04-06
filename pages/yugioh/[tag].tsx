@@ -7,6 +7,7 @@ import CardDetailsSkeleton from "../../components/card-details/card-details-skel
 import SinglesRelated from "../../components/singles-related";
 import {
 	getCardDetails,
+	setResetCardDetail,
 	startFetchingCardList,
 	stopFetchingCardList,
 } from "../../redux/slices/yugioh-slice";
@@ -35,6 +36,11 @@ const CardDetailsPage: NextPage = () => {
 
 	useLayoutEffect(() => {
 		fetchData(tag, name);
+
+		return () => {
+			dispatch(stopFetchingCardList());
+			dispatch(setResetCardDetail());
+		};
 	}, [dispatch, tag, name]);
 
 	return (

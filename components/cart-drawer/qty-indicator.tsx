@@ -11,7 +11,11 @@ const QtyIndicator = ({ children }: PropsTypes) => {
 
 	const qty = useCallback(() => {
 		return cartItems.reduce((acc, item) => {
-			return acc + item.quantity;
+
+			const cantES = item.quantitySpanish ? item.quantitySpanish : 0;
+			const cantEN = item.quantityEnglish ? item.quantityEnglish : 0;
+
+			return acc + cantES + cantEN;
 		}, 0);
 	}, [cartItems])();
 

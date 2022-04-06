@@ -14,7 +14,13 @@ const CheckoutDetails = () => {
 	const router = useRouter();
 	const cartItems = useAppSelector((store) => store.cartListSlice.items);
 	const subtotal = useCallback(
-		() => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+		() =>
+			cartItems.reduce((acc, item) => {
+				const cantES = item.quantitySpanish ? item.quantitySpanish : 0;
+				const cantEN = item.quantityEnglish ? item.quantityEnglish : 0;
+				const qty = cantES + cantEN;
+				return acc + item.price * qty;
+			}, 0),
 		[cartItems],
 	)();
 	const itbms = subtotal * 0.07;

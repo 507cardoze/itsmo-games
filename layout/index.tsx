@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
 import HeaderLogo from "../components/header-logo";
-import AuthModal from "../components/modals/auth-modal/auth-modal";
+import { AuthModal, LenguageModal } from "../components/modals/";
 import {
 	getCards,
 	startFetchingCardList,
@@ -39,7 +39,14 @@ const Layout = ({ children }: PropsTypes) => {
 	}, []);
 
 	const renderModal = () =>
-		typeof window !== "undefined" ? <AuthModal /> : <></>;
+		typeof window !== "undefined" ? (
+			<>
+				<LenguageModal />
+				<AuthModal />
+			</>
+		) : (
+			<></>
+		);
 
 	return (
 		<Box sx={{ overFlow: "hidden", minHeight: "100vh" }}>

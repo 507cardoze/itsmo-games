@@ -6,7 +6,8 @@ export type CartItemType = {
 	name: string;
 	tag: string;
 	price: number;
-	quantity: number;
+	quantitySpanish: number;
+	quantityEnglish: number;
 };
 
 export type CartListTypeState = {
@@ -24,7 +25,7 @@ export const cartListSlice = createSlice({
 	initialState,
 	reducers: {
 		addItem: (state, action) => {
-			const { uid, url, name, tag, price } = action.payload;
+			const { uid, url, name, tag, price, type } = action.payload;
 			const product = {
 				uid,
 				url,
@@ -35,25 +36,46 @@ export const cartListSlice = createSlice({
 
 			const itemExist = state.items.find((item) => item.uid === uid);
 
-			if (itemExist) {
+			if (itemExist && type === "spanish") {
 				let newCartItems = [] as CartItemType[];
+
 				state.items.forEach((item) => {
+					const cantES = item.quantitySpanish ? item.quantitySpanish : 0;
+
 					if (item.uid === uid) {
 						newCartItems.push({
-							uid: item.uid,
-							url: item.url,
-							name: item.name,
-							tag: item.tag,
-							price: item.price,
-							quantity: item.quantity + 1,
+							...item,
+							quantitySpanish: cantES + 1,
 						});
 					} else {
 						newCartItems.push(item);
 					}
 				});
+
+				state.items = newCartItems;
+			} else if (itemExist && type === "english") {
+				let newCartItems = [] as CartItemType[];
+
+				state.items.forEach((item) => {
+					const cantEN = item.quantityEnglish ? item.quantityEnglish : 0;
+
+					if (item.uid === uid) {
+						newCartItems.push({
+							...item,
+							quantityEnglish: cantEN + 1,
+						});
+					} else {
+						newCartItems.push(item);
+					}
+				});
+
 				state.items = newCartItems;
 			} else {
-				state.items.push({ ...product, quantity: 1 });
+				if (type === "spanish") {
+					state.items.push({ ...product, quantitySpanish: 1 });
+				} else if (type === "english") {
+					state.items.push({ ...product, quantityEnglish: 1 });
+				}
 			}
 		},
 		deleteItem: (state, action) => {
@@ -62,29 +84,44 @@ export const cartListSlice = createSlice({
 			state.items = newCartItems;
 		},
 		lessItem: (state, action) => {
-			const { uid } = action.payload;
+			const { uid, type } = action.payload;
 			const itemExist = state.items.find((item) => item.uid === uid);
 
 			if (itemExist) {
-				if (itemExist.quantity == 1) {
-					state.items = state.items.filter((item) => item.uid !== uid);
-				} else {
-					let newCartItems = [] as CartItemType[];
-					state.items.forEach((item) => {
-						if (item.uid === uid) {
-							newCartItems.push({
-								uid: item.uid,
-								url: item.url,
-								name: item.name,
-								tag: item.tag,
-								price: item.price,
-								quantity: item.quantity - 1,
-							});
-						} else if (item.quantity > 0) {
-							newCartItems.push(item);
-						}
-					});
-					state.items = newCartItems;
+				if (type === "spanish") {
+					if (itemExist.quantitySpanish == 1) {
+						state.items = state.items.filter((item) => item.uid !== uid);
+					} else {
+						let newCartItems = [] as CartItemType[];
+						state.items.forEach((item) => {
+							if (item.uid === uid) {
+								newCartItems.push({
+									...item,
+									quantitySpanish: item.quantitySpanish - 1,
+								});
+							} else if (item.quantitySpanish > 0) {
+								newCartItems.push(item);
+							}
+						});
+						state.items = newCartItems;
+					}
+				} else if (type === "english") {
+					if (itemExist.quantityEnglish == 1) {
+						state.items = state.items.filter((item) => item.uid !== uid);
+					} else {
+						let newCartItems = [] as CartItemType[];
+						state.items.forEach((item) => {
+							if (item.uid === uid) {
+								newCartItems.push({
+									...item,
+									quantityEnglish: item.quantityEnglish - 1,
+								});
+							} else if (item.quantityEnglish > 0) {
+								newCartItems.push(item);
+							}
+						});
+						state.items = newCartItems;
+					}
 				}
 			}
 		},

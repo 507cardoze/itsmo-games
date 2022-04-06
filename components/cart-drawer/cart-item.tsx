@@ -43,8 +43,16 @@ const CartItem = ({ product }: PropsTypes) => {
 				<Text sx={{ lineHeight: 1, fontSize: "0.8rem" }}>{product.name}</Text>
 				<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>{product.tag}</Text>
 				<Text sx={{ lineHeight: 0.6, fontSize: "0.7rem", fontWeight: "bold" }}>
-					{fCurrency(product.price)} x {product.quantity}
+					{fCurrency(product.price)}
 				</Text>
+				<Stack direction='row' spacing={4}>
+					<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+						ES: x{product.quantitySpanish ? product.quantitySpanish : 0}
+					</Text>
+					<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+						EN: x{product.quantityEnglish ? product.quantityEnglish : 0}
+					</Text>
+				</Stack>
 			</Stack>
 			<Spacer />
 			<Stack direction='row' justifyContent='center' alignItems='center' pr={5}>

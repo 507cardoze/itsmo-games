@@ -58,6 +58,8 @@ export type YugiohCartListTypeState = {
 	isLoadingCardList: boolean;
 	searchTerm: string;
 	filterBy: string;
+	isOpenLenguageModal: boolean;
+	lenguageModalType: "add" | "less";
 };
 
 const initialState = {
@@ -66,6 +68,8 @@ const initialState = {
 	isLoadingCardList: false,
 	searchTerm: "",
 	filterBy: "",
+	isOpenLenguageModal: false,
+	lenguageModalType: "add",
 } as YugiohCartListTypeState;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
@@ -158,6 +162,18 @@ export const YugiohCardListSlice = createSlice({
 		setFilterBy: (state, action) => {
 			state.filterBy = action.payload;
 		},
+		setOpenLenguageModal: (state) => {
+			state.isOpenLenguageModal = true;
+		},
+		setCloseLenguageModal: (state) => {
+			state.isOpenLenguageModal = false;
+		},
+		setlenguageModalType: (state, action) => {
+			state.lenguageModalType = action.payload;
+		},
+		setResetCardDetail: (state) => {
+			state.cardDetail = null;
+		},
 	},
 
 	extraReducers: (builder) => {
@@ -176,6 +192,10 @@ export const {
 	stopFetchingCardList,
 	setSearchTerm,
 	setFilterBy,
+	setOpenLenguageModal,
+	setCloseLenguageModal,
+	setlenguageModalType,
+	setResetCardDetail,
 } = YugiohCardListSlice.actions;
 
 export default YugiohCardListSlice.reducer;

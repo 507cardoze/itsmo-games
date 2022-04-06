@@ -13,6 +13,7 @@ const CheckoutItem = ({ product }: PropsTypes) => {
 		<NextLink href={`./yugioh/${product.tag}?name=${product.name}`} passHref>
 			<GridItem
 				w='100%'
+				h='355px'
 				sx={{
 					mb: 5,
 					transition: "all 0.3s ease-in-out",
@@ -39,8 +40,16 @@ const CheckoutItem = ({ product }: PropsTypes) => {
 					</Text>
 					<Text
 						sx={{ lineHeight: 0.6, fontSize: "0.7rem", fontWeight: "bold" }}>
-						{fCurrency(product.price)} x {product.quantity}
+						{fCurrency(product.price)}
 					</Text>
+					<Stack w='100%' direction='row' justifyContent='center' spacing={2}>
+						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+							ES: x{product.quantitySpanish ? product.quantitySpanish : 0}
+						</Text>
+						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+							EN: x{product.quantityEnglish ? product.quantityEnglish : 0}
+						</Text>
+					</Stack>
 				</Stack>
 			</GridItem>
 		</NextLink>

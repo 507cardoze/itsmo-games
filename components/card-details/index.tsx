@@ -11,7 +11,7 @@ import { fCurrency } from "../../common/formatNumber";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { MdAddShoppingCart } from "react-icons/md";
 import Singles from "../singles";
-import { addItem } from "../../redux/slices/carrito-slice";
+import { setOpenLenguageModal } from "../../redux/slices/yugioh-slice";
 
 const CardDetails = () => {
 	const dispatch = useAppDispatch();
@@ -86,16 +86,7 @@ const CardDetails = () => {
 					<Stack>
 						<Button
 							onClick={() => {
-								if (cardDetail)
-									return dispatch(
-										addItem({
-											uid: cardDetail.uid,
-											name: cardDetail.name,
-											price: cardDetail.prices.average,
-											url: cardDetail.url,
-											tag: cardDetail.printTag,
-										}),
-									);
+								if (cardDetail) return dispatch(setOpenLenguageModal());
 							}}
 							colorScheme='blue'
 							bgGradient='linear(to-r, blue.400, blue.500, blue.600)'
