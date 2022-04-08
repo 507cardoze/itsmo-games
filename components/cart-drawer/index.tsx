@@ -35,6 +35,7 @@ const CartButton = () => {
 				onClick={() => dispatch(setOpencartDrawerOpen())}
 			/>
 			<Drawer
+				size='sm'
 				isOpen={isOpen}
 				placement='right'
 				onClose={() => dispatch(setClosecartDrawerOpen())}>

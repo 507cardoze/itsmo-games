@@ -1,7 +1,7 @@
 import { Button, Grid } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useEffect } from "react";
 import CardDetails from "../../components/card-details";
 import CardDetailsSkeleton from "../../components/card-details/card-details-skeleton";
 import SinglesRelated from "../../components/singles-related";
@@ -34,7 +34,7 @@ const CardDetailsPage: NextPage = () => {
 		[dispatch, tag, name],
 	);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		fetchData(tag, name);
 
 		return () => {

@@ -3,141 +3,117 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalBody,
-	ModalFooter,
-	Button,
-	Icon,
-	Stack,
 	Heading,
 } from "@chakra-ui/react";
 import { useAppSelector, useAppDispatch } from "../../../redux/store";
-import { setCloseLenguageModal } from "../../../redux/slices/yugioh-slice";
-import { addItem, lessItem } from "../../../redux/slices/carrito-slice";
-import { MdAddShoppingCart } from "react-icons/md";
+
+import {
+	CartItemType,
+	addItem,
+	lessItem,
+	setCloseLenguageCartModal,
+} from "../../../redux/slices/carrito-slice";
+import { useEffect, useState } from "react";
+import LessButtons from "./lessButtons";
+import AddButtons from "./addButtons";
 
 function LenguageCartModal() {
 	const dispatch = useAppDispatch();
-	const isOpenLenguageModal = useAppSelector(
-		(state) => state.YugiohCardListSlice.isOpenLenguageModal,
+	const LenguageCartModalState = useAppSelector(
+		(state) => state.cartListSlice.LenguageCartModalState,
 	);
-
-	const cardDetail = useAppSelector(
-		(store) => store.YugiohCardListSlice.cardDetail,
-	);
-
 	const carritoItems = useAppSelector((store) => store.cartListSlice.items);
-
-	const lenguageModalType = useAppSelector(
-		(store) => store.YugiohCardListSlice.lenguageModalType,
+	const action = useAppSelector((store) => store.cartListSlice.action);
+	const yugiohCardList = useAppSelector(
+		(store) => store.YugiohCardListSlice.cardList,
 	);
 
-	const handleAddItem = (lang: "spanish" | "english"): void => {
-		if (cardDetail)
-			dispatch(
-				addItem({
-					uid: cardDetail.uid,
-					name: cardDetail.name,
-					price: cardDetail.prices.average,
-					url: cardDetail.url,
-					tag: cardDetail.printTag,
-					type: lang,
-				}),
-			);
-	};
+	const [carritoSelectedItem, setCarritoSelectedItem] = useState<
+		CartItemType | undefined
+	>();
+
+	const selectedCartItem = useAppSelector(
+		(store) => store.cartListSlice.editableItem,
+	);
+
+	const card = yugiohCardList.find(
+		(cardItem) => cardItem.uid === selectedCartItem?.uid,
+	);
 
 	const handleLessItem = (lang: "spanish" | "english"): void => {
-		if (cardDetail)
+		if (carritoSelectedItem)
 			dispatch(
 				lessItem({
-					uid: cardDetail.uid,
-					name: cardDetail.name,
-					price: cardDetail.prices.average,
-					url: cardDetail.url,
-					tag: cardDetail.printTag,
+					uid: carritoSelectedItem.uid,
+					name: carritoSelectedItem.name,
+					price: carritoSelectedItem.price,
+					url: carritoSelectedItem.url,
+					tag: carritoSelectedItem.tag,
 					type: lang,
 				}),
 			);
 	};
 
-	const handleOnClick = (lang: "spanish" | "english") => {
-		if (cardDetail) {
-			if (lenguageModalType === "add") {
-				handleAddItem(lang);
-			}
-			if (lenguageModalType === "less") {
-				handleLessItem(lang);
-			}
-		}
+	const handleAddItem = (lang: "spanish" | "english"): void => {
+		if (carritoSelectedItem)
+			dispatch(
+				addItem({
+					uid: carritoSelectedItem.uid,
+					name: carritoSelectedItem.name,
+					price: carritoSelectedItem.price,
+					url: carritoSelectedItem.url,
+					tag: carritoSelectedItem.tag,
+					type: lang,
+				}),
+			);
 	};
 
-	const checkStock = (lang: "spanish" | "english"): boolean => {
-		if (!cardDetail) return false;
-
-		const carritoSelectedItem = carritoItems.find(
-			(item) => item.uid === cardDetail.uid,
-		);
-
-		if (carritoSelectedItem) {
-			if (lang === "spanish") {
-				if (cardDetail.Spanish <= carritoSelectedItem.quantitySpanish) {
-					return true;
-				} else {
-					return false;
-				}
-			} else if (lang === "english") {
-				if (cardDetail.English <= carritoSelectedItem.quantityEnglish) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
+	const handleOnClick = (lang: "spanish" | "english"): void => {
+		if (action === "add") {
+			handleAddItem(lang);
 		} else {
-			return false;
+			handleLessItem(lang);
 		}
 	};
+
+	useEffect(() => {
+		if (carritoItems && selectedCartItem) {
+			setCarritoSelectedItem(
+				carritoItems.find((item) => item.uid === selectedCartItem.uid),
+			);
+			if (!carritoItems.find((item) => item.uid === selectedCartItem.uid)) {
+				dispatch(setCloseLenguageCartModal());
+			}
+		}
+	}, [carritoItems, selectedCartItem]);
+
+	if (!carritoSelectedItem || !card) return null;
 
 	return (
 		<Modal
-			onClose={() => dispatch(setCloseLenguageModal())}
+			onClose={() => dispatch(setCloseLenguageCartModal())}
 			size='xl'
-			isOpen={isOpenLenguageModal}>
+			isOpen={LenguageCartModalState}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalBody>
 					<Heading fontSize='24px' textAlign='center'>
-						Lenguajes disponibles
+						{action === "add" ? "Agregar " : "Restar"} {selectedCartItem?.name}
 					</Heading>
-					<Stack direction='row' spacing={4} justifyContent='center' my={10}>
-						<Button
-							disabled={checkStock("spanish")}
-							onClick={() => handleOnClick("spanish")}
-							colorScheme='red'
-							bgGradient='linear(to-r, red.400, red.500, red.600)'
-							color='white'
-							variant='solid'
-							isFullWidth
-							leftIcon={<Icon as={MdAddShoppingCart} />}>
-							Agregar versión española
-						</Button>
-						<Button
-							disabled={checkStock("english")}
-							onClick={() => handleOnClick("english")}
-							colorScheme='blue'
-							bgGradient='linear(to-r, blue.400, blue.500, blue.600)'
-							color='white'
-							variant='solid'
-							isFullWidth
-							leftIcon={<Icon as={MdAddShoppingCart} />}>
-							Agregar versión inglesa
-						</Button>
-					</Stack>
+					{action === "add" ? (
+						<AddButtons
+							carritoSelectedItem={carritoSelectedItem}
+							card={card}
+							handleOnClick={handleOnClick}
+						/>
+					) : (
+						<LessButtons
+							carritoSelectedItem={carritoSelectedItem}
+							card={card}
+							handleOnClick={handleOnClick}
+						/>
+					)}
 				</ModalBody>
-				<ModalFooter justifyContent='center' alignItems='center'>
-					<Button size='sm' onClick={() => dispatch(setCloseLenguageModal())}>
-						Cancelar
-					</Button>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);

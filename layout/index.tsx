@@ -1,7 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
 import HeaderLogo from "../components/header-logo";
-import { AuthModal, LenguageModal } from "../components/modals/";
+import {
+	AuthModal,
+	LenguageModal,
+	LenguageCartModal,
+} from "../components/modals/";
 import {
 	getCards,
 	startFetchingCardList,
@@ -42,6 +46,7 @@ const Layout = ({ children }: PropsTypes) => {
 		typeof window !== "undefined" ? (
 			<>
 				<LenguageModal />
+				<LenguageCartModal />
 				<AuthModal />
 			</>
 		) : (

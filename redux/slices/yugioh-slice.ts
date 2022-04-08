@@ -14,6 +14,13 @@ export type YugiohCardType = {
 	printTag: string;
 	uid: string;
 	url: string;
+	English: number;
+	Spanish: number;
+	rarity: string;
+	cardType: string;
+	tcgName: string;
+	setName: string;
+	cardProperty: string;
 };
 
 export type YugiohCardTypeAPI = {

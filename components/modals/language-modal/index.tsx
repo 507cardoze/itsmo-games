@@ -3,7 +3,6 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalBody,
-	ModalFooter,
 	Button,
 	Icon,
 	Stack,
@@ -40,12 +39,12 @@ function LenguageModal() {
 			);
 	};
 
+	const carritoSelectedItem = carritoItems.find(
+		(item) => item.uid === cardDetail?.uid,
+	);
+
 	const checkStock = (lang: "spanish" | "english"): boolean => {
 		if (!cardDetail) return true;
-
-		const carritoSelectedItem = carritoItems.find(
-			(item) => item.uid === cardDetail.uid,
-		);
 
 		if (carritoSelectedItem) {
 			if (
@@ -75,8 +74,52 @@ function LenguageModal() {
 						Lenguajes disponibles
 					</Heading>
 					<Stack direction='row' spacing={4} justifyContent='center' my={10}>
+						{cardDetail && cardDetail.Spanish > 0 && (
+							<Button disabled maxW='250px' variant='outlined' isFullWidth>
+								{cardDetail
+									? `${
+											cardDetail.Spanish
+												? `${cardDetail.Spanish} de ${
+														carritoSelectedItem &&
+														carritoSelectedItem.quantitySpanish
+															? carritoSelectedItem.quantitySpanish
+															: 0
+												  }`
+												: `0 de ${
+														carritoSelectedItem
+															? carritoSelectedItem.quantitySpanish
+															: 0
+												  }`
+									  }`
+									: `0`}
+							</Button>
+						)}
+						{cardDetail && cardDetail.English >= 0 && (
+							<Button disabled maxW='250px' variant='outlined' isFullWidth>
+								{cardDetail
+									? `${
+											cardDetail.English
+												? `${cardDetail.English} de ${
+														carritoSelectedItem &&
+														carritoSelectedItem.quantityEnglish
+															? carritoSelectedItem.quantityEnglish
+															: 0
+												  }`
+												: `0 de ${
+														carritoSelectedItem &&
+														carritoSelectedItem.quantityEnglish
+															? carritoSelectedItem.quantityEnglish
+															: 0
+												  }`
+									  }`
+									: `0`}
+							</Button>
+						)}
+					</Stack>
+					<Stack direction='row' spacing={4} justifyContent='center' my={10}>
 						{cardDetail && cardDetail.Spanish && (
 							<Button
+								maxW='250px'
 								disabled={checkStock("spanish")}
 								onClick={() => handleAddItem("spanish")}
 								colorScheme='red'
@@ -90,6 +133,7 @@ function LenguageModal() {
 						)}
 						{cardDetail && cardDetail.English && (
 							<Button
+								maxW='250px'
 								disabled={checkStock("english")}
 								onClick={() => handleAddItem("english")}
 								colorScheme='blue'
@@ -103,11 +147,6 @@ function LenguageModal() {
 						)}
 					</Stack>
 				</ModalBody>
-				<ModalFooter justifyContent='center' alignItems='center'>
-					<Button size='sm' onClick={() => dispatch(setCloseLenguageModal())}>
-						Cancelar
-					</Button>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);

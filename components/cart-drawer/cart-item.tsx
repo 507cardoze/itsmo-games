@@ -12,6 +12,7 @@ import {
 	CartItemType,
 	deleteItem,
 	lessItem,
+	setOpenLenguageCartModal,
 } from "../../redux/slices/carrito-slice";
 import { useAppDispatch } from "../../redux/store";
 
@@ -21,6 +22,12 @@ type PropsTypes = {
 
 const CartItem = ({ product }: PropsTypes) => {
 	const dispatch = useAppDispatch();
+
+	const cantES = product.quantitySpanish || 0;
+	const cantEN = product.quantityEnglish || 0;
+
+	const totalProduct = cantES + cantEN;
+
 	return (
 		<Stack direction='row' mt={2}>
 			<Box w='30%'>
@@ -43,15 +50,19 @@ const CartItem = ({ product }: PropsTypes) => {
 				<Text sx={{ lineHeight: 1, fontSize: "0.8rem" }}>{product.name}</Text>
 				<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>{product.tag}</Text>
 				<Text sx={{ lineHeight: 0.6, fontSize: "0.7rem", fontWeight: "bold" }}>
-					{fCurrency(product.price)}
+					{fCurrency(product.price) + " x " + totalProduct}
 				</Text>
 				<Stack direction='row' spacing={4}>
-					<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-						ES: x{product.quantitySpanish ? product.quantitySpanish : 0}
-					</Text>
-					<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-						EN: x{product.quantityEnglish ? product.quantityEnglish : 0}
-					</Text>
+					{product.quantitySpanish && (
+						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+							ES: x{product.quantitySpanish}
+						</Text>
+					)}
+					{product.quantityEnglish && (
+						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+							EN: x{product.quantityEnglish}
+						</Text>
+					)}
 				</Stack>
 			</Stack>
 			<Spacer />
@@ -59,13 +70,21 @@ const CartItem = ({ product }: PropsTypes) => {
 				<Button
 					variant='outline'
 					size='xs'
-					onClick={() => dispatch(addItem(product))}>
+					onClick={() =>
+						dispatch(
+							setOpenLenguageCartModal({ cartItem: product, action: "add" }),
+						)
+					}>
 					<Icon as={MdAdd} />
 				</Button>
 				<Button
 					variant='outline'
 					size='xs'
-					onClick={() => dispatch(lessItem(product))}>
+					onClick={() =>
+						dispatch(
+							setOpenLenguageCartModal({ cartItem: product, action: "less" }),
+						)
+					}>
 					<Icon as={MdOutlineDangerous} />
 				</Button>
 				<Button
