@@ -43,12 +43,16 @@ const CheckoutItem = ({ product }: PropsTypes) => {
 						{fCurrency(product.price)}
 					</Text>
 					<Stack w='100%' direction='row' justifyContent='center' spacing={2}>
-						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-							ES: x{product.quantitySpanish ? product.quantitySpanish : 0}
-						</Text>
-						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-							EN: x{product.quantityEnglish ? product.quantityEnglish : 0}
-						</Text>
+						{product.quantitySpanish && (
+							<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+								ES: x{product.quantitySpanish}
+							</Text>
+						)}
+						{product.quantityEnglish && (
+							<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
+								EN: x{product.quantityEnglish}
+							</Text>
+						)}
 					</Stack>
 				</Stack>
 			</GridItem>

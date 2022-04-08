@@ -23,11 +23,6 @@ export type firestoreUserType = {
 	email: string;
 	displayName: string;
 	phoneNumber: string;
-	address1: string;
-	address2: string;
-	city: string;
-	state: string;
-	country: string;
 	createdAt: string;
 	isAdmin: boolean;
 	isBanned: boolean;
