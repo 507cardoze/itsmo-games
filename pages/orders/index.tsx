@@ -49,6 +49,7 @@ const MyOrders = () => {
 				<Tbody>
 					{orders.map((order) => (
 						<Tr
+							key={order.uid}
 							_hover={{
 								bg: "gray.100",
 							}}>
