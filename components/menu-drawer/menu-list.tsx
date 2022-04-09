@@ -26,12 +26,12 @@ const MenuList = () => {
 	return (
 		<Stack spacing={2} mt={1}>
 			<MenuItem
-				handleOnClick={() => handleClick("/")}
-				label='Mis Pedidos'
+				handleOnClick={() => handleClick("/orders")}
+				label='Mis ordenes'
 				Icono={<Icon as={MdAssignmentTurnedIn} />}
 			/>
 			<MenuItem
-				handleOnClick={() => handleClick("/orders")}
+				handleOnClick={() => handleClick("/")}
 				label='Mi Cuenta'
 				Icono={<Icon as={MdAccountBox} />}
 			/>

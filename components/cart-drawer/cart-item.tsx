@@ -6,12 +6,11 @@ import {
 	MdOutlineDeleteOutline,
 	MdOutlineDangerous,
 } from "react-icons/md";
+import { VscChromeMinimize } from "react-icons/vsc";
 import { SyntheticEvent } from "react";
 import {
-	addItem,
 	CartItemType,
 	deleteItem,
-	lessItem,
 	setOpenLenguageCartModal,
 } from "../../redux/slices/carrito-slice";
 import { useAppDispatch } from "../../redux/store";
@@ -47,20 +46,20 @@ const CartItem = ({ product }: PropsTypes) => {
 				/>
 			</Box>
 			<Stack spacing={2} w='30%' justifyContent='center'>
-				<Text sx={{ lineHeight: 1, fontSize: "0.8rem" }}>{product.name}</Text>
-				<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>{product.tag}</Text>
-				<Text sx={{ lineHeight: 0.6, fontSize: "0.7rem", fontWeight: "bold" }}>
+				<Text sx={{ lineHeight: 1, fontSize: "1rem" }}>{product.name}</Text>
+				<Text sx={{ lineHeight: 0.6, fontSize: "0.7rem" }}>{product.tag}</Text>
+				<Text sx={{ lineHeight: 0.6, fontSize: "0.9rem", fontWeight: "bold" }}>
 					{fCurrency(product.price) + " x " + totalProduct}
 				</Text>
 				<Stack direction='row' spacing={4}>
 					{product.quantitySpanish && (
-						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-							ES: x{product.quantitySpanish}
+						<Text sx={{ lineHeight: 0.8, fontSize: "0.6rem" }}>
+							Español: x{product.quantitySpanish}
 						</Text>
 					)}
 					{product.quantityEnglish && (
-						<Text sx={{ lineHeight: 0.6, fontSize: "0.6rem" }}>
-							EN: x{product.quantityEnglish}
+						<Text sx={{ lineHeight: 0.8, fontSize: "0.6rem" }}>
+							Ingles: x{product.quantityEnglish}
 						</Text>
 					)}
 				</Stack>
@@ -69,7 +68,7 @@ const CartItem = ({ product }: PropsTypes) => {
 			<Stack direction='row' justifyContent='center' alignItems='center' pr={5}>
 				<Button
 					variant='outline'
-					size='xs'
+					size='sm'
 					onClick={() =>
 						dispatch(
 							setOpenLenguageCartModal({ cartItem: product, action: "add" }),
@@ -79,18 +78,18 @@ const CartItem = ({ product }: PropsTypes) => {
 				</Button>
 				<Button
 					variant='outline'
-					size='xs'
+					size='sm'
 					onClick={() =>
 						dispatch(
 							setOpenLenguageCartModal({ cartItem: product, action: "less" }),
 						)
 					}>
-					<Icon as={MdOutlineDangerous} />
+					<Icon as={VscChromeMinimize} />
 				</Button>
 				<Button
 					onClick={() => dispatch(deleteItem(product))}
 					variant='outline'
-					size='xs'
+					size='sm'
 					colorScheme='red'
 					bgGradient='linear(to-r, red.400, red.500, red.600)'
 					color='white'

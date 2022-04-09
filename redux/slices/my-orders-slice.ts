@@ -1,14 +1,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
-import { errorToast, successToast } from "../../common/toast";
+import { errorToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
-import { nanoid } from "@reduxjs/toolkit";
-import { getOrdersByUserUid, saveOrder } from "../../firebase/firebase-orders";
+import { getOrdersByUserUid } from "../../firebase/firebase-orders";
+import { CartItemType } from "./carrito-slice";
+
+export type Order = {
+	uid: string;
+	address1: string;
+	address2: string;
+	city: string;
+	userUid: string;
+	status: string;
+	metodoPago: string;
+	useCredit: number;
+	phoneNumber: string;
+	created_at: string;
+	items: CartItemType[];
+};
+
+export type MyOrdersState = {
+	myOrders: Order[];
+	fetchingOrders: boolean;
+};
 
 const initialState = {
 	myOrders: [],
 	fetchingOrders: false,
-};
+} as MyOrdersState;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
 

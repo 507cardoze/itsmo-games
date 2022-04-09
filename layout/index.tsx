@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Spacer } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
 import HeaderLogo from "../components/header-logo";
 import {
@@ -18,6 +18,7 @@ import {
 	startAuthLoading,
 	stopAuthLoading,
 } from "../redux/slices/auth-slice";
+import Footer from "../components/footer";
 
 type PropsTypes = { children: ReactNode };
 
@@ -54,10 +55,18 @@ const Layout = ({ children }: PropsTypes) => {
 		);
 
 	return (
-		<Box sx={{ overFlow: "hidden", minHeight: "100vh" }}>
+		<Box
+			sx={{
+				overFlowY: "hidden",
+				height: "100vh",
+				display: "flex",
+				flexDirection: "column",
+			}}>
 			<HeaderLogo />
 			{renderModal()}
 			{children}
+			<Spacer />
+			<Footer />
 		</Box>
 	);
 };

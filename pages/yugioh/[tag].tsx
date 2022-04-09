@@ -1,4 +1,4 @@
-import { Button, Grid } from "@chakra-ui/react";
+import { Button, Grid, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
@@ -45,13 +45,16 @@ const CardDetailsPage: NextPage = () => {
 
 	return (
 		<>
-			<Button
-				variant='solid'
-				ml={2}
-				mt={2}
-				onClick={() => router.push("/yugioh")}>
-				Volver al listado
-			</Button>
+			<Stack>
+				<Button
+					variant='solid'
+					sx={{ width: "180px", height: "45px" }}
+					ml={2}
+					mt={3}
+					onClick={() => router.push("/yugioh")}>
+					Volver al listado
+				</Button>
+			</Stack>
 			<Grid
 				templateColumns={{
 					base: "repeat(1, 1fr)",
