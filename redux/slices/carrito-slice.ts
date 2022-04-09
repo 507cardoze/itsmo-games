@@ -136,6 +136,9 @@ export const cartListSlice = createSlice({
 				}
 			}
 		},
+		resetCart: (state) => {
+			state.items = [];
+		},
 		setClosecartDrawerOpen: (state) => {
 			state.cartDrawerOpen = false;
 		},
@@ -163,6 +166,7 @@ export const {
 	setOpencartDrawerOpen,
 	setOpenLenguageCartModal,
 	setCloseLenguageCartModal,
+	resetCart,
 } = cartListSlice.actions;
 
 export default cartListSlice.reducer;

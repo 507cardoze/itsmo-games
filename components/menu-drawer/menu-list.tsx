@@ -31,7 +31,7 @@ const MenuList = () => {
 				Icono={<Icon as={MdAssignmentTurnedIn} />}
 			/>
 			<MenuItem
-				handleOnClick={() => handleClick("/")}
+				handleOnClick={() => handleClick("/orders")}
 				label='Mi Cuenta'
 				Icono={<Icon as={MdAccountBox} />}
 			/>

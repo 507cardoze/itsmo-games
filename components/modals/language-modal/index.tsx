@@ -128,7 +128,7 @@ function LenguageModal() {
 								variant='solid'
 								isFullWidth
 								leftIcon={<Icon as={MdAddShoppingCart} />}>
-								Agregar versión española
+								Español
 							</Button>
 						)}
 						{cardDetail && cardDetail.English && (
@@ -142,7 +142,7 @@ function LenguageModal() {
 								variant='solid'
 								isFullWidth
 								leftIcon={<Icon as={MdAddShoppingCart} />}>
-								Agregar versión inglesa
+								Ingles
 							</Button>
 						)}
 					</Stack>

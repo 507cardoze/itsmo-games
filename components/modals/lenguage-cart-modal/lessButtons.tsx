@@ -71,7 +71,7 @@ const LessButtons = ({
 						variant='solid'
 						isFullWidth
 						leftIcon={<Icon as={MdAddShoppingCart} />}>
-						Restar versión española
+						Restar Español
 					</Button>
 				)}
 				{carritoSelectedItem && carritoSelectedItem.quantityEnglish >= 0 && (
@@ -84,7 +84,7 @@ const LessButtons = ({
 						variant='solid'
 						isFullWidth
 						leftIcon={<Icon as={MdAddShoppingCart} />}>
-						Restar versión inglesa
+						Restar Ingles
 					</Button>
 				)}
 			</Stack>

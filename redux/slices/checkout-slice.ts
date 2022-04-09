@@ -5,7 +5,9 @@ import { FirebaseError } from "firebase/app";
 import { nanoid } from "@reduxjs/toolkit";
 import { saveOrder } from "../../firebase/firebase-orders";
 
-const initialState = {};
+const initialState = {
+	submittingOrder: false,
+};
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
 
@@ -48,7 +50,7 @@ export const setOrder = createAsyncThunk<
 
 		const order = await saveOrder(orderData);
 		if (!order) return thunkAPI.rejectWithValue("Error al guardar el pedido");
-		successToast("Orden creada", "¡Hecho tu orden!");
+		successToast("¡Orden creada!", "¡Has hecho tu orden!");
 	} catch (error) {
 		if (error instanceof FirebaseError) {
 			errorToast(`${error.name}`, `${error.code}`);
@@ -62,12 +64,17 @@ export const setOrder = createAsyncThunk<
 export const CheckoutSlice = createSlice({
 	name: "checkout-slice",
 	initialState,
-	reducers: {},
-	extraReducers: (builder) => {
-		builder.addCase(setOrder.fulfilled, (state, action) => {});
+	reducers: {
+		startSubmittingOrder(state) {
+			state.submittingOrder = true;
+		},
+		stopSubmittingOrder(state) {
+			state.submittingOrder = false;
+		},
 	},
 });
 
-//export const {  } = CheckoutSlice.actions;
+export const { startSubmittingOrder, stopSubmittingOrder } =
+	CheckoutSlice.actions;
 
 export default CheckoutSlice.reducer;

@@ -35,3 +35,11 @@ export const saveOrder = async (order: order) => {
 		return error;
 	}
 };
+
+
+export const getOrdersByUserUid = async (userUid: string) => {
+	const ordersRef = collection(db, collectionName);
+	const orders = query(ordersRef, where("userUid", "==", userUid));
+
+	return (await getDocs(orders)).docs.map((doc) => doc.data());
+};

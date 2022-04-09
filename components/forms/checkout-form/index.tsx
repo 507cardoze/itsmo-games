@@ -17,12 +17,21 @@ import {
 	onOpenModalAuth,
 	setAuthFormToLogin,
 } from "../../../redux/slices/auth-slice";
-import { setOrder } from "../../../redux/slices/checkout-slice";
+import { resetCart } from "../../../redux/slices/carrito-slice";
+import {
+	setOrder,
+	startSubmittingOrder,
+	stopSubmittingOrder,
+} from "../../../redux/slices/checkout-slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 
 const CheckoutForm = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
+
+	const submittingOrder = useAppSelector(
+		(state) => state.CheckoutSlice.submittingOrder,
+	);
 
 	const cartItems = useAppSelector((store) => store.cartListSlice.items);
 	const subtotal = useCallback(
@@ -75,7 +84,11 @@ const CheckoutForm = () => {
 			dispatch(setAuthFormToLogin());
 			dispatch(onOpenModalAuth());
 		} else if (cartItems.length) {
+			dispatch(startSubmittingOrder());
 			await dispatch(setOrder(formData));
+			dispatch(stopSubmittingOrder());
+			router.push("/checkout/success");
+			dispatch(resetCart());
 		}
 	};
 
@@ -253,6 +266,9 @@ const CheckoutForm = () => {
 								formData.phoneNumber.trim().length > 0
 							)
 						}
+						isLoading={submittingOrder}
+						loadingText='Ordenando...'
+						spinnerPlacement='start'
 						onClick={handleOrdenar}
 						colorScheme='blue'
 						bgGradient='linear(to-r, blue.400, blue.500, blue.600)'

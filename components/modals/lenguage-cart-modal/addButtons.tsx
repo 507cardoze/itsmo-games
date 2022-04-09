@@ -78,7 +78,7 @@ const AddButtons = ({
 						variant='solid'
 						isFullWidth
 						leftIcon={<Icon as={MdAddShoppingCart} />}>
-						Agregar versión española
+						Agregar Español
 					</Button>
 				)}
 				{carritoSelectedItem && carritoSelectedItem.quantityEnglish >= 0 && (
@@ -91,7 +91,7 @@ const AddButtons = ({
 						variant='solid'
 						isFullWidth
 						leftIcon={<Icon as={MdAddShoppingCart} />}>
-						Agregar versión inglesa
+						Agregar Ingles
 					</Button>
 				)}
 			</Stack>

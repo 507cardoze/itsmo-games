@@ -12,12 +12,19 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { MdAddShoppingCart } from "react-icons/md";
 import Singles from "../singles";
 import { setOpenLenguageModal } from "../../redux/slices/yugioh-slice";
+import { useState } from "react";
 
 const CardDetails = () => {
+	const [seeMore, setSeeMore] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const cardDetail = useAppSelector(
 		(store) => store.YugiohCardListSlice.cardDetail,
 	);
+
+	const toggleSeeMore = () => {
+		setSeeMore(!seeMore);
+	};
+
 	return (
 		<Box
 			sx={{
@@ -52,7 +59,7 @@ const CardDetails = () => {
 				/>
 				<Stack sx={{ width: "50%", height: "95%", display: "flex" }}>
 					<Stack>
-						<Heading sx={{ lineHeight: 0.9, fontSize: "24px" }}>
+						<Heading sx={{ lineHeight: 1, fontSize: "24px" }}>
 							{cardDetail ? cardDetail.name : ""}
 						</Heading>
 						<Text fontStyle='italic' fontWeight='bold'>
@@ -73,7 +80,7 @@ const CardDetails = () => {
 						<Text sx={{ lineHeight: 0.6 }}>
 							rarity: {cardDetail ? cardDetail.rarity : "xxxx"}
 						</Text>
-						<Text sx={{ lineHeight: 0.6 }}>
+						<Text sx={{ lineHeight: 1 }}>
 							{cardDetail ? cardDetail.setName : "xxxx"}
 						</Text>
 						<Text fontWeight='bold' fontSize='26px' sx={{ lineHeight: 0.8 }}>
@@ -88,14 +95,12 @@ const CardDetails = () => {
 							onClick={() => {
 								if (cardDetail) return dispatch(setOpenLenguageModal());
 							}}
+							maxW={90}
 							colorScheme='blue'
 							bgGradient='linear(to-r, blue.400, blue.500, blue.600)'
 							color='white'
-							variant='solid'
-							isFullWidth
-							sx={{ maxWidth: "180px" }}
-							leftIcon={<Icon as={MdAddShoppingCart} />}>
-							Agregar al carrito
+							variant='solid'>
+							<Icon as={MdAddShoppingCart} />
 						</Button>
 						<Text sx={{ lineHeight: 0.8 }}>
 							En stock:{" "}
@@ -115,9 +120,20 @@ const CardDetails = () => {
 				<Heading sx={{ lineHeight: 0.9, fontSize: "20px" }}>
 					Descripción:
 				</Heading>
-				<Text sx={{ lineHeight: 1.1 }}>
-					{cardDetail ? cardDetail.text : ""}
-				</Text>
+				{cardDetail && (
+					<>
+						<Text>
+							{cardDetail.text.slice(0, seeMore ? cardDetail.text.length : 150)}
+							{!seeMore && (
+								<Text
+									onClick={toggleSeeMore}
+									sx={{ cursor: "pointer", textDecoration: "underLine" }}>
+									Ver mas...
+								</Text>
+							)}
+						</Text>
+					</>
+				)}
 			</Stack>
 		</Box>
 	);
