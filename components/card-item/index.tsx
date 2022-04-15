@@ -2,7 +2,6 @@ import { GridItem, Stack } from "@chakra-ui/react";
 import { Heading, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { YugiohCardType } from "../../redux/slices/yugioh-slice";
-
 import Singles from "../singles";
 
 const CardItem = ({ card }: { card: YugiohCardType }) => {

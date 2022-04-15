@@ -80,7 +80,7 @@ export default function Footer() {
 					<Link href={"#"}>Blog</Link>
 					<Link href={"#"}>Contact</Link> */}
 				</Stack>
-				<Text>{`© ${new Date().getFullYear()} Itsmo Games. Todos los derechos reservados.`}</Text>
+				<Text>{`© ${new Date().getFullYear()} Istmo Games. Todos los derechos reservados.`}</Text>
 				<Stack direction={"row"} spacing={6}>
 					<SocialButton label={"Twitter"} href={"#"}>
 						<FaTwitter />
