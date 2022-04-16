@@ -10,6 +10,7 @@ import YugiohCardListSlice from "./slices/yugioh-slice";
 import cartListSlice from "./slices/carrito-slice";
 import CheckoutSlice from "./slices/checkout-slice";
 import MyOrderSlice from "./slices/my-orders-slice";
+import HomePageSlice from "./slices/home-page-slice";
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
@@ -19,6 +20,7 @@ const reducers = combineReducers({
 	cartListSlice,
 	CheckoutSlice,
 	MyOrderSlice,
+	HomePageSlice,
 });
 
 export const store = configureStore({

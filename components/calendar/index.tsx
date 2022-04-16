@@ -1,7 +1,12 @@
 import { Box, Image } from "@chakra-ui/react";
 import React, { SyntheticEvent } from "react";
+import { useAppSelector } from "../../redux/store";
 
 const Calendar = () => {
+	const calendarUrl = useAppSelector(
+		(store) => store.HomePageSlice.calendarUrl,
+	);
+
 	return (
 		<Box w='100%' sx={{ pb: 5, display: "flex", justifyContent: "center" }}>
 			<Image
@@ -10,7 +15,7 @@ const Calendar = () => {
 				onError={(e: SyntheticEvent<HTMLImageElement, Event>) =>
 					(e.currentTarget.src = "/Istmo Games.png")
 				}
-				src='https://binaries.templates.cdn.office.net/support/templates/en-us/lt04014209_quantized.png'
+				src={calendarUrl || ""}
 				sx={{
 					width: "100%",
 					maxWidth: "800px",
