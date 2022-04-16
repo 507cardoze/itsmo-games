@@ -1,4 +1,7 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import MyOrderDetailsInfo from "../../components/my-order-detail-info";
+import MyOrderList from "../../components/my-order-list";
 import { useAppSelector } from "../../redux/store";
 
 const OrderDetails = () => {
@@ -9,9 +12,20 @@ const OrderDetails = () => {
 		store.MyOrderSlice.myOrders.find((order) => order.uid === uid),
 	);
 
-	if (!orderDetails) return router.push("/");
+	if (!orderDetails || !uid) return <></>;
 
-	return <div>{orderDetails?.address1}</div>;
+	useEffect(() => {
+		if (!orderDetails || !uid) {
+			router.push("/");
+		}
+	}, []);
+
+	return (
+		<>
+			<MyOrderDetailsInfo order={orderDetails} />
+			<MyOrderList items={orderDetails.items} />
+		</>
+	);
 };
 
 export default OrderDetails;

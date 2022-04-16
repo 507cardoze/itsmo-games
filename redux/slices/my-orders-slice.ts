@@ -17,6 +17,8 @@ export type Order = {
 	phoneNumber: string;
 	created_at: string;
 	items: CartItemType[];
+	clientName: string;
+	clientEmail: string;
 };
 
 export type MyOrdersState = {

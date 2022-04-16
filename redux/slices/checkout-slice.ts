@@ -20,8 +20,8 @@ export const setOrder = createAsyncThunk<
 		address2: string;
 		city: string;
 		useCredit: number;
-		clientName: string;
-		clientEmail: string;
+		clientName?: string;
+		clientEmail?: string;
 	},
 	AsyncThunkConfig
 >("checkout/setOrder", async (args, thunkAPI) => {

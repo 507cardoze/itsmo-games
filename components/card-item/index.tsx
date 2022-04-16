@@ -27,11 +27,19 @@ const CardItem = ({ card }: { card: YugiohCardType }) => {
 						as='h3'
 						size='lg'
 						color='black'
-						sx={{ lineHeight: 0.8, fontSize: "20px" }}>
+						sx={{ lineHeight: 0.8, fontSize: "18px" }}>
 						{card.name}
 					</Heading>
-					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "14px" }}>
+					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "12px" }}>
 						{card.printTag}
+					</Text>
+					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "12px" }}>
+						{card.rarity}
+					</Text>
+					<Text
+						color='black'
+						sx={{ lineHeight: 0.8, fontSize: "12px", fontStyle: "italic" }}>
+						{card.cardType}
 					</Text>
 				</Stack>
 			</GridItem>
