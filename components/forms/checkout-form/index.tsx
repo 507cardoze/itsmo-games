@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { fCurrency } from "../../../common/formatNumber";
+import { validateCheckoutForm } from "../../../common/validateForms";
 import {
 	onOpenModalAuth,
 	setAuthFormToLogin,
@@ -159,13 +160,11 @@ const CheckoutForm = () => {
 									name='useCredit'
 									type='number'
 									disabled={
-										currentUser && currentUser.credit <= 0 ? true : false
+										currentUser && currentUser.credit > 0 ? false : true
 									}
-									min={0}
-									max={currentUser?.credit || 0}
 									w='full'
 									focusBorderColor='blue.500'
-									value={formData.useCredit || currentUser?.credit}
+									value={formData.useCredit}
 									onChange={handleOnChange}
 								/>
 							</FormControl>
@@ -256,16 +255,7 @@ const CheckoutForm = () => {
 					</Stack>
 					<Button
 						sx={{ maxWidth: "250px" }}
-						disabled={
-							!(
-								cartItems.length > 0 &&
-								formData.address1.trim().length > 0 &&
-								formData.address2.trim().length > 0 &&
-								formData.city.trim().length > 0 &&
-								formData.metodoPago.trim().length > 0 &&
-								formData.phoneNumber.trim().length > 0
-							)
-						}
+						disabled={validateCheckoutForm(formData)}
 						isLoading={submittingOrder}
 						loadingText='Ordenando...'
 						spinnerPlacement='start'
