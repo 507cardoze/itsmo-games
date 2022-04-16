@@ -26,7 +26,7 @@ export type MyOrdersState = {
 
 const initialState = {
 	myOrders: [],
-	fetchingOrders: false,
+	fetchingOrders: true,
 } as MyOrdersState;
 
 type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
@@ -59,8 +59,15 @@ export const MyOrderSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {
+		builder.addCase(getOrderByUser.pending, (state, action) => {
+			state.fetchingOrders = true;
+		});
 		builder.addCase(getOrderByUser.fulfilled, (state, action) => {
 			state.myOrders = action.payload;
+			state.fetchingOrders = false;
+		});
+		builder.addCase(getOrderByUser.rejected, (state, action) => {
+			state.fetchingOrders = false;
 		});
 	},
 });

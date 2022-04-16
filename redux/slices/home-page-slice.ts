@@ -10,7 +10,7 @@ export type HomePageState = {
 };
 
 const initialState = {
-	isLoadingHomePage: false,
+	isLoadingHomePage: true,
 	calendarUrl: null,
 } as HomePageState;
 
@@ -39,18 +39,14 @@ export const loadHomePageInfo = createAsyncThunk<any, void, AsyncThunkConfig>(
 export const HomePageSlice = createSlice({
 	name: "homePageSlice",
 	initialState,
-	reducers: {
-		setIsLoadingHomePage: (state, action) => {
-			state.isLoadingHomePage = action.payload as boolean;
-		},
-	},
+	reducers: {},
 	extraReducers: (builder) => {
 		builder.addCase(loadHomePageInfo.pending, (state, action) => {
 			state.isLoadingHomePage = true;
 		});
 		builder.addCase(loadHomePageInfo.fulfilled, (state, action) => {
-			state.isLoadingHomePage = false;
 			state.calendarUrl = action.payload.calendarUrl as string;
+			state.isLoadingHomePage = false;
 		});
 		builder.addCase(loadHomePageInfo.rejected, (state, action) => {
 			state.isLoadingHomePage = false;

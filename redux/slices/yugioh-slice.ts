@@ -72,7 +72,7 @@ export type YugiohCartListTypeState = {
 const initialState = {
 	cardList: [],
 	cardDetail: null,
-	isLoadingCardList: false,
+	isLoadingCardList: true,
 	searchTerm: "",
 	filterBy: "",
 	isOpenLenguageModal: false,

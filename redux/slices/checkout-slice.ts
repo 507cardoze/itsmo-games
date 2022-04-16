@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../store";
 import { errorToast, successToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
 import { nanoid } from "@reduxjs/toolkit";
-import { saveOrder } from "../../firebase/firebase-orders";
+import { order, saveOrder } from "../../firebase/firebase-orders";
 
 const initialState = {
 	submittingOrder: false,
@@ -20,6 +20,8 @@ export const setOrder = createAsyncThunk<
 		address2: string;
 		city: string;
 		useCredit: number;
+		clientName: string;
+		clientEmail: string;
 	},
 	AsyncThunkConfig
 >("checkout/setOrder", async (args, thunkAPI) => {
@@ -29,7 +31,7 @@ export const setOrder = createAsyncThunk<
 		if (items.length === 0)
 			return thunkAPI.rejectWithValue("No hay items en el carrito");
 		if (!currentUser) return thunkAPI.rejectWithValue("No user logged in");
-		const { uid } = currentUser;
+		const { uid, displayName, email } = currentUser;
 		const { address1, address2, city, phoneNumber, useCredit, metodoPago } =
 			args;
 		const created_at = new Date().toISOString();
@@ -46,7 +48,9 @@ export const setOrder = createAsyncThunk<
 			items,
 			created_at,
 			status,
-		};
+			clientName: displayName,
+			clientEmail: email,
+		} as order;
 
 		const order = await saveOrder(orderData);
 		if (!order) return thunkAPI.rejectWithValue("Error al guardar el pedido");

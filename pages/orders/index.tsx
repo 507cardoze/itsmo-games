@@ -1,32 +1,29 @@
-import {
-	Box,
-	Button,
-	Heading,
-	Table,
-	Tbody,
-	Td,
-	Th,
-	Thead,
-	Tr,
-} from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import React, { useCallback, useEffect } from "react";
 import { getOrderByUser } from "../../redux/slices/my-orders-slice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import NextLink from "next/link";
+import { MyOrderTable } from "../../components/tables";
+import TableSkeleton from "../../components/tables/myorders/skeleton";
 
 const MyOrders = () => {
 	const dispatch = useAppDispatch();
 
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 	const orders = useAppSelector((store) => store.MyOrderSlice.myOrders);
+	const isLoading = useAppSelector(
+		(store) => store.MyOrderSlice.fetchingOrders,
+	);
 
-	const getData = useCallback(async (uid) => {
-		await dispatch(
-			getOrderByUser({
-				userUid: uid,
-			}),
-		);
-	}, []);
+	const getData = useCallback(
+		async (uid) => {
+			await dispatch(
+				getOrderByUser({
+					userUid: uid,
+				}),
+			);
+		},
+		[currentUser],
+	);
 
 	useEffect(() => {
 		if (currentUser) {
@@ -37,46 +34,7 @@ const MyOrders = () => {
 	return (
 		<Box px={10} sx={{ overflowY: "auto" }}>
 			<Heading my={10}>Mis Ordenes</Heading>
-			<Table size='sm' variant='striped' my={5} color='gray.700'>
-				<Thead>
-					<Tr>
-						<Th>Codigo de orden</Th>
-						<Th>Estado</Th>
-						<Th>Fecha</Th>
-						<Th></Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{orders.map((order) => (
-						<Tr
-							key={order.uid}
-							_hover={{
-								bg: "gray.100",
-							}}>
-							<Td sx={{ fontSize: "14px" }}>{order.uid}</Td>
-							<Td>
-								<Button
-									size='sm'
-									colorScheme='teal'
-									bgGradient='linear(to-r, teal.400, teal.500, teal.600)'>
-									{order.status}
-								</Button>
-							</Td>
-							<Td>{new Date(order.created_at).toLocaleDateString()}</Td>
-							<Td>
-								<NextLink href={`./orders/${order.uid}`} passHref>
-									<Button
-										size='sm'
-										colorScheme='blue'
-										bgGradient='linear(to-r, blue.400, blue.500, blue.600)'>
-										Ver detalles
-									</Button>
-								</NextLink>
-							</Td>
-						</Tr>
-					))}
-				</Tbody>
-			</Table>
+			{isLoading ? <TableSkeleton /> : <MyOrderTable orders={orders} />}
 		</Box>
 	);
 };

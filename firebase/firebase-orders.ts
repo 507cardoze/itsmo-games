@@ -24,6 +24,8 @@ export type order = {
 	items: any;
 	created_at: string;
 	status: string;
+	clientName: string;
+	clientEmail: string;
 };
 
 export const saveOrder = async (order: order) => {
