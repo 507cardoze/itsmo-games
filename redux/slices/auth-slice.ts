@@ -10,6 +10,8 @@ import { auth, googleProvider } from "../../firebase/firebase-config";
 import { successToast, errorToast, warnToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
 import { createUserProfileDocument } from "../../firebase/firebase-auth";
+import { resetCart } from "./carrito-slice";
+import { resetMyOrders } from "./my-orders-slice";
 
 export type userAuthType = {
 	uid: string;
@@ -180,6 +182,10 @@ export const signoutSession = createAsyncThunk<
 >("auth/signoutSession", async (args, thunkAPI) => {
 	try {
 		await signOut(auth);
+
+		thunkAPI.dispatch(resetCart());
+		thunkAPI.dispatch(resetMyOrders());
+
 		if (args === "withToast") {
 			warnToast(
 				"Has cerrado sesión con exito.",

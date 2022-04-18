@@ -2,7 +2,7 @@ import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
 import { round } from "lodash";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-import { fCurrency, fPercent } from "../../common/formatNumber";
+import { fCurrency } from "../../common/formatNumber";
 import { Order } from "../../redux/slices/my-orders-slice";
 
 type PropsTypes = {

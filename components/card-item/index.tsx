@@ -27,7 +27,7 @@ const CardItem = ({ card }: { card: YugiohCardType }) => {
 						as='h3'
 						size='lg'
 						color='black'
-						sx={{ lineHeight: 0.8, fontSize: "18px" }}>
+						sx={{ lineHeight: 1, fontSize: "16px" }}>
 						{card.name}
 					</Heading>
 					<Text color='black' sx={{ lineHeight: 0.8, fontSize: "12px" }}>
