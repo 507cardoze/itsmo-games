@@ -1,4 +1,5 @@
 import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
+import { round } from "lodash";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { fCurrency, fPercent } from "../../common/formatNumber";
@@ -57,7 +58,15 @@ const MyOrderDetailsInfo = ({ order }: PropsTypes) => {
 						<Text fontSize='12px'>
 							Código de orden: <strong>{order.uid}</strong>
 						</Text>
-						<Text fontSize='12px'>Estado: {order.status}</Text>
+						<Text fontSize='12px'>
+							Estado:{" "}
+							<Button
+								size='sm'
+								colorScheme='teal'
+								bgGradient='linear(to-r, teal.400, teal.500, teal.600)'>
+								{order.status}
+							</Button>
+						</Text>
 						<Text fontSize='12px'>
 							Fecha:{" "}
 							<strong>{new Date(order.created_at).toLocaleDateString()}</strong>
@@ -101,11 +110,11 @@ const MyOrderDetailsInfo = ({ order }: PropsTypes) => {
 						<Text fontSize='12px'>
 							Descuentos:{" "}
 							<strong style={{ color: "red" }}>
-								- {fCurrency(order.useCredit)}
+								-{fCurrency(order.useCredit)}
 							</strong>
 						</Text>
 						<Text fontSize='12px'>
-							Total a pagar: <strong>{fCurrency(total)}</strong>
+							Total a pagar: <strong>{fCurrency(round(total, 2))}</strong>
 						</Text>
 					</Stack>
 				</Stack>

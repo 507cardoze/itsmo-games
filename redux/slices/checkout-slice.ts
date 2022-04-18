@@ -35,7 +35,7 @@ export const setOrder = createAsyncThunk<
 		const { address1, address2, city, phoneNumber, useCredit, metodoPago } =
 			args;
 		const created_at = new Date().toISOString();
-		const status = "pending";
+		const status = "Pendiente";
 		const orderData = {
 			uid: nanoid(),
 			userUid: uid,

@@ -4,6 +4,10 @@ import { combineReducers } from "redux";
 import { ThunkMiddleware } from "redux-thunk";
 import reduxThunk from "redux-thunk";
 
+//persist
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+
 //reducers
 import AuthSlice from "./slices/auth-slice";
 import YugiohCardListSlice from "./slices/yugioh-slice";
@@ -14,6 +18,11 @@ import HomePageSlice from "./slices/home-page-slice";
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
+const persistConfig = {
+	key: "istmo-games_v1",
+	storage: storage,
+};
+
 const reducers = combineReducers({
 	YugiohCardListSlice,
 	AuthSlice,
@@ -23,12 +32,21 @@ const reducers = combineReducers({
 	HomePageSlice,
 });
 
+const persistedReducers = persistReducer(persistConfig, reducers);
+
 export const store = configureStore({
-	reducer: reducers,
+	reducer: persistedReducers,
 	devTools: process.env.NODE_ENV !== "production",
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({}).concat(middlewares),
+		getDefaultMiddleware({
+			serializableCheck: {
+				// Ignore these action types
+				ignoredActions: ["persist/PERSIST"],
+			},
+		}).concat(middlewares),
 });
+
+export let persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
