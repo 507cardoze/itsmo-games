@@ -39,16 +39,12 @@ const MyOrderTable = ({ orders }: PropsTypes) => {
 			</Thead>
 			<Tbody>
 				{orders.map((order) => {
-					const subtotal = useCallback(
-						() =>
-							order.items.reduce((acc, item) => {
-								const cantES = item.quantitySpanish ? item.quantitySpanish : 0;
-								const cantEN = item.quantityEnglish ? item.quantityEnglish : 0;
-								const qty = cantES + cantEN;
-								return acc + item.price * qty;
-							}, 0),
-						[order.items],
-					)();
+					const subtotal = order.items.reduce((acc, item) => {
+						const cantES = item.quantitySpanish ? item.quantitySpanish : 0;
+						const cantEN = item.quantityEnglish ? item.quantityEnglish : 0;
+						const qty = cantES + cantEN;
+						return acc + item.price * qty;
+					}, 0);
 					const itbms = subtotal * 0.07;
 
 					const total = subtotal + itbms - order.useCredit;
