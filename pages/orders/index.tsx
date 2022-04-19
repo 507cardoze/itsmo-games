@@ -22,14 +22,14 @@ const MyOrders = () => {
 				}),
 			);
 		},
-		[currentUser],
+		[dispatch],
 	);
 
 	useEffect(() => {
 		if (currentUser) {
 			getData(currentUser.uid);
 		}
-	}, [currentUser]);
+	}, [currentUser, getData]);
 
 	return (
 		<Box px={10} sx={{ overflowY: "auto" }}>

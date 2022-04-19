@@ -31,7 +31,7 @@ const CardDetailsPage: NextPage = () => {
 			await dispatch(getCardDetails({ tag, name }));
 			dispatch(stopFetchingCardList());
 		},
-		[dispatch, tag, name],
+		[dispatch],
 	);
 
 	useEffect(() => {
@@ -41,7 +41,7 @@ const CardDetailsPage: NextPage = () => {
 			dispatch(stopFetchingCardList());
 			dispatch(setResetCardDetail());
 		};
-	}, [dispatch, tag, name]);
+	}, [dispatch, tag, name, fetchData]);
 
 	return (
 		<>

@@ -3,7 +3,6 @@ import {
 	chakra,
 	Container,
 	Image,
-	Link,
 	Stack,
 	Text,
 	useColorModeValue,
@@ -80,9 +79,15 @@ export default function Footer() {
 					<Link href={"#"}>Blog</Link>
 					<Link href={"#"}>Contact</Link> */}
 				</Stack>
-				<Text>{`© ${new Date().getFullYear()} Istmo Games. Todos los derechos reservados. BID: ${
-					process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "En desarrollo"
-				}`}</Text>
+				<Stack spacing={2} textAlign='center'>
+					<Text>
+						{`© ${new Date().getFullYear()} Istmo Games. Todos los derechos reservados.`}
+					</Text>
+					<Text fontSize='12px'>
+						BID:{" "}
+						{process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "running local"}
+					</Text>
+				</Stack>
 				<Stack direction={"row"} spacing={6}>
 					<SocialButton label={"Twitter"} href={"#"}>
 						<FaTwitter />

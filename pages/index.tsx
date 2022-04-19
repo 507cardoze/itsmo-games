@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
 	useEffect(() => {
 		fetchHomePageInfo();
-	}, [dispatch]);
+	}, [fetchHomePageInfo]);
 
 	return (
 		<Box sx={{ p: 5 }}>

@@ -85,7 +85,7 @@ function LenguageCartModal() {
 				dispatch(setCloseLenguageCartModal());
 			}
 		}
-	}, [carritoItems, selectedCartItem]);
+	}, [carritoItems, selectedCartItem, dispatch]);
 
 	if (!carritoSelectedItem || !card) return null;
 
