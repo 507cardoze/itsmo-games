@@ -9,7 +9,10 @@ import {
 import { auth, googleProvider } from "../../firebase/firebase-config";
 import { successToast, errorToast, warnToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
-import { createUserProfileDocument } from "../../firebase/firebase-auth";
+import {
+	createUserProfileDocument,
+	updateUserPassword,
+} from "../../firebase/firebase-auth";
 import { resetCart } from "./carrito-slice";
 import { resetMyOrders } from "./my-orders-slice";
 
@@ -229,6 +232,37 @@ export const isUserAuthenticated = createAsyncThunk<
 	} catch (error) {
 		thunkAPI.dispatch(signoutSession());
 		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const updateUserAuthPassword = createAsyncThunk<
+	void,
+	{
+		newPassword: string;
+	},
+	AsyncThunkConfig
+>("auth/updatePassword", async (args, thunkAPI) => {
+	try {
+		const { newPassword } = args;
+
+		const resetPassword = await updateUserPassword(newPassword);
+
+		console.log("resetPassword: ", resetPassword);
+
+		if (resetPassword === null)
+			return thunkAPI.rejectWithValue("Error al actualizar contraseña");
+
+		successToast(
+			"Cambio de contraseña exitoso",
+			"¡Has cambiado tu información correctamente!",
+		);
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			errorToast(`${error.name}`, `${error.code}`);
+		} else {
+			errorToast("Auth - Error", "Fallo al cambiar de contraseña.");
+		}
+		thunkAPI.rejectWithValue(error);
 	}
 });
 

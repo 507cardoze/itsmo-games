@@ -1,9 +1,8 @@
-import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { Box, Heading, Stack, Text } from "@chakra-ui/react";
+import { useAppSelector } from "../../redux/store";
+import ResetPasswordForm from "../forms/reset-password-form";
 
 const MyAccountInfo = () => {
-	const dispatch = useAppDispatch();
-
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 
 	return (
@@ -45,14 +44,7 @@ const MyAccountInfo = () => {
 						</Text>
 					)}
 				</Stack>
-				<Stack spacing={2} gap={2}>
-					<Heading as='h3' textAlign='center' size='sm'>
-						Restablecer contraseña
-					</Heading>
-					<Button variant='outline' colorScheme='red' onClick={() => {}}>
-						Enviar
-					</Button>
-				</Stack>
+				<ResetPasswordForm />
 			</Stack>
 		</Box>
 	);

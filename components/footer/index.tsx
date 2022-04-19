@@ -81,7 +81,7 @@ export default function Footer() {
 					<Link href={"#"}>Contact</Link> */}
 				</Stack>
 				<Text>{`© ${new Date().getFullYear()} Istmo Games. Todos los derechos reservados. BID: ${
-					process.env.VERCEL_GIT_COMMIT_SHA ?? "En desarrollo"
+					process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "En desarrollo"
 				}`}</Text>
 				<Stack direction={"row"} spacing={6}>
 					<SocialButton label={"Twitter"} href={"#"}>

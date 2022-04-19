@@ -37,9 +37,9 @@ const RegisterForm = () => {
 	const isConfirmPasswordEmpty = confirmPassword.trim() === "";
 	const isConfirmPasswordEqual = confirmPassword.trim() === password.trim();
 
-	const handleRegister = (event: SyntheticEvent) => {
+	const handleRegister = async (event: SyntheticEvent) => {
 		event.preventDefault();
-		dispatch(createUserWithEmail({ email, password, displayName }));
+		await dispatch(createUserWithEmail({ email, password, displayName }));
 		dispatch(onCloseModalAuth());
 		dispatch(onCloseDrawerMenu());
 	};
