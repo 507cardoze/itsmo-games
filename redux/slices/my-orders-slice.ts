@@ -31,7 +31,7 @@ const initialState = {
 	fetchingOrders: true,
 } as MyOrdersState;
 
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
+type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
 export const getOrderByUser = createAsyncThunk<
 	any,

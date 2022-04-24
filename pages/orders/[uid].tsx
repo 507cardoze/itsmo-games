@@ -1,9 +1,10 @@
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import MyOrderDetailsInfo from "../../components/my-order-detail-info";
 import MyOrderList from "../../components/my-order-list";
 import { useAppSelector } from "../../redux/store";
 
-const OrderDetails = () => {
+const OrderDetails: NextPage = () => {
 	const router = useRouter();
 	const { uid } = router.query;
 

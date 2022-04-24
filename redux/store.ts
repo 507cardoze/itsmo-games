@@ -15,12 +15,14 @@ import cartListSlice from "./slices/carrito-slice";
 import CheckoutSlice from "./slices/checkout-slice";
 import MyOrderSlice from "./slices/my-orders-slice";
 import HomePageSlice from "./slices/home-page-slice";
+import adminPanelSlice from "./slices/admin-panel-slice";
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
 const persistConfig = {
 	key: "istmo-games_v1",
 	storage: storage,
+	blacklist: ["adminPanelSlice"],
 };
 
 const reducers = combineReducers({
@@ -30,6 +32,7 @@ const reducers = combineReducers({
 	CheckoutSlice,
 	MyOrderSlice,
 	HomePageSlice,
+	adminPanelSlice,
 });
 
 const persistedReducers = persistReducer(persistConfig, reducers);

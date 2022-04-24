@@ -17,6 +17,7 @@ export type YugiohCardType = {
 	English: number;
 	Spanish: number;
 	rarity: string;
+	attribute: string;
 	cardType: string;
 	tcgName: string;
 	setName: string;
@@ -32,6 +33,7 @@ export type YugiohCardTypeAPI = {
 	cardType: string;
 	family: string;
 	property: string;
+	attribute: string;
 	setName: string;
 	type: string;
 	rarity: string;
@@ -79,7 +81,7 @@ const initialState = {
 	lenguageModalType: "add",
 } as YugiohCartListTypeState;
 
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
+type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
 export const getCards = createAsyncThunk<
 	YugiohCardType[],

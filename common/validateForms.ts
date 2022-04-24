@@ -1,4 +1,6 @@
 import { round } from "lodash";
+import { YugiohCardMutableData } from "../redux/slices/admin-panel-slice";
+import { YugiohCardType } from "../redux/slices/yugioh-slice";
 import { store } from "../redux/store";
 
 export const validateCheckoutForm = (formData: {
@@ -40,6 +42,23 @@ export const validateCheckoutForm = (formData: {
 
 		if (useCredit > currentUser.credit) return true;
 	}
+
+	return false;
+};
+
+export const validateYugiohForm = (
+	editable: YugiohCardType | YugiohCardMutableData | null,
+) => {
+	if (!editable) return true;
+	const { url, name, rarity, attribute, cardType, printTag, setName } =
+		editable;
+	if (!url || !url.trim().length) return true;
+	if (!name || !name.trim().length) return true;
+	if (!rarity || !rarity.trim().length) return true;
+	if (!attribute || !attribute.trim().length) return true;
+	if (!cardType || !cardType.trim().length) return true;
+	if (!printTag || !printTag.trim().length) return true;
+	if (!setName || !setName.trim().length) return true;
 
 	return false;
 };

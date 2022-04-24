@@ -3,9 +3,10 @@ import React, { useCallback, useEffect } from "react";
 import { getOrderByUser } from "../../redux/slices/my-orders-slice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { MyOrderTable } from "../../components/tables";
-import TableSkeleton from "../../components/tables/myorders/skeleton";
+import TableSkeleton from "../../components/tables/skeleton";
+import { NextPage } from "next";
 
-const MyOrders = () => {
+const MyOrders: NextPage = () => {
 	const dispatch = useAppDispatch();
 
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);

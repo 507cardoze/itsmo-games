@@ -9,7 +9,7 @@ const initialState = {
 	submittingOrder: false,
 };
 
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
+type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
 export const setOrder = createAsyncThunk<
 	any,

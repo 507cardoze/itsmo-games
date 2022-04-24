@@ -9,7 +9,7 @@ import {
 	VisuallyHidden,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
 import { ReactNode } from "react";
 
 const SocialButton = ({
@@ -75,9 +75,6 @@ export default function Footer() {
 					<NextLink href={"/yugioh"} passHref>
 						Yu-Gi-Oh!
 					</NextLink>
-					{/* <Link href={"#"}>About</Link>
-					<Link href={"#"}>Blog</Link>
-					<Link href={"#"}>Contact</Link> */}
 				</Stack>
 				<Stack spacing={2} textAlign='center'>
 					<Text>
@@ -89,13 +86,14 @@ export default function Footer() {
 					</Text>
 				</Stack>
 				<Stack direction={"row"} spacing={6}>
-					<SocialButton label={"Twitter"} href={"#"}>
-						<FaTwitter />
+					<SocialButton
+						label={"Facebook"}
+						href={"https://www.facebook.com/IstmoGamesPTY/"}>
+						<FaFacebook />
 					</SocialButton>
-					<SocialButton label={"YouTube"} href={"#"}>
-						<FaYoutube />
-					</SocialButton>
-					<SocialButton label={"Instagram"} href={"#"}>
+					<SocialButton
+						label={"Instagram"}
+						href={"https://www.instagram.com/istmogames/"}>
 						<FaInstagram />
 					</SocialButton>
 				</Stack>

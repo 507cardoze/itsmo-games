@@ -37,7 +37,7 @@ const MenuList = () => {
 			/>
 			{currentUser?.isAdmin && (
 				<MenuItem
-					handleOnClick={() => handleClick("/")}
+					handleOnClick={() => handleClick("/panel-admin")}
 					label='Admin Panel'
 					Icono={<Icon as={MdOutlineWeb} />}
 				/>

@@ -14,7 +14,7 @@ const initialState = {
 	calendarUrl: null,
 } as HomePageState;
 
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
+type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
 export const loadHomePageInfo = createAsyncThunk<any, void, AsyncThunkConfig>(
 	"homePage/loadData",

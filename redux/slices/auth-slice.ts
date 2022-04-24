@@ -50,7 +50,7 @@ const initialState = {
 	authForm: "login",
 } as AuthStateType;
 
-type AsyncThunkConfig = { state: RootState; dispatch?: AppDispatch };
+type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
 export const createUserWithEmail = createAsyncThunk<
 	firestoreUserType,

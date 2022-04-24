@@ -1,13 +1,12 @@
 import { Box, Heading } from "@chakra-ui/react";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import MyAccountInfo from "../../components/my-account-info";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 
-const Account = () => {
+const Account: NextPage = () => {
 	const router = useRouter();
-
-	const dispatch = useAppDispatch();
 
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 
