@@ -63,20 +63,26 @@ const CardDetails = () => {
 							{cardDetail ? cardDetail.name : ""}
 						</Heading>
 						<Text fontStyle='italic' fontWeight='bold'>
-							{cardDetail ? cardDetail.cardType : "xxxx"}
+							{cardDetail ? cardDetail.cardType : ""}
 						</Text>
 						<Text sx={{ lineHeight: 0.6 }}>
-							{cardDetail ? cardDetail.printTag : "xxxx"}
+							{cardDetail ? cardDetail.printTag : ""}
 						</Text>
-						<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
-							ATK: {cardDetail ? cardDetail.atk : "xxxx"}
-						</Text>
-						<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
-							DEF: {cardDetail ? cardDetail.def : "xxxx"}
-						</Text>
-						<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
-							LV: {cardDetail ? cardDetail.level : "xxxx"}
-						</Text>
+						{cardDetail && cardDetail.atk ? (
+							<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+								ATK: {cardDetail.atk}
+							</Text>
+						) : null}
+						{cardDetail && cardDetail.def ? (
+							<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+								DEF: {cardDetail.def}
+							</Text>
+						) : null}
+						{cardDetail && cardDetail.level ? (
+							<Text sx={{ lineHeight: 0.6, fontWeight: "bold" }}>
+								level: {cardDetail.level}
+							</Text>
+						) : null}
 						<Text sx={{ lineHeight: 0.6 }}>
 							rarity: {cardDetail ? cardDetail.rarity : "xxxx"}
 						</Text>

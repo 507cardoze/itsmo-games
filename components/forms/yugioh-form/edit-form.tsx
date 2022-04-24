@@ -9,6 +9,7 @@ import {
 	Box,
 	Select,
 	Switch,
+	FormHelperText,
 } from "@chakra-ui/react";
 import { ChangeEvent, SyntheticEvent } from "react";
 import { validateYugiohForm } from "../../../common/validateForms";
@@ -110,6 +111,10 @@ const EditForm = ({ editable }: PropsTypes) => {
 						value={editable.name || ""}
 						onChange={handleChange}
 					/>
+					<FormHelperText>
+						Este dato es importante para el funcionamiento del sistema,
+						asegurarse que el tag esta bien escrito.
+					</FormHelperText>
 				</FormControl>
 				<FormControl isRequired>
 					<FormLabel htmlFor='printTag'>Print Tag</FormLabel>
@@ -122,6 +127,11 @@ const EditForm = ({ editable }: PropsTypes) => {
 						value={editable.printTag || ""}
 						onChange={handleChange}
 					/>
+
+					<FormHelperText>
+						Si este dato correcto no se mostrara correctamente en los detalles
+						de la pagina , asegurarse que el tag esta bien escrito.
+					</FormHelperText>
 				</FormControl>
 
 				<FormControl isRequired>

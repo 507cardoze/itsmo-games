@@ -117,9 +117,9 @@ const YugiohTable = () => {
 						<Th>Rarity</Th>
 						<Th>Type</Th>
 						<Th>Attribute</Th>
+						<Th>En venta</Th>
 						<Th>Spanish (Unit)</Th>
 						<Th>English (Unit)</Th>
-						<Th>En venta</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
@@ -143,8 +143,6 @@ const YugiohTable = () => {
 								<Td sx={{ fontSize: "14px" }}>{card.rarity}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.cardType}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.attribute}</Td>
-								<Td>{card.Spanish}</Td>
-								<Td>{card.English}</Td>
 								<Td>
 									{card.isActive ? (
 										<Button
@@ -162,6 +160,8 @@ const YugiohTable = () => {
 										</Button>
 									)}
 								</Td>
+								<Td>{card.Spanish}</Td>
+								<Td>{card.English}</Td>
 							</Tr>
 						))}
 				</Tbody>
