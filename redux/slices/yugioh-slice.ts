@@ -22,6 +22,7 @@ export type YugiohCardType = {
 	tcgName: string;
 	setName: string;
 	cardProperty: string;
+	isActive: boolean;
 };
 
 export type YugiohCardTypeAPI = {
@@ -87,7 +88,7 @@ export const getCards = createAsyncThunk<
 	YugiohCardType[],
 	undefined,
 	AsyncThunkConfig
->("cardList-slice/getCards", async (_, thunkAPI) => {
+>("yugiohCardListSlice/getCards", async (_, thunkAPI) => {
 	try {
 		const cardsCollection = await getCardList();
 		return cardsCollection as YugiohCardType[];
@@ -105,7 +106,7 @@ export const getCardDetails = createAsyncThunk<
 	YugiohCardTypeAPI,
 	any,
 	AsyncThunkConfig
->("cardList-slice/getCardDetails", async (args, thunkAPI) => {
+>("yugiohCardListSlice/getCardDetails", async (args, thunkAPI) => {
 	try {
 		const { tag, name } = args;
 		if (!tag || !name) {

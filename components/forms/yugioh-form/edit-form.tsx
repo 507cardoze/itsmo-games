@@ -8,12 +8,15 @@ import {
 	Input,
 	Box,
 	Select,
+	Switch,
 } from "@chakra-ui/react";
 import { ChangeEvent, SyntheticEvent } from "react";
 import { validateYugiohForm } from "../../../common/validateForms";
 import {
 	setisSubmmiting,
+	setModalInventory,
 	setYugiohEditable,
+	updateCardItem,
 } from "../../../redux/slices/admin-panel-slice";
 import { YugiohCardType } from "../../../redux/slices/yugioh-slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
@@ -45,19 +48,24 @@ const EditForm = ({ editable }: PropsTypes) => {
 	const handleSaveChanges = async (event: SyntheticEvent) => {
 		event.preventDefault();
 		dispatch(setisSubmmiting(true));
+		await dispatch(updateCardItem(editable));
 		dispatch(setisSubmmiting(false));
+		dispatch(setModalInventory(false));
 	};
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
 	) => {
 		const { name, value } = event.target;
+
 		dispatch(setYugiohEditable({ ...editable, [name]: value }));
 	};
 
 	const handleSliderChange = (value: number, name: string) => {
 		dispatch(setYugiohEditable({ ...editable, [name]: value }));
 	};
+
+	//console.log(editable);
 
 	return (
 		<chakra.form onSubmit={handleSaveChanges} flexDirection='column' mt={4}>
@@ -193,6 +201,22 @@ const EditForm = ({ editable }: PropsTypes) => {
 						handleChange={(newValue) => handleSliderChange(newValue, "English")}
 					/>
 				</FormControl>
+				<FormControl display='flex' alignItems='center'>
+					<FormLabel htmlFor='isActive' mb='0'>
+						Visible para la venta?
+					</FormLabel>
+					<Switch
+						id='isActive'
+						name='isActive'
+						isChecked={editable.isActive}
+						onChange={(e) =>
+							dispatch(
+								setYugiohEditable({ ...editable, isActive: e.target.checked }),
+							)
+						}
+						colorScheme='green'
+					/>
+				</FormControl>
 				<Button
 					disabled={validateYugiohForm(editable)}
 					colorScheme='blue'
@@ -208,6 +232,6 @@ const EditForm = ({ editable }: PropsTypes) => {
 			</Box>
 		</chakra.form>
 	);
-};
+};;
 
 export default EditForm;

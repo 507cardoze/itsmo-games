@@ -36,9 +36,7 @@ const YugiohTable = () => {
 		(store) => store.adminPanelSlice.yugiohInventory,
 	);
 
-	const handleOpenNew = () => {
-		dispatch(setModalInventory(true));
-	};
+	const handleOpenNew = () => dispatch(setModalInventory(true));
 
 	const handleOpenEdit = (card: YugiohCardType) => {
 		dispatch(setModalInventory(true));
@@ -119,8 +117,9 @@ const YugiohTable = () => {
 						<Th>Rarity</Th>
 						<Th>Type</Th>
 						<Th>Attribute</Th>
-						<Th isNumeric>Spanish (Unit)</Th>
-						<Th isNumeric>English (Unit)</Th>
+						<Th>Spanish (Unit)</Th>
+						<Th>English (Unit)</Th>
+						<Th>En venta</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
@@ -136,16 +135,33 @@ const YugiohTable = () => {
 									cursor: "pointer",
 								}}>
 								<Td sx={{ fontSize: "14px" }}>{card.uid}</Td>
-								<Td align='center'>
-									<Singles url={card.url} alt={card.name} height='75px' />
+								<Td>
+									<Singles url={card.url} alt={card.name} height='50px' />
 								</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.name}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.printTag}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.rarity}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.cardType}</Td>
 								<Td sx={{ fontSize: "14px" }}>{card.attribute}</Td>
-								<Td isNumeric>{card.Spanish}</Td>
-								<Td isNumeric>{card.English}</Td>
+								<Td>{card.Spanish}</Td>
+								<Td>{card.English}</Td>
+								<Td>
+									{card.isActive ? (
+										<Button
+											size='sm'
+											colorScheme='green'
+											bgGradient='linear(to-r, green.400, green.500, green.600)'>
+											Si
+										</Button>
+									) : (
+										<Button
+											size='sm'
+											colorScheme='red'
+											bgGradient='linear(to-r, red.400, red.500, red.600)'>
+											No
+										</Button>
+									)}
+								</Td>
 							</Tr>
 						))}
 				</Tbody>
@@ -157,9 +173,10 @@ const YugiohTable = () => {
 						<Th></Th>
 						<Th></Th>
 						<Th></Th>
-						<Th isNumeric>Total: {total}</Th>
-						<Th isNumeric>{qtySpanish}</Th>
-						<Th isNumeric>{qtyEnglish}</Th>
+						<Th></Th>
+						<Th>Total: {total}</Th>
+						<Th>{qtySpanish}</Th>
+						<Th>{qtyEnglish}</Th>
 					</Tr>
 				</Tfoot>
 			</Table>

@@ -12,7 +12,9 @@ import {
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { validateYugiohForm } from "../../../common/validateForms";
 import {
+	saveNewCard,
 	setisSubmmiting,
+	setModalInventory,
 	YugiohCardMutableData,
 } from "../../../redux/slices/admin-panel-slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
@@ -31,6 +33,7 @@ const CreateForm = () => {
 		setName: "",
 		Spanish: 0,
 		English: 0,
+		isActive: true,
 	});
 
 	const isSubmmiting = useAppSelector(
@@ -52,7 +55,9 @@ const CreateForm = () => {
 	const handleSaveChanges = async (event: SyntheticEvent) => {
 		event.preventDefault();
 		dispatch(setisSubmmiting(true));
+		await dispatch(saveNewCard(formData));
 		dispatch(setisSubmmiting(false));
+		dispatch(setModalInventory(false));
 	};
 
 	const handleChange = (
@@ -65,8 +70,6 @@ const CreateForm = () => {
 	const handleSliderChange = (value: number, name: string) => {
 		setFormData({ ...formData, [name]: value });
 	};
-
-	console.log(formData);
 
 	return (
 		<chakra.form onSubmit={handleSaveChanges} flexDirection='column' mt={4}>

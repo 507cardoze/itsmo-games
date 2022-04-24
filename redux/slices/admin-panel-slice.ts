@@ -1,10 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../store";
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import { AppDispatch, RootState, store } from "../store";
 import { errorToast, successToast } from "../../common/toast";
 import { FirebaseError } from "firebase/app";
-import { nanoid } from "@reduxjs/toolkit";
 import { YugiohCardType } from "./yugioh-slice";
-import { getCardList } from "../../firebase/firebase-yugioh";
+import {
+	getCardList,
+	saveCard,
+	updateCard,
+} from "../../firebase/firebase-yugioh";
 
 export type NavItem = {
 	label: string;
@@ -35,6 +38,7 @@ export type YugiohCardMutableData = {
 	setName: string;
 	Spanish: number;
 	English: number;
+	isActive: boolean;
 };
 
 export const loadYugiOhInventory = createAsyncThunk<
@@ -157,6 +161,136 @@ const initialState = {
 
 type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
+export const saveNewCard = createAsyncThunk<
+	YugiohCardType,
+	{
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	AsyncThunkConfig
+>("admin-panel/saveCard", async (card, thunkAPI) => {
+	try {
+		const {
+			name,
+			url,
+			printTag,
+			setName,
+			rarity,
+			cardType,
+			attribute,
+			Spanish,
+			English,
+			isActive,
+		} = card;
+		const uid = nanoid();
+
+		const savedCard = (await saveCard(
+			{
+				name,
+				url,
+				printTag,
+				setName,
+				rarity,
+				cardType,
+				attribute,
+				Spanish,
+				English,
+				isActive,
+			},
+			uid,
+		)) as YugiohCardType;
+
+		successToast("Carta guardada", "La carta fue guardada correctamente.");
+
+		return savedCard;
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			errorToast(`${error.name}`, `${error.code}`);
+		} else {
+			errorToast(
+				"Firebase error",
+				"Fallo al guardar carta en la base de datos",
+			);
+		}
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const updateCardItem = createAsyncThunk<
+	YugiohCardType,
+	{
+		uid: string;
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	AsyncThunkConfig
+>("admin-panel/updateCardItem", async (card, thunkAPI) => {
+	try {
+		const {
+			name,
+			url,
+			printTag,
+			setName,
+			rarity,
+			cardType,
+			attribute,
+			Spanish,
+			English,
+			uid,
+			isActive,
+		} = card;
+
+		const savedCard = (await updateCard(
+			{
+				name,
+				url,
+				printTag,
+				setName,
+				rarity,
+				cardType,
+				attribute,
+				Spanish,
+				English,
+				isActive,
+			},
+			uid,
+		)) as YugiohCardType;
+
+		successToast(
+			"Carta Actualizada.",
+			"La carta fue actualizada correctamente.",
+		);
+
+		return savedCard;
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			errorToast(`${error.name}`, `${error.code}`);
+		} else {
+			errorToast(
+				"Firebase error",
+				"Fallo al guardar carta en la base de datos",
+			);
+		}
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
 export const adminPanelSlice = createSlice({
 	name: "admin-panel-slice",
 	initialState,
@@ -181,6 +315,15 @@ export const adminPanelSlice = createSlice({
 		});
 		builder.addCase(loadYugiOhInventory.rejected, (state) => {
 			state.isFetchingData = false;
+		});
+		builder.addCase(saveNewCard.fulfilled, (state, action) => {
+			state.yugiohInventory.push(action.payload);
+		});
+		builder.addCase(updateCardItem.fulfilled, (state, action) => {
+			const index = state.yugiohInventory.findIndex(
+				(card) => card.uid === action.payload.uid,
+			);
+			state.yugiohInventory[index] = action.payload;
 		});
 	},
 });

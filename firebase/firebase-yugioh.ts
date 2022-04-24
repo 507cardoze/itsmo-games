@@ -48,4 +48,56 @@ export const getCardPricing = async (tag: string) => {
 	};
 };
 
+export const saveCard = async (
+	card: {
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	uid: string,
+): Promise<YugiohCardType | unknown> => {
+	const cardRef = doc(db, collectionName, uid);
+
+	try {
+		await setDoc(cardRef, { ...card, uid });
+		return (await getDoc(cardRef)).data() as YugiohCardType;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const updateCard = async (
+	updatedCard: {
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	uid: string,
+): Promise<YugiohCardType | unknown> => {
+	const cardRef = doc(db, collectionName, uid);
+	const snapShot = await getDoc(cardRef);
+	if (snapShot.exists()) {
+		try {
+			await updateDoc(cardRef, updatedCard);
+			return (await getDoc(cardRef)).data() as YugiohCardType;
+		} catch (error) {
+			return error;
+		}
+	}
+}; 
+
 //https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/price_for_print_tag/MAGO-EN023

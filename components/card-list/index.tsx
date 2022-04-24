@@ -19,9 +19,9 @@ const CardList = () => {
 		.filter((card) =>
 			card.name?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
 		)
-		.map((card, idx) => (
-			<CardItem key={card.uid + idx.toString()} card={card} />
-		));
+		.map((card, idx) =>
+			card.isActive ? <CardItem key={idx} card={card} /> : null,
+		);
 
 	return (
 		<Grid
