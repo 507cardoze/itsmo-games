@@ -8,6 +8,8 @@ import {
 	saveCard,
 	updateCard,
 } from "../../firebase/firebase-yugioh";
+import { firestoreUserType } from "./auth-slice";
+import { getDBClients } from "../../firebase/firebase-clients";
 
 export type NavItem = {
 	label: string;
@@ -26,6 +28,7 @@ export type adminPanelState = {
 	yugiohCardAttributes: string[];
 	yugiohCardRarities: string[];
 	isSubmmiting: boolean;
+	clientList: firestoreUserType[];
 };
 
 export type YugiohCardMutableData = {
@@ -157,6 +160,7 @@ const initialState = {
 			],
 		},
 	],
+	clientList: [],
 } as adminPanelState;
 
 type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
@@ -291,6 +295,25 @@ export const updateCardItem = createAsyncThunk<
 	}
 });
 
+export const getClientList = createAsyncThunk<
+	firestoreUserType[],
+	void,
+	AsyncThunkConfig
+>("admin-panel/getClientList", async (_, thunkAPI) => {
+	try {
+		const listClient = await getDBClients();
+		if (listClient) return listClient;
+		return thunkAPI.rejectWithValue("No se pudo obtener la lista de clientes");
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			errorToast(`${error.name}`, `${error.code}`);
+		} else {
+			errorToast("Firebase error", "Fallo al obtener lista de clientes");
+		}
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
 export const adminPanelSlice = createSlice({
 	name: "admin-panel-slice",
 	initialState,
@@ -324,6 +347,16 @@ export const adminPanelSlice = createSlice({
 				(card) => card.uid === action.payload.uid,
 			);
 			state.yugiohInventory[index] = action.payload;
+		});
+		builder.addCase(getClientList.fulfilled, (state, action) => {
+			state.isFetchingData = false;
+			state.clientList = action.payload;
+		});
+		builder.addCase(getClientList.pending, (state, action) => {
+			state.isFetchingData = true;
+		});
+		builder.addCase(getClientList.rejected, (state, action) => {
+			state.isFetchingData = false;
 		});
 	},
 });
