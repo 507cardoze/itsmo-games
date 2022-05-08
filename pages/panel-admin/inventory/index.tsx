@@ -49,7 +49,7 @@ const Inventory = () => {
 	return (
 		<>
 			<WithSubnavigation />
-			<Box px={10} sx={{ overflowY: "auto" }}>
+			<Box px={10} mt={5} sx={{ overflowY: "auto" }}>
 				{GetTable(tcg as string)}
 			</Box>
 			<InventoryModal tcg={tcg as string} />

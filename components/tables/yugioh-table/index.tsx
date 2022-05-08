@@ -12,6 +12,9 @@ import {
 	InputGroup,
 	InputLeftElement,
 	Tfoot,
+	Box,
+	TableContainer,
+	useControllableState,
 } from "@chakra-ui/react";
 import {
 	setModalInventory,
@@ -27,6 +30,7 @@ import sortItBro from "../../../common/sortItBro";
 
 const YugiohTable = () => {
 	const dispatch = useAppDispatch();
+	const [limit, setLimit] = useControllableState({ defaultValue: 10 });
 	const [searchTerm, setSearchTerm] = useState<string>("");
 
 	const isFetchingData = useAppSelector(
@@ -53,28 +57,42 @@ const YugiohTable = () => {
 		);
 	};
 
-	const sortAlgo = (a: YugiohCardType, b: YugiohCardType) =>
-		sortItBro(a.name, b.name, "desc");
-
 	const total = useMemo(
-		() => inventory.reduce((acc, curr) => acc + curr.English + curr.Spanish, 0),
+		() =>
+			inventory.reduce(
+				(acc, curr) =>
+					acc +
+					parseInt(curr.English.toString()) +
+					parseInt(curr.Spanish.toString()),
+				0,
+			),
 		[inventory],
 	);
 
 	const qtySpanish = useMemo(
-		() => inventory.reduce((acc, curr) => acc + curr.Spanish, 0),
+		() =>
+			inventory.reduce(
+				(acc, curr) => acc + parseInt(curr.Spanish.toString()),
+				0,
+			),
 		[inventory],
 	);
 
 	const qtyEnglish = useMemo(
-		() => inventory.reduce((acc, curr) => acc + curr.English, 0),
+		() =>
+			inventory.reduce(
+				(acc, curr) => acc + parseInt(curr.English.toString()),
+				0,
+			),
 		[inventory],
 	);
+
+	const copy = [...inventory].filter(filterAlgo).slice(0, limit);
 
 	if (isFetchingData) return <TableSkeleton />;
 
 	return (
-		<>
+		<Box sx={{ width: "100%" }}>
 			<Stack direction='row' mt={5} justifyContent='space-between'>
 				<Heading
 					fontSize='20px'
@@ -107,80 +125,103 @@ const YugiohTable = () => {
 					</Button>
 				</Stack>
 			</Stack>
-			<Table size='sm' my={5} color='gray.900'>
-				<Thead>
-					<Tr>
-						<Th>ID</Th>
-						<Th>Imagen</Th>
-						<Th>Nombre</Th>
-						<Th>Print Tag</Th>
-						<Th>Rarity</Th>
-						<Th>Type</Th>
-						<Th>Attribute</Th>
-						<Th>En venta</Th>
-						<Th>Spanish (Unit)</Th>
-						<Th>English (Unit)</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{[...inventory]
-						.sort(sortAlgo)
-						.filter(filterAlgo)
-						.map((card, index) => (
-							<Tr
-								onClick={() => handleOpenEdit(card)}
-								key={card.uid + index.toString()}
-								_hover={{
-									bg: "gray.100",
-									cursor: "pointer",
-								}}>
-								<Td sx={{ fontSize: "14px" }}>{card.uid}</Td>
-								<Td>
-									<Singles url={card.url} alt={card.name} height='50px' />
-								</Td>
-								<Td sx={{ fontSize: "14px" }}>{card.name}</Td>
-								<Td sx={{ fontSize: "14px" }}>{card.printTag}</Td>
-								<Td sx={{ fontSize: "14px" }}>{card.rarity}</Td>
-								<Td sx={{ fontSize: "14px" }}>{card.cardType}</Td>
-								<Td sx={{ fontSize: "14px" }}>{card.attribute}</Td>
-								<Td>
-									{card.isActive ? (
-										<Button
-											size='sm'
-											colorScheme='green'
-											bgGradient='linear(to-r, green.400, green.500, green.600)'>
-											Si
-										</Button>
-									) : (
-										<Button
-											size='sm'
-											colorScheme='red'
-											bgGradient='linear(to-r, red.400, red.500, red.600)'>
-											No
-										</Button>
-									)}
-								</Td>
-								<Td>{card.Spanish}</Td>
-								<Td>{card.English}</Td>
-							</Tr>
-						))}
-				</Tbody>
-				<Tfoot>
-					<Tr>
-						<Th></Th>
-						<Th></Th>
-						<Th></Th>
-						<Th></Th>
-						<Th></Th>
-						<Th></Th>
-						<Th></Th>
-						<Th>Total: {total}</Th>
-						<Th>{qtySpanish}</Th>
-						<Th>{qtyEnglish}</Th>
-					</Tr>
-				</Tfoot>
-			</Table>
-		</>
+			<TableContainer>
+				<Table size='sm' my={5} color='gray.900' sx={{ maxWidth: "800px" }}>
+					<Thead>
+						<Tr>
+							<Th>ID</Th>
+							<Th>Imagen</Th>
+							<Th>Nombre</Th>
+							<Th>Print Tag</Th>
+							<Th>Rarity</Th>
+							<Th>Type</Th>
+							<Th>Attribute</Th>
+							<Th>En venta</Th>
+							<Th>Spanish (Unit)</Th>
+							<Th>English (Unit)</Th>
+						</Tr>
+					</Thead>
+					<Tbody>
+						{[...inventory]
+							.filter(filterAlgo)
+							.slice(0, limit)
+							.map((card, index) => (
+								<Tr
+									onClick={() => handleOpenEdit(card)}
+									key={card.uid + index.toString()}
+									_hover={{
+										bg: "gray.100",
+										cursor: "pointer",
+									}}>
+									<Td sx={{ fontSize: "14px" }}>{card.uid}</Td>
+									<Td>
+										<Singles url={card.url} alt={card.name} height='50px' />
+									</Td>
+									<Td sx={{ fontSize: "14px" }}>{card.name}</Td>
+									<Td sx={{ fontSize: "14px" }}>{card.printTag}</Td>
+									<Td sx={{ fontSize: "14px" }}>{card.rarity}</Td>
+									<Td sx={{ fontSize: "14px" }}>{card.cardType}</Td>
+									<Td sx={{ fontSize: "14px" }}>{card.attribute}</Td>
+									<Td>
+										{card.isActive ? (
+											<Button
+												size='sm'
+												colorScheme='green'
+												bgGradient='linear(to-r, green.400, green.500, green.600)'>
+												Si
+											</Button>
+										) : (
+											<Button
+												size='sm'
+												colorScheme='red'
+												bgGradient='linear(to-r, red.400, red.500, red.600)'>
+												No
+											</Button>
+										)}
+									</Td>
+									<Td>{card.Spanish}</Td>
+									<Td>{card.English}</Td>
+								</Tr>
+							))}
+					</Tbody>
+					<Tfoot>
+						<Tr>
+							<Th></Th>
+							<Th></Th>
+							<Th></Th>
+							<Th></Th>
+							<Th></Th>
+							<Th></Th>
+							<Th></Th>
+							<Th>Total: {total}</Th>
+							<Th>{qtySpanish}</Th>
+							<Th>{qtyEnglish}</Th>
+						</Tr>
+					</Tfoot>
+				</Table>
+				{limit < inventory.length && (
+					<Box sx={{ width: "100%", p: 2 }}>
+						<Button
+							variant='ghost'
+							size='sm'
+							rounded='lg'
+							shadow='lg'
+							onClick={() => setLimit(limit + 15)}
+							w='100%'
+							alignSelf='center'
+							sx={{
+								mt: 5,
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+								minH: "50px",
+							}}>
+							Ver más
+						</Button>
+					</Box>
+				)}
+			</TableContainer>
+		</Box>
 	);
 };
 

@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
-import { errorToast, successToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
+import { successToast } from "../../common/toast";
 import { nanoid } from "@reduxjs/toolkit";
 import { order, saveOrder } from "../../firebase/firebase-orders";
+import handleRequestError from "../../common/handleRequestError";
 
 const initialState = {
 	submittingOrder: false,
@@ -56,11 +56,7 @@ export const setOrder = createAsyncThunk<
 		if (!order) return thunkAPI.rejectWithValue("Error al guardar el pedido");
 		successToast("¡Orden creada!", "¡Has hecho tu orden!");
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al guardar la orden.");
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });

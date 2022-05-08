@@ -22,7 +22,7 @@ let middlewares = [reduxThunk as ThunkMiddleware];
 const persistConfig = {
 	key: "istmo-games_v1",
 	storage: storage,
-	blacklist: ["adminPanelSlice"],
+	blacklist: [],
 };
 
 const reducers = combineReducers({

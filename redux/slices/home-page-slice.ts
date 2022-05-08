@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
-import { errorToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
 import { getHomePageData } from "../../firebase/firebase-homepage";
+import handleRequestError from "../../common/handleRequestError";
 
 export type HomePageState = {
 	isLoadingHomePage: boolean;
@@ -26,11 +25,7 @@ export const loadHomePageInfo = createAsyncThunk<any, void, AsyncThunkConfig>(
 
 			return homePageData;
 		} catch (error) {
-			if (error instanceof FirebaseError) {
-				errorToast(`${error.name}`, `${error.code}`);
-			} else {
-				errorToast("Firebase error", "Fallo al traer los datos.");
-			}
+			handleRequestError(error);
 			return thunkAPI.rejectWithValue(error);
 		}
 	},

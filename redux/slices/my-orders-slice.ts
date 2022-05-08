@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
-import { errorToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
 import { getOrdersByUserUid } from "../../firebase/firebase-orders";
 import { CartItemType } from "./carrito-slice";
+import handleRequestError from "../../common/handleRequestError";
 
 export type Order = {
 	uid: string;
@@ -47,11 +46,7 @@ export const getOrderByUser = createAsyncThunk<
 
 		return orders;
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al traer todas las ordenes.");
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });

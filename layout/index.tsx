@@ -6,11 +6,6 @@ import {
 	LenguageModal,
 	LenguageCartModal,
 } from "../components/modals/";
-import {
-	getCards,
-	startFetchingCardList,
-	stopFetchingCardList,
-} from "../redux/slices/yugioh-slice";
 import { useAppDispatch } from "../redux/store";
 import { auth } from "../firebase/firebase-config";
 import {
@@ -24,16 +19,6 @@ type PropsTypes = { children: ReactNode };
 
 const Layout = ({ children }: PropsTypes) => {
 	const dispatch = useAppDispatch();
-	const fetchData = useCallback(async () => {
-		dispatch(startFetchingCardList());
-		await dispatch(getCards());
-		dispatch(stopFetchingCardList());
-	}, []);
-
-	useEffect(() => {
-		fetchData();
-	}, []);
-
 	useEffect(() => {
 		const unSubcribe = auth.onAuthStateChanged(async (currentUser) => {
 			dispatch(startAuthLoading());

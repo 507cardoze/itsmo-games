@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
 import { errorToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
 import {
+	getCardByTag,
 	getCardData,
 	getCardList,
 	getCardPricing,
+	getFirstCardList,
+	getMoreCardList,
 } from "../../firebase/firebase-yugioh";
+import handleRequestError from "../../common/handleRequestError";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 
 export type YugiohCardType = {
 	dateCreated: string;
@@ -70,6 +74,7 @@ export type YugiohCartListTypeState = {
 	filterBy: string;
 	isOpenLenguageModal: boolean;
 	lenguageModalType: "add" | "less";
+	lastVisible: QueryDocumentSnapshot<DocumentData> | null;
 };
 
 const initialState = {
@@ -80,24 +85,64 @@ const initialState = {
 	filterBy: "",
 	isOpenLenguageModal: false,
 	lenguageModalType: "add",
+	lastVisible: null,
 } as YugiohCartListTypeState;
 
 type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
-export const getCards = createAsyncThunk<
-	YugiohCardType[],
-	undefined,
-	AsyncThunkConfig
->("yugiohCardListSlice/getCards", async (_, thunkAPI) => {
-	try {
-		const cardsCollection = await getCardList();
-		return cardsCollection as YugiohCardType[];
-	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al consultar la base de datos");
+export const getCards = createAsyncThunk<YugiohCardType[], void, AsyncThunkConfig>(
+	"yugiohCardListSlice/getCards",
+	async (_, thunkAPI) => {
+		try {
+			const cardsCollection = await getCardList();
+			return cardsCollection as YugiohCardType[];
+		} catch (error) {
+			handleRequestError(error);
+			return thunkAPI.rejectWithValue(error);
 		}
+	},
+);
+
+export const getFirstCards = createAsyncThunk<
+	{
+		data: YugiohCardType[];
+		lastVisible: QueryDocumentSnapshot<DocumentData>;
+	},
+	void,
+	AsyncThunkConfig
+>("yugiohCardListSlice/getFirstCards", async (_, thunkAPI) => {
+	try {
+		const firstData = await getFirstCardList(54);
+		return firstData as {
+			data: YugiohCardType[];
+			lastVisible: QueryDocumentSnapshot<DocumentData>;
+		};
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const getMoreCards = createAsyncThunk<
+	{
+		data: YugiohCardType[];
+		lastVisible: QueryDocumentSnapshot<DocumentData>;
+	},
+	void,
+	AsyncThunkConfig
+>("yugiohCardListSlice/getMoreCards", async (_, thunkAPI) => {
+	try {
+		const lastVisible = thunkAPI.getState().YugiohCardListSlice.lastVisible;
+		if (lastVisible) {
+			const cardsCollection = await getMoreCardList(54, lastVisible);
+			return cardsCollection as {
+				data: YugiohCardType[];
+				lastVisible: QueryDocumentSnapshot<DocumentData>;
+			};
+		}
+		return thunkAPI.rejectWithValue("No more cards");
+	} catch (error) {
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -115,18 +160,19 @@ export const getCardDetails = createAsyncThunk<
 
 		let data = {} as any;
 
-		const cardsCollection = (await getCardList()) as YugiohCardType[];
+		const localCollection = thunkAPI.getState().YugiohCardListSlice.cardList;
 
-		if (cardsCollection.length === 0) {
-			errorToast("Error", "Esta carta no existe");
-			return thunkAPI.rejectWithValue("Esta carta no existe");
-		}
+		if (localCollection.length) {
+			data = localCollection.find((card) => card.printTag === tag);
+		} else {
+			const cardObject = (await getCardByTag(tag)) as YugiohCardType;
 
-		data = cardsCollection.find((card) => card.printTag === tag);
+			data = cardObject;
 
-		if (!data) {
-			errorToast("Error", "No se encontró la carta");
-			return thunkAPI.rejectWithValue("No cards in DB");
+			if (!data) {
+				errorToast("Error", "No se encontró la carta");
+				return thunkAPI.rejectWithValue("No cards in DB");
+			}
 		}
 
 		const APIcardData = await getCardData(name);
@@ -147,11 +193,7 @@ export const getCardDetails = createAsyncThunk<
 
 		return data;
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al consultar la base de datos");
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -191,8 +233,20 @@ export const YugiohCardListSlice = createSlice({
 			.addCase(getCards.fulfilled, (state, action) => {
 				state.cardList = action.payload;
 			})
+			.addCase(getFirstCards.fulfilled, (state, action) => {
+				const { data, lastVisible } = action.payload;
+
+				state.lastVisible = lastVisible;
+				state.cardList = data;
+			})
 			.addCase(getCardDetails.fulfilled, (state, action) => {
 				state.cardDetail = action.payload;
+			})
+			.addCase(getMoreCards.fulfilled, (state, action) => {
+				const { data, lastVisible } = action.payload;
+
+				state.lastVisible = lastVisible;
+				state.cardList = [...state.cardList, ...data];
 			});
 	},
 });

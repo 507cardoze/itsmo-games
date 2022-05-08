@@ -21,9 +21,11 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { fCurrency } from "../../../common/formatNumber";
 import { getClientList } from "../../../redux/slices/admin-panel-slice";
 import { dateFromNow } from "../../../common/formatTime";
+import { useRouter } from "next/router";
 
 const ClienteTable = () => {
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const isLoading = useAppSelector(
 		(store) => store.adminPanelSlice.isFetchingData,
@@ -93,7 +95,9 @@ const ClienteTable = () => {
 						})
 						.map((client, index) => (
 							<Tr
-								//onClick={() => handleOpenEdit(card)}
+								onClick={() =>
+									router.push("/panel-admin/client-panel/" + client.uid)
+								}
 								key={client.uid + index.toString()}
 								_hover={{
 									bg: "gray.100",

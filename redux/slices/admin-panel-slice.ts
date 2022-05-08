@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
-import { AppDispatch, RootState, store } from "../store";
-import { errorToast, successToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
+import { AppDispatch, RootState } from "../store";
+import { successToast } from "../../common/toast";
 import { YugiohCardType } from "./yugioh-slice";
 import {
 	getCardList,
@@ -10,6 +9,7 @@ import {
 } from "../../firebase/firebase-yugioh";
 import { firestoreUserType } from "./auth-slice";
 import { getDBClients } from "../../firebase/firebase-clients";
+import handleRequestError from "../../common/handleRequestError";
 
 export type NavItem = {
 	label: string;
@@ -53,11 +53,138 @@ export const loadYugiOhInventory = createAsyncThunk<
 		const cardsCollection = await getCardList();
 		return cardsCollection as YugiohCardType[];
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al consultar la base de datos");
-		}
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const saveNewCard = createAsyncThunk<
+	YugiohCardType,
+	{
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	AsyncThunkConfig
+>("admin-panel/saveCard", async (card, thunkAPI) => {
+	try {
+		const {
+			name,
+			url,
+			printTag,
+			setName,
+			rarity,
+			cardType,
+			attribute,
+			Spanish,
+			English,
+			isActive,
+		} = card;
+		const uid = nanoid();
+
+		const savedCard = (await saveCard(
+			{
+				name,
+				url,
+				printTag,
+				setName,
+				rarity,
+				cardType,
+				attribute,
+				Spanish,
+				English,
+				isActive,
+			},
+			uid,
+		)) as YugiohCardType;
+
+		successToast("Carta guardada", "La carta fue guardada correctamente.");
+
+		return savedCard;
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const updateCardItem = createAsyncThunk<
+	YugiohCardType,
+	{
+		uid: string;
+		name: string;
+		url: string;
+		printTag: string;
+		setName: string;
+		rarity: string;
+		cardType: string;
+		attribute: string;
+		Spanish: number;
+		English: number;
+		isActive: boolean;
+	},
+	AsyncThunkConfig
+>("admin-panel/updateCardItem", async (card, thunkAPI) => {
+	try {
+		const {
+			name,
+			url,
+			printTag,
+			setName,
+			rarity,
+			cardType,
+			attribute,
+			Spanish,
+			English,
+			uid,
+			isActive,
+		} = card;
+
+		const savedCard = (await updateCard(
+			{
+				name,
+				url,
+				printTag,
+				setName,
+				rarity,
+				cardType,
+				attribute,
+				Spanish,
+				English,
+				isActive,
+			},
+			uid,
+		)) as YugiohCardType;
+
+		successToast(
+			"Carta Actualizada.",
+			"La carta fue actualizada correctamente.",
+		);
+
+		return savedCard;
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const getClientList = createAsyncThunk<
+	firestoreUserType[],
+	void,
+	AsyncThunkConfig
+>("admin-panel/getClientList", async (_, thunkAPI) => {
+	try {
+		const listClient = await getDBClients();
+		if (listClient) return listClient;
+		return thunkAPI.rejectWithValue("No se pudo obtener la lista de clientes");
+	} catch (error) {
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -125,18 +252,18 @@ const initialState = {
 	yugiohInventory: [],
 	navItems: [
 		{
-			label: "Usuarios",
+			label: "Ordenes",
 			children: [
 				{
-					label: "Clientes",
-					subLabel: "Módulo de cliente para la administración pedidos.",
+					label: "Por clientes",
+					//subLabel: "Ordenes por clientes",
 					href: "/panel-admin/client-panel",
 				},
-				// {
-				// 	label: "Empleados",
-				// 	subLabel: "Módulo de empleados para la administración de accesos.",
-				// 	href: "#",
-				// },
+				{
+					label: "Por Ordenes individuales",
+					//subLabel: "Ordenes por ordenes individuales",
+					href: "/panel-admin/orders-panel",
+				},
 			],
 		},
 		{
@@ -144,7 +271,7 @@ const initialState = {
 			children: [
 				{
 					label: "Yu-Gi-Oh! TCG",
-					subLabel: "Módulo de administración cartas de Yu-Gi-Oh!.",
+					//åsubLabel: "Módulo de administración cartas",
 					href: "/panel-admin/inventory?tcg=yugioh",
 				},
 				// {
@@ -165,154 +292,7 @@ const initialState = {
 
 type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
-export const saveNewCard = createAsyncThunk<
-	YugiohCardType,
-	{
-		name: string;
-		url: string;
-		printTag: string;
-		setName: string;
-		rarity: string;
-		cardType: string;
-		attribute: string;
-		Spanish: number;
-		English: number;
-		isActive: boolean;
-	},
-	AsyncThunkConfig
->("admin-panel/saveCard", async (card, thunkAPI) => {
-	try {
-		const {
-			name,
-			url,
-			printTag,
-			setName,
-			rarity,
-			cardType,
-			attribute,
-			Spanish,
-			English,
-			isActive,
-		} = card;
-		const uid = nanoid();
 
-		const savedCard = (await saveCard(
-			{
-				name,
-				url,
-				printTag,
-				setName,
-				rarity,
-				cardType,
-				attribute,
-				Spanish,
-				English,
-				isActive,
-			},
-			uid,
-		)) as YugiohCardType;
-
-		successToast("Carta guardada", "La carta fue guardada correctamente.");
-
-		return savedCard;
-	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast(
-				"Firebase error",
-				"Fallo al guardar carta en la base de datos",
-			);
-		}
-		return thunkAPI.rejectWithValue(error);
-	}
-});
-
-export const updateCardItem = createAsyncThunk<
-	YugiohCardType,
-	{
-		uid: string;
-		name: string;
-		url: string;
-		printTag: string;
-		setName: string;
-		rarity: string;
-		cardType: string;
-		attribute: string;
-		Spanish: number;
-		English: number;
-		isActive: boolean;
-	},
-	AsyncThunkConfig
->("admin-panel/updateCardItem", async (card, thunkAPI) => {
-	try {
-		const {
-			name,
-			url,
-			printTag,
-			setName,
-			rarity,
-			cardType,
-			attribute,
-			Spanish,
-			English,
-			uid,
-			isActive,
-		} = card;
-
-		const savedCard = (await updateCard(
-			{
-				name,
-				url,
-				printTag,
-				setName,
-				rarity,
-				cardType,
-				attribute,
-				Spanish,
-				English,
-				isActive,
-			},
-			uid,
-		)) as YugiohCardType;
-
-		successToast(
-			"Carta Actualizada.",
-			"La carta fue actualizada correctamente.",
-		);
-
-		return savedCard;
-	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast(
-				"Firebase error",
-				"Fallo al guardar carta en la base de datos",
-			);
-		}
-		return thunkAPI.rejectWithValue(error);
-	}
-});
-
-export const getClientList = createAsyncThunk<
-	firestoreUserType[],
-	void,
-	AsyncThunkConfig
->("admin-panel/getClientList", async (_, thunkAPI) => {
-	try {
-		const listClient = await getDBClients();
-		if (listClient) return listClient;
-		return thunkAPI.rejectWithValue("No se pudo obtener la lista de clientes");
-	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Firebase error", "Fallo al obtener lista de clientes");
-		}
-		return thunkAPI.rejectWithValue(error);
-	}
-});
 
 export const adminPanelSlice = createSlice({
 	name: "admin-panel-slice",

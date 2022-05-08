@@ -6,8 +6,15 @@ import {
 	updateDoc,
 	collection,
 	query,
-	where,
 	getDocs,
+	limit,
+	orderBy,
+	where,
+	startAfter,
+	startAt,
+	endAt,
+	QueryDocumentSnapshot,
+	DocumentData,
 } from "firebase/firestore";
 import axios from "axios";
 import { YugiohCardType } from "../redux/slices/yugioh-slice";
@@ -19,7 +26,7 @@ const collectionName = "yugiohCardList";
 
 export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	const cardListCollectionSnapshot = await getDocs(
-		collection(db, collectionName),
+		query(collection(db, collectionName), orderBy("name", "asc")),
 	);
 
 	let data = [] as YugiohCardType[];
@@ -32,6 +39,76 @@ export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	});
 
 	return data;
+};
+
+export const getFirstCardList = async (limitCard: number) => {
+	const cardListCollectionSnapshot = await getDocs(
+		query(
+			collection(db, collectionName),
+			orderBy("name", "asc"),
+			limit(limitCard),
+		),
+	);
+
+	let data = [] as YugiohCardType[];
+
+	cardListCollectionSnapshot.forEach((doc) => {
+		let cardList = doc.data() as YugiohCardType;
+		data.push({
+			...cardList,
+		});
+	});
+
+	return {
+		data,
+		lastVisible:
+			cardListCollectionSnapshot.docs[
+				cardListCollectionSnapshot.docs.length - 1
+			],
+	};
+};
+
+export const getMoreCardList = async (
+	limitCard: number,
+	lastVisible: QueryDocumentSnapshot<DocumentData>,
+) => {
+	const cardListCollectionSnapshot = await getDocs(
+		query(
+			collection(db, collectionName),
+			orderBy("name", "asc"),
+			startAfter(lastVisible),
+			limit(limitCard),
+		),
+	);
+
+	let data = [] as YugiohCardType[];
+
+	cardListCollectionSnapshot.forEach((doc) => {
+		let cardList = doc.data() as YugiohCardType;
+		data.push({
+			...cardList,
+		});
+	});
+
+	return {
+		data,
+		lastVisible:
+			cardListCollectionSnapshot.docs[
+				cardListCollectionSnapshot.docs.length - 1
+			],
+	};
+};
+
+export const getCardByTag = async (tag: string) => {
+	const q = query(collection(db, collectionName), where("printTag", "==", tag));
+	const querySnapShot = await getDocs(q);
+
+	if (!querySnapShot.empty && querySnapShot.size > 0) {
+		const card = querySnapShot.docs[0].data() as YugiohCardType;
+		return card;
+	} else {
+		return null;
+	}
 };
 
 export const getCardData = async (name: string) => {

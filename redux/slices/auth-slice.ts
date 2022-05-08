@@ -15,6 +15,7 @@ import {
 } from "../../firebase/firebase-auth";
 import { resetCart } from "./carrito-slice";
 import { resetMyOrders } from "./my-orders-slice";
+import handleRequestError from "../../common/handleRequestError";
 
 export type userAuthType = {
 	uid: string;
@@ -87,11 +88,7 @@ export const createUserWithEmail = createAsyncThunk<
 			return userQuery as firestoreUserType;
 		}
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Auth - Error", "Fallo la creación de usuario.");
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -130,14 +127,7 @@ export const signInUserWithEmail = createAsyncThunk<
 			return userQuery as firestoreUserType;
 		}
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast(
-				"Auth - Error",
-				"Fallo el inicio de sesión con correo y contrasena.",
-			);
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -169,11 +159,7 @@ export const signInWithGoogle = createAsyncThunk<
 			return userQuery as firestoreUserType;
 		}
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Auth - Error", "Fallo el inicio de sesión con google.");
-		}
+		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
@@ -196,11 +182,7 @@ export const signoutSession = createAsyncThunk<
 			);
 		}
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Auth - Error", "Fallo al cerrar sesión.");
-		}
+		handleRequestError(error);
 		thunkAPI.rejectWithValue(error);
 	}
 });
@@ -247,8 +229,6 @@ export const updateUserAuthPassword = createAsyncThunk<
 
 		const resetPassword = await updateUserPassword(newPassword);
 
-		console.log("resetPassword: ", resetPassword);
-
 		if (resetPassword === null)
 			return thunkAPI.rejectWithValue("Error al actualizar contraseña");
 
@@ -257,11 +237,7 @@ export const updateUserAuthPassword = createAsyncThunk<
 			"¡Has cambiado tu información correctamente!",
 		);
 	} catch (error) {
-		if (error instanceof FirebaseError) {
-			errorToast(`${error.name}`, `${error.code}`);
-		} else {
-			errorToast("Auth - Error", "Fallo al cambiar de contraseña.");
-		}
+		handleRequestError(error);
 		thunkAPI.rejectWithValue(error);
 	}
 });
