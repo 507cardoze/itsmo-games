@@ -13,11 +13,11 @@ import {
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { validateYugiohForm } from "../../../common/validateForms";
 import {
-	saveNewCard,
 	setisSubmmiting,
 	setModalInventory,
-	YugiohCardMutableData,
-} from "../../../redux/slices/admin-panel-slice";
+} from '../../../redux/slices/admin-panel';
+import { saveNewCard } from '../../../redux/slices/admin-panel/admin-panel.thunk';
+import { YugiohCardMutableData } from '../../../redux/slices/admin-panel/admin-panel.types';
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import SliderInput from "../../number-slider-input";
 

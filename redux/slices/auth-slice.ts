@@ -1,14 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch, RootState, store } from '../store';
 import {
 	signInWithPopup,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 	signOut,
-} from "firebase/auth";
-import { auth, googleProvider } from "../../firebase/firebase-config";
-import { successToast, errorToast, warnToast } from "../../common/toast";
-import { FirebaseError } from "firebase/app";
+} from 'firebase/auth';
+import { auth, googleProvider } from '../../firebase/firebase-config';
+import { successToast, errorToast, warnToast } from '../../common/toast';
 import {
 	createUserProfileDocument,
 	updateUserPassword,

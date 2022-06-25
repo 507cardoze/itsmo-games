@@ -17,8 +17,8 @@ import {
 	setisSubmmiting,
 	setModalInventory,
 	setYugiohEditable,
-	updateCardItem,
-} from "../../../redux/slices/admin-panel-slice";
+} from '../../../redux/slices/admin-panel';
+import { updateCardItem } from '../../../redux/slices/admin-panel/admin-panel.thunk';
 import { YugiohCardType } from "../../../redux/slices/yugioh-slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import SliderInput from "../../number-slider-input";
@@ -65,8 +65,6 @@ const EditForm = ({ editable }: PropsTypes) => {
 	const handleSliderChange = (value: number, name: string) => {
 		dispatch(setYugiohEditable({ ...editable, [name]: value }));
 	};
-
-	//console.log(editable);
 
 	return (
 		<chakra.form onSubmit={handleSaveChanges} flexDirection='column' mt={4}>

@@ -13,8 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { round } from "lodash";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useRouter } from 'next/router';
 import { fCurrency } from "../../../common/formatNumber";
 import { Order } from "../../../redux/slices/my-orders-slice";
 
@@ -26,11 +25,10 @@ const MyOrderTable = ({ orders }: PropsTypes) => {
 	if (orders.length === 0) return <EmptyTable />;
 
 	return (
-		<Table size='sm' variant='striped' my={5} color='gray.700'>
+		<Table size="sm" variant="striped" my={5} color="gray.700">
 			<Thead>
 				<Tr>
 					<Th>Codigo de orden</Th>
-					<Th>Cliente</Th>
 					<Th>Total a pagar</Th>
 					<Th>Estado</Th>
 					<Th>Fecha</Th>
@@ -52,16 +50,15 @@ const MyOrderTable = ({ orders }: PropsTypes) => {
 						<Tr
 							key={order.uid}
 							_hover={{
-								bg: "gray.100",
+								bg: 'gray.100',
 							}}>
-							<Td sx={{ fontSize: "14px" }}>{order.uid}</Td>
-							<Td sx={{ fontSize: "14px" }}>{order.clientName}</Td>
-							<Td sx={{ fontSize: "14px" }}>{fCurrency(round(total, 2))}</Td>
+							<Td sx={{ fontSize: '14px' }}>{order.uid}</Td>
+							<Td sx={{ fontSize: '14px' }}>{fCurrency(round(total, 2))}</Td>
 							<Td>
 								<Button
-									size='sm'
-									colorScheme='teal'
-									bgGradient='linear(to-r, teal.400, teal.500, teal.600)'>
+									size="sm"
+									colorScheme="teal"
+									bgGradient="linear(to-r, teal.400, teal.500, teal.600)">
 									{order.status}
 								</Button>
 							</Td>
@@ -69,9 +66,9 @@ const MyOrderTable = ({ orders }: PropsTypes) => {
 							<Td>
 								<NextLink href={`./orders/${order.uid}`} passHref>
 									<Button
-										size='sm'
-										colorScheme='blue'
-										bgGradient='linear(to-r, blue.400, blue.500, blue.600)'>
+										size="sm"
+										colorScheme="blue"
+										bgGradient="linear(to-r, blue.400, blue.500, blue.600)">
 										Ver detalles
 									</Button>
 								</NextLink>

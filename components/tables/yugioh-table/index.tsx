@@ -15,29 +15,29 @@ import {
 	Box,
 	TableContainer,
 	useControllableState,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { YugiohCardType } from '../../../redux/slices/yugioh-slice';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
+import Singles from '../../singles';
+import TableSkeleton from '../skeleton';
+import { SearchIcon } from '@chakra-ui/icons';
+import { useMemo, useState } from 'react';
+import sortItBro from '../../../common/sortItBro';
 import {
 	setModalInventory,
 	setYugiohEditable,
-} from "../../../redux/slices/admin-panel-slice";
-import { YugiohCardType } from "../../../redux/slices/yugioh-slice";
-import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import Singles from "../../singles";
-import TableSkeleton from "../skeleton";
-import { SearchIcon } from "@chakra-ui/icons";
-import { useMemo, useState } from "react";
-import sortItBro from "../../../common/sortItBro";
+} from '../../../redux/slices/admin-panel';
 
 const YugiohTable = () => {
 	const dispatch = useAppDispatch();
 	const [limit, setLimit] = useControllableState({ defaultValue: 10 });
-	const [searchTerm, setSearchTerm] = useState<string>("");
+	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const isFetchingData = useAppSelector(
-		(store) => store.adminPanelSlice.isFetchingData,
+		(store) => store.adminPanelSlice.isFetchingData
 	);
 	const inventory = useAppSelector(
-		(store) => store.adminPanelSlice.yugiohInventory,
+		(store) => store.adminPanelSlice.yugiohInventory
 	);
 
 	const handleOpenNew = () => dispatch(setModalInventory(true));
@@ -64,69 +64,74 @@ const YugiohTable = () => {
 					acc +
 					parseInt(curr.English.toString()) +
 					parseInt(curr.Spanish.toString()),
-				0,
+				0
 			),
-		[inventory],
+		[inventory]
 	);
 
 	const qtySpanish = useMemo(
 		() =>
 			inventory.reduce(
 				(acc, curr) => acc + parseInt(curr.Spanish.toString()),
-				0,
+				0
 			),
-		[inventory],
+		[inventory]
 	);
 
 	const qtyEnglish = useMemo(
 		() =>
 			inventory.reduce(
 				(acc, curr) => acc + parseInt(curr.English.toString()),
-				0,
+				0
 			),
-		[inventory],
+		[inventory]
 	);
-
-	const copy = [...inventory].filter(filterAlgo).slice(0, limit);
 
 	if (isFetchingData) return <TableSkeleton />;
 
 	return (
-		<Box sx={{ width: "100%" }}>
-			<Stack direction='row' mt={5} justifyContent='space-between'>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'flex',
+				justifyContent: 'center',
+				alignContent: 'center',
+				flexDirection: 'column',
+			}}>
+			<Stack direction="row" mt={5} justifyContent="space-between">
 				<Heading
-					fontSize='20px'
+					fontSize="20px"
 					sx={{
 						display: {
-							base: "none",
-							sm: "block",
+							base: 'none',
+							sm: 'block',
 						},
 					}}>
 					Inventario de Yu-Gi-Oh!
 				</Heading>
-				<Stack direction='row' spacing={1} alignItems='center'>
+				<Stack direction="row" spacing={1} alignItems="center">
 					<InputGroup>
-						<InputLeftElement pointerEvents='none'>
-							<SearchIcon color='gray.300' />
+						<InputLeftElement pointerEvents="none">
+							<SearchIcon color="gray.300" />
 						</InputLeftElement>
 						<Input
-							type='text'
-							placeholder='Buscar...'
+							type="text"
+							placeholder="Buscar..."
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 						/>
 					</InputGroup>
 					<Button
 						onClick={handleOpenNew}
-						size='sm'
-						colorScheme='blue'
-						bgGradient='linear(to-r, blue.400, blue.500, blue.600)'>
+						size="sm"
+						colorScheme="blue"
+						bgGradient="linear(to-r, blue.400, blue.500, blue.600)">
 						Agregar
 					</Button>
 				</Stack>
 			</Stack>
-			<TableContainer>
-				<Table size='sm' my={5} color='gray.900' sx={{ maxWidth: "800px" }}>
+			<TableContainer w="full">
+				<Table size="sm" my={5} color="gray.900">
 					<Thead>
 						<Tr>
 							<Th>ID</Th>
@@ -150,31 +155,31 @@ const YugiohTable = () => {
 									onClick={() => handleOpenEdit(card)}
 									key={card.uid + index.toString()}
 									_hover={{
-										bg: "gray.100",
-										cursor: "pointer",
+										bg: 'gray.100',
+										cursor: 'pointer',
 									}}>
-									<Td sx={{ fontSize: "14px" }}>{card.uid}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.uid}</Td>
 									<Td>
-										<Singles url={card.url} alt={card.name} height='50px' />
+										<Singles url={card.url} alt={card.name} height="50px" />
 									</Td>
-									<Td sx={{ fontSize: "14px" }}>{card.name}</Td>
-									<Td sx={{ fontSize: "14px" }}>{card.printTag}</Td>
-									<Td sx={{ fontSize: "14px" }}>{card.rarity}</Td>
-									<Td sx={{ fontSize: "14px" }}>{card.cardType}</Td>
-									<Td sx={{ fontSize: "14px" }}>{card.attribute}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.name}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.printTag}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.rarity}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.cardType}</Td>
+									<Td sx={{ fontSize: '14px' }}>{card.attribute}</Td>
 									<Td>
 										{card.isActive ? (
 											<Button
-												size='sm'
-												colorScheme='green'
-												bgGradient='linear(to-r, green.400, green.500, green.600)'>
+												size="sm"
+												colorScheme="green"
+												bgGradient="linear(to-r, green.400, green.500, green.600)">
 												Si
 											</Button>
 										) : (
 											<Button
-												size='sm'
-												colorScheme='red'
-												bgGradient='linear(to-r, red.400, red.500, red.600)'>
+												size="sm"
+												colorScheme="red"
+												bgGradient="linear(to-r, red.400, red.500, red.600)">
 												No
 											</Button>
 										)}
@@ -200,21 +205,21 @@ const YugiohTable = () => {
 					</Tfoot>
 				</Table>
 				{limit < inventory.length && (
-					<Box sx={{ width: "100%", p: 2 }}>
+					<Box sx={{ width: '100%', p: 2 }}>
 						<Button
-							variant='ghost'
-							size='sm'
-							rounded='lg'
-							shadow='lg'
+							variant="ghost"
+							size="sm"
+							rounded="lg"
+							shadow="lg"
 							onClick={() => setLimit(limit + 15)}
-							w='100%'
-							alignSelf='center'
+							w="100%"
+							alignSelf="center"
 							sx={{
 								mt: 5,
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								minH: "50px",
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								minH: '50px',
 							}}>
 							Ver más
 						</Button>

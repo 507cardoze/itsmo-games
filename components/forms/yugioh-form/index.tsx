@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { setYugiohEditable } from "../../../redux/slices/admin-panel-slice";
+import { setYugiohEditable } from '../../../redux/slices/admin-panel';
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import CreateForm from "./create-form";
 import EditForm from "./edit-form";

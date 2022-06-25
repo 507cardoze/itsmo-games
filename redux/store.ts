@@ -15,7 +15,7 @@ import cartListSlice from "./slices/carrito-slice";
 import CheckoutSlice from "./slices/checkout-slice";
 import MyOrderSlice from "./slices/my-orders-slice";
 import HomePageSlice from "./slices/home-page-slice";
-import adminPanelSlice from "./slices/admin-panel-slice";
+import adminPanelSlice from './slices/admin-panel';
 
 let middlewares = [reduxThunk as ThunkMiddleware];
 
@@ -44,12 +44,7 @@ export const store = configureStore({
 		getDefaultMiddleware({
 			serializableCheck: {
 				// Ignore these action types
-				ignoredActions: [
-					'persist/PERSIST',
-					'yugiohCardListSlice/getFirstCards/fulfilled',
-					'yugiohCardListSlice/getCardBySearchName/fulfilled',
-					'yugiohCardListSlice/getCardBySearchName/rejected',
-				],
+				ignoredActions: ['persist/PERSIST'],
 			},
 		}).concat(middlewares),
 });

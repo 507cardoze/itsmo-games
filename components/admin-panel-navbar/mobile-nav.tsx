@@ -7,10 +7,12 @@ import {
 	Link,
 	useColorModeValue,
 	useDisclosure,
-} from "@chakra-ui/react";
+	Button,
+} from '@chakra-ui/react';
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useAppSelector } from "../../redux/store";
-import { NavItem } from "../../redux/slices/admin-panel-slice";
+import { useAppSelector } from '../../redux/store';
+import { NavItem } from '../../redux/slices/admin-panel/admin-panel.types';
+import { useRouter } from 'next/router';
 
 const MobileNav = () => {
 	const navItems = useAppSelector((store) => store.adminPanelSlice.navItems);
@@ -31,46 +33,57 @@ export default MobileNav;
 const MobileNavItem = ({ label, children, href }: NavItem) => {
 	const { isOpen, onToggle } = useDisclosure();
 
+	const router = useRouter();
+
+	const handleClick = (href: string | undefined) => {
+		if (href) {
+			router.push(href);
+		}
+	};
+
 	return (
 		<Stack spacing={4} onClick={children && onToggle}>
 			<Flex
 				py={2}
 				as={Link}
-				href={href ?? "#"}
-				justify={"space-between"}
-				align={"center"}
+				href={href ?? '#'}
+				justify={'space-between'}
+				align={'center'}
 				_hover={{
-					textDecoration: "none",
+					textDecoration: 'none',
 				}}>
 				<Text
 					fontWeight={600}
-					color={useColorModeValue("gray.600", "gray.200")}>
+					color={useColorModeValue('gray.600', 'gray.200')}>
 					{label}
 				</Text>
 				{children && (
 					<Icon
 						as={ChevronDownIcon}
-						transition={"all .25s ease-in-out"}
-						transform={isOpen ? "rotate(180deg)" : ""}
+						transition={'all .25s ease-in-out'}
+						transform={isOpen ? 'rotate(180deg)' : ''}
 						w={6}
 						h={6}
 					/>
 				)}
 			</Flex>
 
-			<Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
+			<Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
 				<Stack
 					mt={2}
 					pl={4}
 					borderLeft={1}
-					borderStyle={"solid"}
-					borderColor={useColorModeValue("gray.200", "gray.700")}
-					align={"start"}>
+					borderStyle={'solid'}
+					borderColor={useColorModeValue('gray.200', 'gray.700')}
+					align={'start'}>
 					{children &&
 						children.map((child) => (
-							<Link key={child.label} py={2} href={child.href}>
+							<Button
+								key={child.label}
+								py={2}
+								onClick={() => handleClick(child.href)}>
 								{child.label}
-							</Link>
+							</Button>
 						))}
 				</Stack>
 			</Collapse>

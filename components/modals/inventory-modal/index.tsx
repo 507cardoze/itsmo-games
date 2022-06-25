@@ -5,7 +5,7 @@ import {
 	ModalContent,
 	ModalOverlay,
 } from "@chakra-ui/react";
-import { setModalInventory } from "../../../redux/slices/admin-panel-slice";
+import { setModalInventory } from '../../../redux/slices/admin-panel';
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import YugiohForm from "../../forms/yugioh-form";
 
