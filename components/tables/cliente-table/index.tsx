@@ -24,48 +24,39 @@ import { dateFromNow } from "../../../common/formatTime";
 import { useRouter } from "next/router";
 
 const ClienteTable = () => {
-	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [searchTerm, setSearchTerm] = useState<string>("");
+	const [searchTerm, setSearchTerm] = useState<string>('');
 	const isLoading = useAppSelector(
-		(store) => store.adminPanelSlice.isFetchingData,
+		(store) => store.adminPanelSlice.isFetchingData
 	);
 
 	const clientList = useAppSelector(
-		(store) => store.adminPanelSlice.clientList,
+		(store) => store.adminPanelSlice.clientList
 	);
-
-	const getData = useCallback(async () => {
-		await dispatch(getClientList());
-	}, []);
-
-	useEffect(() => {
-		getData();
-	}, []);
 
 	if (isLoading) return <TableSkeleton />;
 
 	return (
 		<>
-			<Stack direction='row' mt={5} justifyContent='space-between'>
+			<Stack direction="row" mt={5} justifyContent="space-between">
 				<Heading
-					fontSize='20px'
+					fontSize="20px"
 					sx={{
 						display: {
-							base: "none",
-							sm: "block",
+							base: 'none',
+							sm: 'block',
 						},
 					}}>
 					Lista de clientes
 				</Heading>
-				<Stack direction='row' spacing={1} alignItems='center'>
+				<Stack direction="row" spacing={1} alignItems="center">
 					<InputGroup>
-						<InputLeftElement pointerEvents='none'>
-							<SearchIcon color='gray.300' />
+						<InputLeftElement pointerEvents="none">
+							<SearchIcon color="gray.300" />
 						</InputLeftElement>
 						<Input
-							type='text'
-							placeholder='Buscar...'
+							type="text"
+							placeholder="Buscar..."
 							value={searchTerm}
 							onChange={(e: ChangeEvent<HTMLInputElement>) =>
 								setSearchTerm(e.target.value)
@@ -74,20 +65,20 @@ const ClienteTable = () => {
 					</InputGroup>
 				</Stack>
 			</Stack>
-			<Table size='sm' my={5} color='gray.900'>
+			<Table size="sm" my={5} color="gray.900">
 				<Thead>
 					<Tr>
 						<Th>Nombre completo</Th>
-						<Th>Correo electronico</Th>
-						<Th>Credito</Th>
+						<Th>Correo electrónico</Th>
+						<Th>Crédito</Th>
 						<Th>Es empleado</Th>
 						<Th>Estado</Th>
-						<Th>Antiguedad</Th>
+						<Th>Antigüedad</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
 					{[...clientList]
-						.sort((a, b) => sortItBro(a.displayName, b.displayName, "desc"))
+						.sort((a, b) => sortItBro(a.displayName, b.displayName, 'desc'))
 						.filter((client) => {
 							return client.displayName
 								.toLowerCase()
@@ -96,38 +87,38 @@ const ClienteTable = () => {
 						.map((client, index) => (
 							<Tr
 								onClick={() =>
-									router.push("/panel-admin/client-panel/" + client.uid)
+									router.push('/panel-admin/client-panel/' + client.uid)
 								}
 								key={client.uid + index.toString()}
 								_hover={{
-									bg: "gray.100",
-									cursor: "pointer",
+									bg: 'gray.100',
+									cursor: 'pointer',
 								}}>
-								<Td sx={{ fontSize: "14px" }}>{client.displayName}</Td>
-								<Td sx={{ fontSize: "14px" }}>{client.email}</Td>
-								<Td sx={{ fontSize: "14px" }}>{fCurrency(client.credit)}</Td>
+								<Td sx={{ fontSize: '14px' }}>{client.displayName}</Td>
+								<Td sx={{ fontSize: '14px' }}>{client.email}</Td>
+								<Td sx={{ fontSize: '14px' }}>{fCurrency(client.credit)}</Td>
 								<Td>
 									<Button
-										size='sm'
-										colorScheme={client.isAdmin ? "green" : "red"}
+										size="sm"
+										colorScheme={client.isAdmin ? 'green' : 'red'}
 										bgGradient={`linear(to-r, ${
-											client.isAdmin ? "green" : "red"
-										}.400, ${client.isAdmin ? "green" : "red"}.500, ${
-											client.isAdmin ? "green" : "red"
+											client.isAdmin ? 'green' : 'red'
+										}.400, ${client.isAdmin ? 'green' : 'red'}.500, ${
+											client.isAdmin ? 'green' : 'red'
 										}.600)`}>
-										{client.isAdmin ? "Si" : "No"}
+										{client.isAdmin ? 'Si' : 'No'}
 									</Button>
 								</Td>
 								<Td>
 									<Button
-										size='sm'
-										colorScheme={!client.isBanned ? "green" : "red"}
+										size="sm"
+										colorScheme={!client.isBanned ? 'green' : 'red'}
 										bgGradient={`linear(to-r, ${
-											!client.isBanned ? "green" : "red"
-										}.400, ${!client.isBanned ? "green" : "red"}.500, ${
-											!client.isBanned ? "green" : "red"
+											!client.isBanned ? 'green' : 'red'
+										}.400, ${!client.isBanned ? 'green' : 'red'}.500, ${
+											!client.isBanned ? 'green' : 'red'
 										}.600)`}>
-										{!client.isBanned ? "Activo" : "Inactivo"}
+										{!client.isBanned ? 'Activo' : 'Inactivo'}
 									</Button>
 								</Td>
 								<Td>{dateFromNow(client.createdAt)}</Td>

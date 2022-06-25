@@ -20,7 +20,7 @@ import axios from 'axios';
 import { YugiohCardType } from '../redux/slices/yugioh-slice';
 
 const APIbaseURL =
-	'http://private-anon-309aa231ab-yugiohprices.apiary-proxy.com/api/';
+	'https://private-anon-309aa231ab-yugiohprices.apiary-proxy.com/api/';
 
 const collectionName = 'yugiohCardList';
 

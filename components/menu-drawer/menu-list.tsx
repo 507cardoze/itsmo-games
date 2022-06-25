@@ -26,19 +26,19 @@ const MenuList = () => {
 	return (
 		<Stack spacing={2} mt={1}>
 			<MenuItem
-				handleOnClick={() => handleClick("/orders")}
-				label='Mis ordenes'
+				handleOnClick={() => handleClick('/orders')}
+				label="Mis ordenes"
 				Icono={<Icon as={MdAssignmentTurnedIn} />}
 			/>
 			<MenuItem
-				handleOnClick={() => handleClick("/account")}
-				label='Mi Cuenta'
+				handleOnClick={() => handleClick('/account')}
+				label="Mi Cuenta"
 				Icono={<Icon as={MdAccountBox} />}
 			/>
-			{currentUser?.isAdmin && (
+			{currentUser && currentUser.isAdmin && (
 				<MenuItem
-					handleOnClick={() => handleClick("/panel-admin")}
-					label='Admin Panel'
+					handleOnClick={() => handleClick('/panel-admin/client-panel')}
+					label="Admin Panel"
 					Icono={<Icon as={MdOutlineWeb} />}
 				/>
 			)}

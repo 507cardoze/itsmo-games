@@ -8,7 +8,12 @@ import { useAppSelector } from "../../../redux/store";
 const ClientDetailsPage: NextPage = () => {
 	const router = useRouter();
 	const { id_client } = router.query;
+	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 
+	if (!currentUser || !currentUser.isAdmin) {
+		router.push('/');
+		return null;
+	}
 	return (
 		<>
 			<Stack>

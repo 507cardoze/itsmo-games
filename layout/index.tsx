@@ -1,5 +1,5 @@
 import { Box, Spacer } from "@chakra-ui/react";
-import { ReactNode, useCallback, useEffect } from "react";
+import { ReactNode, useEffect } from 'react';
 import HeaderLogo from "../components/header-logo";
 import {
 	AuthModal,
