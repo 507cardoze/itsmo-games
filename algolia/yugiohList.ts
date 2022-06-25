@@ -1,17 +1,18 @@
 import algoliasearch from 'algoliasearch/lite';
 import { YugiohCardType } from '../redux/slices/yugioh-slice';
-
-const APPLICATION_ID = '1C26QW8RZ1';
-const SEARCH_API_KEY = '1d3e1cc590b09fac46d928f19d44aad5';
+const APPLICATION_ID = `${process.env.NEXT_PUBLIC_APPLICATION_ID}`;
+const SEARCH_API_KEY = `${process.env.NEXT_PUBLIC_SEARCH_API_KEY_YUGIOH}`;
 const ALGOLIA_INDEX = 'yugiohList';
 
 const client = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
-export const performAlgoliaSearch = async (value: string) => {
+export const performAlgoliaSearch = async (
+	value: string
+): Promise<YugiohCardType[]> => {
 	const { hits } = (await index
 		.search(value, {
-			hitsPerPage: 5,
+			hitsPerPage: 50,
 		})
 		.then((res) => {
 			return res;

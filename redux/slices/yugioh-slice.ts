@@ -8,7 +8,7 @@ import {
 	getCardPricing,
 } from '../../firebase/firebase-yugioh';
 import handleRequestError from '../../common/handleRequestError';
-import { performAlgoliaSearch } from '../../algolia';
+import { performAlgoliaSearch } from '../../algolia/yugiohList';
 
 export type YugiohCardType = {
 	dateCreated: string;
