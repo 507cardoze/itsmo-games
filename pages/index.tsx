@@ -5,11 +5,11 @@ import Calendar from "../components/calendar";
 import CalendarSkeleton from "../components/calendar/skeleton";
 import GameList from "../components/game-list";
 import { loadHomePageInfo } from "../redux/slices/home-page-slice";
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { useAppDispatch, useAppSelector } from '../redux/store';
 
 const Home: NextPage = () => {
 	const isLoading = useAppSelector(
-		(store) => store.HomePageSlice.isLoadingHomePage,
+		(store) => store.HomePageSlice.isLoadingHomePage
 	);
 
 	const dispatch = useAppDispatch();

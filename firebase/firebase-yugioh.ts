@@ -1,4 +1,4 @@
-import { db } from "./firebase-config";
+import { db } from './firebase-config';
 import {
 	getDoc,
 	doc,
@@ -15,18 +15,23 @@ import {
 	endAt,
 	QueryDocumentSnapshot,
 	DocumentData,
-} from "firebase/firestore";
-import axios from "axios";
-import { YugiohCardType } from "../redux/slices/yugioh-slice";
+} from 'firebase/firestore';
+import axios from 'axios';
+import { YugiohCardType } from '../redux/slices/yugioh-slice';
 
 const APIbaseURL =
-	"https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/";
+	'http://private-anon-309aa231ab-yugiohprices.apiary-proxy.com/api/';
 
-const collectionName = "yugiohCardList";
+const collectionName = 'yugiohCardList';
+
+export type YugiohResultType = {
+	data: YugiohCardType[];
+	lastVisible: QueryDocumentSnapshot<DocumentData> | null;
+};
 
 export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	const cardListCollectionSnapshot = await getDocs(
-		query(collection(db, collectionName), orderBy("name", "asc")),
+		query(collection(db, collectionName), orderBy('name', 'asc'))
 	);
 
 	let data = [] as YugiohCardType[];
@@ -41,66 +46,8 @@ export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	return data;
 };
 
-export const getFirstCardList = async (limitCard: number) => {
-	const cardListCollectionSnapshot = await getDocs(
-		query(
-			collection(db, collectionName),
-			orderBy("name", "asc"),
-			limit(limitCard),
-		),
-	);
-
-	let data = [] as YugiohCardType[];
-
-	cardListCollectionSnapshot.forEach((doc) => {
-		let cardList = doc.data() as YugiohCardType;
-		data.push({
-			...cardList,
-		});
-	});
-
-	return {
-		data,
-		lastVisible:
-			cardListCollectionSnapshot.docs[
-				cardListCollectionSnapshot.docs.length - 1
-			],
-	};
-};
-
-export const getMoreCardList = async (
-	limitCard: number,
-	lastVisible: QueryDocumentSnapshot<DocumentData>,
-) => {
-	const cardListCollectionSnapshot = await getDocs(
-		query(
-			collection(db, collectionName),
-			orderBy("name", "asc"),
-			startAfter(lastVisible),
-			limit(limitCard),
-		),
-	);
-
-	let data = [] as YugiohCardType[];
-
-	cardListCollectionSnapshot.forEach((doc) => {
-		let cardList = doc.data() as YugiohCardType;
-		data.push({
-			...cardList,
-		});
-	});
-
-	return {
-		data,
-		lastVisible:
-			cardListCollectionSnapshot.docs[
-				cardListCollectionSnapshot.docs.length - 1
-			],
-	};
-};
-
 export const getCardByTag = async (tag: string) => {
-	const q = query(collection(db, collectionName), where("printTag", "==", tag));
+	const q = query(collection(db, collectionName), where('printTag', '==', tag));
 	const querySnapShot = await getDocs(q);
 
 	if (!querySnapShot.empty && querySnapShot.size > 0) {
@@ -112,17 +59,29 @@ export const getCardByTag = async (tag: string) => {
 };
 
 export const getCardData = async (name: string) => {
-	const request = await axios.get(`${APIbaseURL}card_data/${name}`);
-	return {
-		...request.data.data,
-	};
+	const encoded = encodeURI(name);
+	try {
+		const request = await axios.get(`${APIbaseURL}card_data/${encoded}`);
+		return {
+			...request.data.data,
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const getCardPricing = async (tag: string) => {
-	const request = await axios.get(`${APIbaseURL}price_for_print_tag/${tag}`);
-	return {
-		...request.data.data.price_data.price_data.data.prices,
-	};
+	const encoded = encodeURI(tag);
+	try {
+		const request = await axios.get(
+			`${APIbaseURL}price_for_print_tag/${encoded}`
+		);
+		return {
+			...request.data.data.price_data.price_data.data.prices,
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const saveCard = async (
@@ -138,7 +97,7 @@ export const saveCard = async (
 		English: number;
 		isActive: boolean;
 	},
-	uid: string,
+	uid: string
 ): Promise<YugiohCardType | unknown> => {
 	const cardRef = doc(db, collectionName, uid);
 
@@ -163,7 +122,7 @@ export const updateCard = async (
 		English: number;
 		isActive: boolean;
 	},
-	uid: string,
+	uid: string
 ): Promise<YugiohCardType | unknown> => {
 	const cardRef = doc(db, collectionName, uid);
 	const snapShot = await getDoc(cardRef);
@@ -175,6 +134,6 @@ export const updateCard = async (
 			return error;
 		}
 	}
-}; 
+};
 
 //https://private-anon-e0b4a3a079-yugiohprices.apiary-proxy.com/api/price_for_print_tag/MAGO-EN023

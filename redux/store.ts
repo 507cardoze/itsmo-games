@@ -39,12 +39,17 @@ const persistedReducers = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
 	reducer: persistedReducers,
-	devTools: process.env.NODE_ENV !== "production",
+	devTools: process.env.NODE_ENV !== 'production',
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
 				// Ignore these action types
-				ignoredActions: ["persist/PERSIST"],
+				ignoredActions: [
+					'persist/PERSIST',
+					'yugiohCardListSlice/getFirstCards/fulfilled',
+					'yugiohCardListSlice/getCardBySearchName/fulfilled',
+					'yugiohCardListSlice/getCardBySearchName/rejected',
+				],
 			},
 		}).concat(middlewares),
 });

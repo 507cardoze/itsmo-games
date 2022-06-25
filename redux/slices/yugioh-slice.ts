@@ -6,11 +6,9 @@ import {
 	getCardData,
 	getCardList,
 	getCardPricing,
-	getFirstCardList,
-	getMoreCardList,
-} from "../../firebase/firebase-yugioh";
-import handleRequestError from "../../common/handleRequestError";
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+} from '../../firebase/firebase-yugioh';
+import handleRequestError from '../../common/handleRequestError';
+import { performAlgoliaSearch } from '../../algolia';
 
 export type YugiohCardType = {
 	dateCreated: string;
@@ -70,92 +68,61 @@ export type YugiohCartListTypeState = {
 	cardList: YugiohCardType[];
 	cardDetail: YugiohCardTypeAPI | null;
 	isLoadingCardList: boolean;
-	searchTerm: string;
-	filterBy: string;
 	isOpenLenguageModal: boolean;
-	lenguageModalType: "add" | "less";
-	lastVisible: QueryDocumentSnapshot<DocumentData> | null;
+	lenguageModalType: 'add' | 'less';
 };
 
 const initialState = {
 	cardList: [],
 	cardDetail: null,
-	isLoadingCardList: true,
-	searchTerm: "",
-	filterBy: "",
+	isLoadingCardList: false,
 	isOpenLenguageModal: false,
-	lenguageModalType: "add",
-	lastVisible: null,
+	lenguageModalType: 'add',
 } as YugiohCartListTypeState;
 
 type AsyncThunkConfig = { state: RootState; dispatch: AppDispatch };
 
-export const getCards = createAsyncThunk<YugiohCardType[], void, AsyncThunkConfig>(
-	"yugiohCardListSlice/getCards",
-	async (_, thunkAPI) => {
-		try {
-			const cardsCollection = await getCardList();
-			return cardsCollection as YugiohCardType[];
-		} catch (error) {
-			handleRequestError(error);
-			return thunkAPI.rejectWithValue(error);
-		}
-	},
-);
-
-export const getFirstCards = createAsyncThunk<
-	{
-		data: YugiohCardType[];
-		lastVisible: QueryDocumentSnapshot<DocumentData>;
-	},
+export const getCards = createAsyncThunk<
+	YugiohCardType[],
 	void,
 	AsyncThunkConfig
->("yugiohCardListSlice/getFirstCards", async (_, thunkAPI) => {
+>('yugiohCardListSlice/getCards', async (_, thunkAPI) => {
 	try {
-		const firstData = await getFirstCardList(54);
-		return firstData as {
-			data: YugiohCardType[];
-			lastVisible: QueryDocumentSnapshot<DocumentData>;
-		};
+		const cardsCollection = await getCardList();
+		return cardsCollection as YugiohCardType[];
 	} catch (error) {
 		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
 
-export const getMoreCards = createAsyncThunk<
+export const getCardBySearchName = createAsyncThunk<
+	YugiohCardType[],
 	{
-		data: YugiohCardType[];
-		lastVisible: QueryDocumentSnapshot<DocumentData>;
+		searchTerm: string;
 	},
-	void,
 	AsyncThunkConfig
->("yugiohCardListSlice/getMoreCards", async (_, thunkAPI) => {
+>('yugiohCardListSlice/getCardBySearchName', async (args, thunkAPI) => {
+	const { searchTerm } = args;
+
 	try {
-		const lastVisible = thunkAPI.getState().YugiohCardListSlice.lastVisible;
-		if (lastVisible) {
-			const cardsCollection = await getMoreCardList(54, lastVisible);
-			return cardsCollection as {
-				data: YugiohCardType[];
-				lastVisible: QueryDocumentSnapshot<DocumentData>;
-			};
-		}
-		return thunkAPI.rejectWithValue("No more cards");
+		const data = await performAlgoliaSearch(searchTerm);
+		return data;
 	} catch (error) {
+		console.log('error: ', error);
 		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
-
 export const getCardDetails = createAsyncThunk<
 	YugiohCardTypeAPI,
 	any,
 	AsyncThunkConfig
->("yugiohCardListSlice/getCardDetails", async (args, thunkAPI) => {
+>('yugiohCardListSlice/getCardDetails', async (args, thunkAPI) => {
 	try {
 		const { tag, name } = args;
 		if (!tag || !name) {
-			return thunkAPI.rejectWithValue("No tag or name");
+			return thunkAPI.rejectWithValue('No tag or name');
 		}
 
 		let data = {} as any;
@@ -170,36 +137,37 @@ export const getCardDetails = createAsyncThunk<
 			data = cardObject;
 
 			if (!data) {
-				errorToast("Error", "No se encontró la carta");
-				return thunkAPI.rejectWithValue("No cards in DB");
+				errorToast('Error', 'No se encontró la carta');
+				return thunkAPI.rejectWithValue('No cards in DB');
 			}
 		}
 
 		const APIcardData = await getCardData(name);
 
 		if (!APIcardData) {
-			errorToast("Error", "No se encontró la data de la carta");
-			return thunkAPI.rejectWithValue("No data in API externo");
+			errorToast('Error', 'No se encontró la data de la carta');
+			return thunkAPI.rejectWithValue('No data in API externo');
 		}
 
 		const APIcardPricing = await getCardPricing(tag);
 
 		if (!APIcardPricing) {
-			errorToast("Error", "No se encontró el precio de la carta");
-			return thunkAPI.rejectWithValue("No price in API externo");
+			errorToast('Error', 'No se encontró el precio de la carta');
+			return thunkAPI.rejectWithValue('No price in API externo');
 		}
 
 		data = { ...data, ...APIcardData, prices: { ...APIcardPricing } };
 
 		return data;
 	} catch (error) {
+		console.log(error);
 		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
 });
 
 export const YugiohCardListSlice = createSlice({
-	name: "yugiohCardListSlice",
+	name: 'yugiohCardListSlice',
 	initialState,
 	reducers: {
 		startFetchingCardList: (state) => {
@@ -207,12 +175,6 @@ export const YugiohCardListSlice = createSlice({
 		},
 		stopFetchingCardList: (state) => {
 			state.isLoadingCardList = false;
-		},
-		setSearchTerm: (state, action) => {
-			state.searchTerm = action.payload;
-		},
-		setFilterBy: (state, action) => {
-			state.filterBy = action.payload;
 		},
 		setOpenLenguageModal: (state) => {
 			state.isOpenLenguageModal = true;
@@ -233,20 +195,19 @@ export const YugiohCardListSlice = createSlice({
 			.addCase(getCards.fulfilled, (state, action) => {
 				state.cardList = action.payload;
 			})
-			.addCase(getFirstCards.fulfilled, (state, action) => {
-				const { data, lastVisible } = action.payload;
-
-				state.lastVisible = lastVisible;
-				state.cardList = data;
+			.addCase(getCardBySearchName.fulfilled, (state, action) => {
+				state.cardList = action.payload;
+				state.isLoadingCardList = false;
+			})
+			.addCase(getCardBySearchName.pending, (state) => {
+				state.isLoadingCardList = true;
+			})
+			.addCase(getCardBySearchName.rejected, (state) => {
+				state.cardList = [];
+				state.isLoadingCardList = false;
 			})
 			.addCase(getCardDetails.fulfilled, (state, action) => {
 				state.cardDetail = action.payload;
-			})
-			.addCase(getMoreCards.fulfilled, (state, action) => {
-				const { data, lastVisible } = action.payload;
-
-				state.lastVisible = lastVisible;
-				state.cardList = [...state.cardList, ...data];
 			});
 	},
 });
@@ -254,8 +215,6 @@ export const YugiohCardListSlice = createSlice({
 export const {
 	startFetchingCardList,
 	stopFetchingCardList,
-	setSearchTerm,
-	setFilterBy,
 	setOpenLenguageModal,
 	setCloseLenguageModal,
 	setlenguageModalType,
