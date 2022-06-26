@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
 	getClientInfo,
+	getClientInit,
 	getClientList,
 	getClientOrdersById,
+	getNextClient,
+	loadMoreYugiOhInventory,
 	loadYugiOhInventory,
 	saveNewCard,
 	updateCardItem,
@@ -33,6 +36,10 @@ export const adminPanelSlice = createSlice({
 		builder.addCase(loadYugiOhInventory.fulfilled, (state, action) => {
 			state.isFetchingData = false;
 			state.yugiohInventory = action.payload;
+		});
+		builder.addCase(loadMoreYugiOhInventory.fulfilled, (state, action) => {
+			state.isFetchingData = false;
+			state.yugiohInventory = [...state.yugiohInventory, ...action.payload];
 		});
 		builder.addCase(loadYugiOhInventory.rejected, (state) => {
 			state.isFetchingData = false;
@@ -75,6 +82,15 @@ export const adminPanelSlice = createSlice({
 		});
 		builder.addCase(getClientInfo.rejected, (state) => {
 			state.isFetchingData = false;
+		});
+		//
+		builder.addCase(getClientInit.fulfilled, (state, action) => {
+			state.isFetchingData = false;
+			state.clientList = action.payload;
+		});
+		builder.addCase(getNextClient.fulfilled, (state, action) => {
+			state.isFetchingData = false;
+			state.clientList = [...state.clientList, ...action.payload];
 		});
 	},
 });

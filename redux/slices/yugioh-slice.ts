@@ -6,6 +6,7 @@ import {
 	getCardData,
 	getCardList,
 	getCardPricing,
+	getMoreCardList,
 } from '../../firebase/firebase-yugioh';
 import handleRequestError from '../../common/handleRequestError';
 import { performAlgoliaSearch } from '../../algolia/yugiohList';
@@ -96,6 +97,23 @@ export const getCards = createAsyncThunk<
 	}
 });
 
+export const getMoreCards = createAsyncThunk<
+	YugiohCardType[],
+	{
+		last: string;
+	},
+	AsyncThunkConfig
+>('yugiohCardListSlice/getMoreCards', async (args, thunkAPI) => {
+	const { last } = args;
+	try {
+		const cardsCollection = await getMoreCardList(last);
+		return cardsCollection as YugiohCardType[];
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
 export const getCardBySearchName = createAsyncThunk<
 	YugiohCardType[],
 	{
@@ -160,7 +178,6 @@ export const getCardDetails = createAsyncThunk<
 
 		return data;
 	} catch (error) {
-		console.log(error);
 		handleRequestError(error);
 		return thunkAPI.rejectWithValue(error);
 	}
@@ -194,6 +211,9 @@ export const YugiohCardListSlice = createSlice({
 		builder
 			.addCase(getCards.fulfilled, (state, action) => {
 				state.cardList = action.payload;
+			})
+			.addCase(getMoreCards.fulfilled, (state, action) => {
+				state.cardList = [...state.cardList, ...action.payload];
 			})
 			.addCase(getCardBySearchName.fulfilled, (state, action) => {
 				state.cardList = action.payload;

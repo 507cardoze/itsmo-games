@@ -31,11 +31,6 @@ const ClientDetailsPage: NextPage = () => {
 
 	const [credit, setCredit] = useState(0);
 
-	if (!currentUser || !currentUser.isAdmin) {
-		router.push('/');
-		return null;
-	}
-
 	const dispatch = useAppDispatch();
 
 	const fetchClientOrders = useCallback(
@@ -43,7 +38,7 @@ const ClientDetailsPage: NextPage = () => {
 			await dispatch(getClientOrdersById({ id_client: id_client as string }));
 			await dispatch(getClientInfo({ id_client: id_client as string }));
 		},
-		[id_client]
+		[id_client, dispatch]
 	);
 
 	const saveCredit = async () => {
@@ -62,7 +57,12 @@ const ClientDetailsPage: NextPage = () => {
 		return () => {
 			dispatch(resetClientdata());
 		};
-	}, [id_client]);
+	}, [fetchClientOrders, dispatch]);
+
+	if (!currentUser || !currentUser.isAdmin) {
+		router.push('/');
+		return null;
+	}
 
 	return (
 		<>

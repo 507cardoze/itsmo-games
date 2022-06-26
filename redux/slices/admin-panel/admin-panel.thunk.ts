@@ -4,12 +4,15 @@ import { successToast } from '../../../common/toast';
 import {
 	getClientByUid,
 	getClientOrdersByUid,
+	getClientPaginated,
+	getClientPaginatedNextPage,
 	getDBClients,
 	updateClientByUid,
 	UpdatedDataType,
 } from '../../../firebase/firebase-clients';
 import {
 	getCardList,
+	getMoreCardList,
 	saveCard,
 	updateCard,
 } from '../../../firebase/firebase-yugioh';
@@ -27,6 +30,23 @@ export const loadYugiOhInventory = createAsyncThunk<
 >('admin-panel/loadYugiOhInventory', async (_, thunkAPI) => {
 	try {
 		const cardsCollection = await getCardList();
+		return cardsCollection as YugiohCardType[];
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const loadMoreYugiOhInventory = createAsyncThunk<
+	YugiohCardType[],
+	{
+		last: string;
+	},
+	AsyncThunkConfig
+>('yugiohCardListSlice/loadMoreYugiOhInventory', async (args, thunkAPI) => {
+	const { last } = args;
+	try {
+		const cardsCollection = await getMoreCardList(last);
 		return cardsCollection as YugiohCardType[];
 	} catch (error) {
 		handleRequestError(error);
@@ -215,3 +235,35 @@ export const updateClientInfo = createAsyncThunk<
 		return thunkAPI.rejectWithValue(error);
 	}
 });
+
+export const getClientInit = createAsyncThunk<
+	firestoreUserType[],
+	void,
+	AsyncThunkConfig
+>('admin-panel/getClientInit', async (_, thunkAPI) => {
+	try {
+		const response = await getClientPaginated();
+		return response;
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const getNextClient = createAsyncThunk<
+	firestoreUserType[],
+	{
+		last: string;
+	},
+	AsyncThunkConfig
+>('admin-panel/getNextClient', async (args, thunkAPI) => {
+	const { last } = args;
+	try {
+		const response = await getClientPaginatedNextPage(last);
+		return response;
+	} catch (error) {
+		handleRequestError(error);
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+

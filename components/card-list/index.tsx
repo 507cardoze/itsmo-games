@@ -1,20 +1,40 @@
-import { Grid } from "@chakra-ui/react";
-import { memo } from 'react';
-import { useAppSelector } from '../../redux/store';
+import { Box, Button, Grid } from '@chakra-ui/react';
+import { memo, useCallback, useEffect } from 'react';
+import { getCards, getMoreCards } from '../../redux/slices/yugioh-slice';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import CardItem from '../card-item';
 import CardItemSkeleton from '../card-item/card-item-skeleton';
 
 const CardList = () => {
-	const cardList = useAppSelector(
-		(store) => store.YugiohCardListSlice.cardList
+	const dispatch = useAppDispatch();
+	const filteredCardList = useAppSelector((store) =>
+		store.YugiohCardListSlice.cardList.filter((card) => card.isActive === true)
 	);
 	const isloading = useAppSelector(
 		(store) => store.YugiohCardListSlice.isLoadingCardList
 	);
 
-	const filteredCardList = cardList.map((card) =>
-		card.isActive ? <CardItem key={card.uid} card={card} /> : null
-	);
+	const CardListElements = filteredCardList.map((card) => (
+		<CardItem key={card.uid} card={card} />
+	));
+
+	const handlegetMoreCards = async () => {
+		if (filteredCardList.length) {
+			await dispatch(
+				getMoreCards({
+					last: filteredCardList[filteredCardList.length - 1].uid,
+				})
+			);
+		}
+	};
+
+	const getData = useCallback(async () => {
+		if (filteredCardList.length < 12) await dispatch(getCards());
+	}, []);
+
+	useEffect(() => {
+		getData();
+	}, []);
 
 	return (
 		<>
@@ -26,8 +46,27 @@ const CardList = () => {
 				}}
 				gap={2}
 				m={5}>
-				{isloading ? <CardItemSkeleton /> : filteredCardList}
+				{isloading ? <CardItemSkeleton /> : CardListElements}
 			</Grid>
+			<Box sx={{ width: '100%', p: 2 }}>
+				<Button
+					variant="ghost"
+					size="sm"
+					rounded="lg"
+					shadow="lg"
+					onClick={handlegetMoreCards}
+					w="100%"
+					alignSelf="center"
+					sx={{
+						mt: 5,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						minH: '50px',
+					}}>
+					Ver más
+				</Button>
+			</Box>
 		</>
 	);
 };

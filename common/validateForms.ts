@@ -1,5 +1,5 @@
 import { round } from "lodash";
-import { YugiohCardMutableData } from "../redux/slices/admin-panel-slice";
+import { YugiohCardMutableData } from '../redux/slices/admin-panel/admin-panel.types';
 import { YugiohCardType } from "../redux/slices/yugioh-slice";
 import { store } from "../redux/store";
 

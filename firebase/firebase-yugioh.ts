@@ -11,18 +11,18 @@ import {
 	orderBy,
 	where,
 	startAfter,
-	startAt,
-	endAt,
 	QueryDocumentSnapshot,
 	DocumentData,
 } from 'firebase/firestore';
 import axios from 'axios';
 import { YugiohCardType } from '../redux/slices/yugioh-slice';
 
-const APIbaseURL =
+const pageSize: number = 12;
+
+const APIbaseURL: string =
 	'https://private-anon-309aa231ab-yugiohprices.apiary-proxy.com/api/';
 
-const collectionName = 'yugiohCardList';
+const collectionName: string = 'yugiohCardList';
 
 export type YugiohResultType = {
 	data: YugiohCardType[];
@@ -31,7 +31,11 @@ export type YugiohResultType = {
 
 export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	const cardListCollectionSnapshot = await getDocs(
-		query(collection(db, collectionName), orderBy('name', 'asc'))
+		query(
+			collection(db, collectionName),
+			orderBy('name', 'asc'),
+			limit(pageSize)
+		)
 	);
 
 	let data = [] as YugiohCardType[];
@@ -44,6 +48,40 @@ export const getCardList = async (): Promise<YugiohCardType[] | unknown> => {
 	});
 
 	return data;
+};
+
+export const getMoreCardList = async (
+	last: string
+): Promise<YugiohCardType[] | unknown> => {
+	try {
+		const lastRef = doc(db, collectionName, last);
+		const lastSnapshot = (await getDoc(lastRef)).data();
+
+		if (!lastSnapshot) return [];
+
+		const q = query(
+			collection(db, collectionName),
+			orderBy('name', 'asc'),
+			startAfter(lastSnapshot['name']),
+			limit(pageSize)
+		);
+
+		const querySnapShot = await getDocs(q);
+		if (querySnapShot.empty) return [];
+
+		let data: YugiohCardType[] = [];
+
+		querySnapShot.forEach((doc) => {
+			let cardList = doc.data() as YugiohCardType;
+			data.push({
+				...cardList,
+			});
+		});
+
+		return data;
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const getCardByTag = async (tag: string) => {

@@ -4,27 +4,28 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import WithSubnavigation from '../../../components/admin-panel-navbar';
 import { ClienteTable } from '../../../components/tables';
-import { getClientList } from '../../../redux/slices/admin-panel/admin-panel.thunk';
+import { getClientInit } from '../../../redux/slices/admin-panel/admin-panel.thunk';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 
 const ClientPanel: NextPage = () => {
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 	const dispatch = useAppDispatch();
-
+	const clientList = useAppSelector(
+		(store) => store.adminPanelSlice.clientList
+	);
 	const router = useRouter();
 
-	if (!currentUser || !currentUser.isAdmin) {
-		router.push('/');
-		return null;
-	}
-
 	const getData = useCallback(async () => {
-		await dispatch(getClientList());
+		if (clientList.length < 12) await dispatch(getClientInit());
 	}, []);
 
 	useEffect(() => {
 		getData();
 	}, []);
+	if (!currentUser || !currentUser.isAdmin) {
+		router.push('/');
+		return null;
+	}
 
 	return (
 		<>

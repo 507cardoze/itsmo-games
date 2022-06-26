@@ -14,7 +14,7 @@ import {
 	Box,
 	TableContainer,
 } from '@chakra-ui/react';
-import { useAppSelector } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import TableSkeleton from '../skeleton';
 import { SearchIcon } from '@chakra-ui/icons';
 import sortItBro from '../../../common/sortItBro';
@@ -22,9 +22,11 @@ import { ChangeEvent, useState } from 'react';
 import { fCurrency } from '../../../common/formatNumber';
 import { dateFromNow } from '../../../common/formatTime';
 import { useRouter } from 'next/router';
+import { getNextClient } from '../../../redux/slices/admin-panel/admin-panel.thunk';
 
 const ClienteTable = () => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const [searchTerm, setSearchTerm] = useState<string>('');
 	const isFetchingData = useAppSelector(
 		(store) => store.adminPanelSlice.isFetchingData
@@ -34,6 +36,15 @@ const ClienteTable = () => {
 		(store) => store.adminPanelSlice.clientList
 	);
 
+	const getNextPage = async () => {
+		if (clientList.length) {
+			await dispatch(
+				getNextClient({
+					last: clientList[clientList.length - 1].uid,
+				})
+			);
+		}
+	};
 	if (isFetchingData) return <TableSkeleton />;
 
 	return (
@@ -44,6 +55,7 @@ const ClienteTable = () => {
 				justifyContent: 'center',
 				alignContent: 'center',
 				flexDirection: 'column',
+				overflowY: 'auto',
 			}}>
 			<Stack direction="row" mt={5} justifyContent="space-between">
 				<Heading
@@ -134,6 +146,11 @@ const ClienteTable = () => {
 							))}
 					</Tbody>
 				</Table>
+				<Stack spacing={4} direction="row" w="full">
+					<Button w="full" onClick={getNextPage}>
+						Mostrar mas
+					</Button>
+				</Stack>
 			</TableContainer>
 		</Box>
 	);

@@ -9,11 +9,15 @@ import {
 	where,
 	getDocs,
 	orderBy,
+	limit,
+	startAfter,
 } from 'firebase/firestore';
 import { firestoreUserType } from '../redux/slices/auth-slice';
 import { Order } from '../redux/slices/my-orders-slice';
 
-const collectionName = 'users';
+const collectionName: string = 'users';
+
+const pageSize: number = 20;
 
 export const getDBClients = async (): Promise<firestoreUserType[] | null> => {
 	try {
@@ -30,8 +34,6 @@ export const getDBClients = async (): Promise<firestoreUserType[] | null> => {
 		return null;
 	}
 };
-
-//get client orders by id
 
 export const getClientOrdersByUid = async (id_client: string) => {
 	try {
@@ -89,6 +91,62 @@ export const updateClientByUid = async (
 		const snapShot = await getDoc(clientRef);
 		if (!snapShot.exists) throw new Error('Client not found');
 		await updateDoc(clientRef, updatedData);
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const getClientPaginated = async () => {
+	try {
+		const q = query(
+			collection(db, collectionName),
+			orderBy('displayName', 'desc'),
+			limit(pageSize)
+		);
+		const querySnapShot = await getDocs(q);
+		if (querySnapShot.empty) return [];
+
+		let data: firestoreUserType[] = [];
+
+		querySnapShot.forEach((doc) => {
+			const client: firestoreUserType = doc.data() as firestoreUserType;
+			data.push({
+				...client,
+			});
+		});
+
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const getClientPaginatedNextPage = async (last: string) => {
+	try {
+		const lastClientRef = doc(db, collectionName, last);
+		const lastClientSnapshot = (await getDoc(lastClientRef)).data();
+
+		if (!lastClientSnapshot) return [];
+
+		const q = query(
+			collection(db, collectionName),
+			orderBy('displayName', 'desc'),
+			startAfter(lastClientSnapshot['displayName']),
+			limit(pageSize)
+		);
+		const querySnapShot = await getDocs(q);
+		if (querySnapShot.empty) return [];
+
+		let data: firestoreUserType[] = [];
+
+		querySnapShot.forEach((doc) => {
+			const client: firestoreUserType = doc.data() as firestoreUserType;
+			data.push({
+				...client,
+			});
+		});
+
+		return data;
 	} catch (error) {
 		throw error;
 	}

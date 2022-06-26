@@ -11,21 +11,25 @@ const Inventory = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const { tcg } = router.query;
-
+	const yugiohInventory = useAppSelector(
+		(store) => store.adminPanelSlice.yugiohInventory
+	);
 	const currentUser = useAppSelector((store) => store.AuthSlice.currentUser);
 
-	if (!currentUser || !currentUser.isAdmin) {
-		router.push('/');
-		return null;
-	}
+	
 
 	const getData = useCallback(async () => {
-		//await dispatch(loadYugiOhInventory());
+		if (yugiohInventory.length < 12) await dispatch(loadYugiOhInventory());
 	}, []);
 
 	useEffect(() => {
 		getData();
 	}, []);
+
+	if (!currentUser || !currentUser.isAdmin) {
+		router.push('/');
+		return null;
+	}
 
 	return (
 		<>

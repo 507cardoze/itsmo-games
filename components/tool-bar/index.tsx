@@ -25,7 +25,7 @@ const Toolbar = () => {
 
 		if (trimmedSearch.length === 0) return;
 
-		dispatch(getCardBySearchName({ searchTerm }));
+		//dispatch(getCardBySearchName({ searchTerm }));
 	};
 
 	return (

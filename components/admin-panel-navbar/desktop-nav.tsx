@@ -1,20 +1,18 @@
 import {
 	Box,
 	Stack,
-	Link,
 	Popover,
 	PopoverTrigger,
 	PopoverContent,
-	useColorModeValue,
 	Text,
 	Flex,
 	Icon,
 	Button,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { useAppSelector } from "../../redux/store";
-import { NavItem } from "../../redux/slices/admin-panel-slice";
-import { useRouter } from "next/router";
+import { useAppSelector } from '../../redux/store';
+import { useRouter } from 'next/router';
+import { NavItem } from '../../redux/slices/admin-panel/admin-panel.types';
 
 const DesktopNav = () => {
 	const linkColor = "gray.600";

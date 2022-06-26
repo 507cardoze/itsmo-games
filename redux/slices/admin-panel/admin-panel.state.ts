@@ -56,7 +56,7 @@ export const initialState: adminPanelState = {
 		'Ultimate Rare',
 		'Ultra Rare',
 	],
-	isSubmmiting: true,
+	isSubmmiting: false,
 	yugiohEditable: null,
 	isModalInventoryOpen: false,
 	isFetchingData: true,
