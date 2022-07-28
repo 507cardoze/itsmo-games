@@ -13,10 +13,17 @@ import {
 } from '@chakra-ui/react';
 import { round } from 'lodash';
 import { fCurrency } from '../../../common/formatNumber';
-import { useAppSelector } from '../../../redux/store';
+import {
+	setClientOrderModal,
+	setClientOrderModalData,
+} from '../../../redux/slices/admin-panel';
+import { Order } from '../../../redux/slices/my-orders-slice';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import TableSkeleton from '../skeleton';
 
 const ClientOrdersTable = () => {
+	const dispatch = useAppDispatch();
+
 	const isFetchingData = useAppSelector(
 		(store) => store.adminPanelSlice.isFetchingData
 	);
@@ -24,6 +31,11 @@ const ClientOrdersTable = () => {
 	const clientOrders = useAppSelector(
 		(store) => store.adminPanelSlice.clientOrders
 	);
+
+	const handleOpenModal = (order: Order) => {
+		dispatch(setClientOrderModalData(order));
+		dispatch(setClientOrderModal(true));
+	};
 
 	if (isFetchingData) return <TableSkeleton />;
 
@@ -76,7 +88,8 @@ const ClientOrdersTable = () => {
 									_hover={{
 										bg: 'gray.100',
 										cursor: 'pointer',
-									}}>
+									}}
+									onClick={() => handleOpenModal(order)}>
 									<Td sx={{ fontSize: '14px' }}>{order.uid}</Td>
 									<Td sx={{ fontSize: '14px' }}>
 										{fCurrency(round(total, 2))}

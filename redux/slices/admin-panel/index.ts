@@ -28,6 +28,12 @@ export const adminPanelSlice = createSlice({
 		resetClientdata: (state) => {
 			state.clientData = null;
 		},
+		setClientOrderModal: (state, action) => {
+			state.clientOrderModal = action.payload;
+		},
+		setClientOrderModalData: (state, action) => {
+			state.clientOrderModalData = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(loadYugiOhInventory.pending, (state) => {
@@ -100,6 +106,8 @@ export const {
 	setYugiohEditable,
 	setisSubmmiting,
 	resetClientdata,
+	setClientOrderModal,
+	setClientOrderModalData,
 } = adminPanelSlice.actions;
 
 export default adminPanelSlice.reducer;

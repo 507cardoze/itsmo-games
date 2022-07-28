@@ -22,6 +22,8 @@ export type adminPanelState = {
 	clientList: firestoreUserType[];
 	clientOrders: Order[];
 	clientData: firestoreUserType | null;
+	clientOrderModal: boolean;
+	clientOrderModalData: Order | null;
 };
 
 export type YugiohCardMutableData = {

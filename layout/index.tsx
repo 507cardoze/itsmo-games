@@ -5,7 +5,8 @@ import {
 	AuthModal,
 	LenguageModal,
 	LenguageCartModal,
-} from "../components/modals/";
+	ClientOrderModal,
+} from '../components/modals/';
 import { useAppDispatch } from "../redux/store";
 import { auth } from "../firebase/firebase-config";
 import {
@@ -29,11 +30,12 @@ const Layout = ({ children }: PropsTypes) => {
 	}, []);
 
 	const renderModal = () =>
-		typeof window !== "undefined" ? (
+		typeof window !== 'undefined' ? (
 			<>
 				<LenguageModal />
 				<LenguageCartModal />
 				<AuthModal />
+				<ClientOrderModal />
 			</>
 		) : (
 			<></>

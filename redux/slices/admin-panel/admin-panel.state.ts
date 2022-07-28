@@ -101,4 +101,6 @@ export const initialState: adminPanelState = {
 	clientList: [],
 	clientOrders: [],
 	clientData: null,
+	clientOrderModal: false,
+	clientOrderModalData: null,
 };
